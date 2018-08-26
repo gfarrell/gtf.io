@@ -1,0 +1,9 @@
+{{ $style := resources.Get "styles/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $style.Permalink }}" />
+
+<!-- METADATA -->
+<meta charset="utf-8" />
+<meta name="Description" content="Gideon Farrell's small corner of the web" />
+
+<!-- Base -->
+<title>[gtf]</title>

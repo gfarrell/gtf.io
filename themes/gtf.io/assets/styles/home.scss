@@ -1,0 +1,16 @@
+.homepage-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    padding: 2em 4em;
+
+    nav {
+    }
+
+    .bio {
+        margin-top: 2em;
+        text-align: justify;
+    }
+}
