@@ -1,0 +1,24 @@
+{{ define "title" }}
+    Gideon's musings
+{{ end }}
+{{ define "main" }}
+<main class="list-view musings-list">
+    <header>
+        <h1>muse | mjuːz |</h1>
+        <p class="defn-type">verb [no object]</p>
+        <p class="defn-descr">be absorbed in thought: <span class="defn-ex">he was musing on
+            the problems he faced</span>.</p>
+    </header>
+    <hr />
+    <p>A collection of thoughts, some well structured, others less so,
+    on a range of topics from programming and technology to culture and
+    society.</p>
+    <ul>{{ range .Pages }}
+        <li>
+            <a href="{{ .Permalink }}">
+                {{ .Title }} ({{ .Date.Format "2006-01-02" }})
+            </a>
+        </li>
+    {{ end }}</ul>
+</main>
+{{ end }}

@@ -1,13 +1,20 @@
-{{ define "main" }}
-    <main class="homepage-content" aria-role="main">
-        <h1>[gtf]</h1>
-        <nav>
-            <span class="nav-item">musings</span>
-            <span class="nav-item">projects</span>
-            <span class="nav-item">things</span>
-        </nav>
-        <section class="bio">
-            {{ partial "short_bio.html" }}
-        </section>
-    </main>
-{{ end }}
+<!DOCTYPE html>
+<html>
+    <head>
+        {{ partial "head.html" . }}
+        <title>[GTF]: Gideon's corner of internet</title>
+    </head>
+    <body>
+        <main class="page-home content" aria-role="main">
+            <h1>[gtf]</h1>
+            <p class="health-warning">a work in progress</p>
+
+            {{ partial "menu.html" . }}
+
+            <section class="bio">
+                {{ partial "short_bio.html" }}
+            </section>
+        </main>
+        {{ partial "footer.html" }}
+    </body>
+</html>

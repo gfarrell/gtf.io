@@ -1,0 +1,27 @@
+{{ define "title" }}
+All Projects
+{{ end }}
+{{ define "main" }}
+<main class="list-view projects-list">
+    <header>
+        <h1>project | ˈprɒdʒɛkt |</h1>
+        <p class="defn-type">noun</p>
+        <p class="defn-descr">
+           an individual or collaborative enterprise that is carefully
+           planned to achieve a particular aim: <span class="defn-ex">a
+           research project | a project to build a new power
+           station</span>.
+        </p>
+    </header>
+    <hr />
+    <p>Some projects I have worked on, mostly small toys to experiment
+    with a particular concept.</p>
+    <ul>{{ range .Pages }}
+        <li>
+            <a href="{{ .Permalink }}">
+                {{ .Title }} ({{ .Params.Category }})
+            </a>
+        </li>
+    {{ end }}</ul>
+</main>
+{{ end }}

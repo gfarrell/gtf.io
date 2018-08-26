@@ -1,0 +1,6 @@
+baseURL: "https://gtf.io"
+languageCode: "en-gb"
+title: "[GTF]"
+theme: "gtf.io"
+repo: "https://github.com/gfarrell/gtf.io"
+sectionPagesMenu: "main"

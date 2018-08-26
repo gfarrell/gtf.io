@@ -1,0 +1,21 @@
+{{ define "title" }}
+    Project: {{ .Params.Title }}
+{{ end }}
+{{ define "main" }}
+<article class="project">
+    <header>
+        <h1>{{ .Params.Title }}</h1>
+        <p class="subtitle">{{ .Date.Format "2006" }}
+        | {{ .Params.Category }}
+        | {{ .Params.language }}
+        {{ if isset .Params "github" }}
+        | <a href="{{ .Params.github }}" title="View on Github">[github]</a>
+        {{ end }}
+        </p>
+    </header>
+
+    <div class="item-content">
+        {{ .Content }}
+    </div>
+</article>
+{{ end }}

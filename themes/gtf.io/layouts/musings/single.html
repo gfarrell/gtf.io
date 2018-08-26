@@ -1,0 +1,15 @@
+{{ define "title" }}
+    Musing on {{ .Params.Title }}
+{{ end }}
+{{ define "main" }}
+<article class="musing">
+    <header>
+        <h1>{{ .Params.Title }}</h1>
+        <p class="subtitle">{{ .Date.Format "2006-01-02" }}</p>
+    </header>
+
+    <div class="item-content">
+        {{ .Content }}
+    </div>
+</article>
+{{ end }}
