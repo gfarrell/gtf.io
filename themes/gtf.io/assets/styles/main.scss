@@ -53,13 +53,13 @@ nav {
     .nav-item {
         padding: 0em 1em;
         border-right: thin solid #CCC;
-        
+
         &:last-child {
             border-right: none;
         }
         &.active {
             font-weight: bold;
-            a { 
+            a {
                 color: black;
                 text-decoration: none;
             }
