@@ -1,6 +1,8 @@
-baseURL: "https://gtf.io"
+baseURL: "https://www.gtf.io"
 languageCode: "en-gb"
 title: "[GTF]"
 theme: "gtf.io"
-repo: "https://github.com/gfarrell/gtf.io"
 sectionPagesMenu: "main"
+params:
+  repo: "https://github.com/gfarrell/gtf.io"
+  description: "Gideon's small corner of the internet"
