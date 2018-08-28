@@ -5,16 +5,18 @@
         <title>[GTF]: Gideon's corner of internet</title>
     </head>
     <body>
-        <main class="page-home content" aria-role="main">
-            <h1>[gtf]</h1>
-            <p class="health-warning">a work in progress</p>
+        <div class="top-container">
+            <main class="page-home content-container" aria-role="main">
+                <h1>[gtf]</h1>
+                <p class="health-warning">a work in progress</p>
 
-            {{ partial "menu.html" . }}
+                {{ partial "menu.html" . }}
 
-            <section class="bio">
-                {{ partial "short_bio.html" }}
-            </section>
-        </main>
+                <section class="bio">
+                    {{ partial "short_bio.html" }}
+                </section>
+            </main>
+        </div>
         {{ partial "footer.html" }}
     </body>
 </html>

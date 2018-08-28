@@ -9,8 +9,10 @@
     </head>
     <body>
         {{ partial "header.html" . }}
-        <div class="content-container">
-            {{ block "main" . }}{{ end }}
+        <div class="top-container">
+            <div class="content-container">
+                {{ block "main" . }}{{ end }}
+            </div>
         </div>
         {{ partial "footer.html" . }}
     </body>
