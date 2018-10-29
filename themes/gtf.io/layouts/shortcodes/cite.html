@@ -1,0 +1,8 @@
+{{ $id := (.Get 0) }}
+{{ range $ind,$citation := $.Page.Params.citations }}
+    {{ if eq $citation.id $id }}
+        <a class="citation" href="#citation-{{ $ind }}" title="{{ $citation.label }}">
+            {{ $citation.label }} [{{ $ind }}]
+        </a>
+    {{ end }}
+{{ end }}
