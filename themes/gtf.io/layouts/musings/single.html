@@ -11,5 +11,22 @@
     <div class="item-content">
         {{ .Content }}
     </div>
+
+    <footer class="bibliography">
+        <h2>References</h2>
+        <ol>
+            {{ range $ind,$citation := $.Page.Params.citations }}
+            {{ $i := add $ind 1 }}
+            <li id="citation-{{ $ind }}">
+                [{{ $i }}]:
+                <i>{{ $citation.label }}</i>
+                <a href="{{ $citation.src }}" title="{{ $citation.label }}">{{ $citation.src }}</a>
+                {{ if $citation.retrieved }}
+                <span>(retrieved: {{ $citation.retrieved }})</span>
+                {{ end }}
+            </li>
+            {{ end }}
+        </ol>
+    </footer>
 </article>
 {{ end }}
