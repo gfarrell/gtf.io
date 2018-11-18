@@ -20,9 +20,10 @@
             <li id="citation-{{ $ind }}">
                 [{{ $i }}]:
                 <i>{{ $citation.label }}</i>
+                <br/>
                 <a href="{{ $citation.src }}" title="{{ $citation.label }}">{{ $citation.src }}</a>
                 {{ if $citation.retrieved }}
-                <span>(retrieved: {{ $citation.retrieved }})</span>
+                <br/><span>Retrieved: {{ $citation.retrieved }}</span>
                 {{ end }}
             </li>
             {{ end }}
