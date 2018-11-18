@@ -17,3 +17,41 @@ header .subtitle {
     list-style-type: none;
     padding: 0;
 }
+
+.bibliography li {
+    margin-bottom: 2em;
+
+    &:last-child {
+        margin-bottom: 0em;
+    }
+}
+
+figure {
+    text-align: center;
+
+    img {
+        width: 75%;
+    }
+
+    figcaption {
+        text-align: center;
+        width: 75%;
+        font-size: 0.8em;
+        font-style: italic;
+        margin: 0 auto;
+    }
+}
+
+@media(max-width: 420px) {
+    figure {
+        margin: 1em 0;
+
+        img, figcaption {
+            width: 100%;
+        }
+    }
+}
+
+.clear {
+    clear: both;
+}

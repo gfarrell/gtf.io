@@ -1,0 +1,8 @@
+{{ $img := $.Page.Resources.GetMatch (.Get 0) }}
+<figure>
+    <img src="{{ $img.RelPermalink }}" alt="{{ .Get 1 }}" />
+    {{ if (.Get 1) }}
+    <figcaption>{{ .Get 1 }}</figcaption>
+    {{ end }}
+</figure>
+<div class="clear"></div>
