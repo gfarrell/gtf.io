@@ -6,3 +6,5 @@ sectionPagesMenu: "main"
 params:
   repo: "https://github.com/gfarrell/gtf.io"
   description: "Gideon's small corner of the internet"
+ignoreFiles: 
+  - "/data/"
