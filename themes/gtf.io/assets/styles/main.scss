@@ -45,12 +45,20 @@ hr {
     .footer-item:last-child {
         border-right: none;
     }
+
+    @media only print {
+        display: none;
+    }
 }
 
 .site-header {
     display: flex;
     flex-direction: row;
     margin-bottom: 2.5em;
+
+    @media only print {
+        display: none;
+    }
 }
 
 nav {
