@@ -8,3 +8,4 @@ params:
   description: "Gideon's small corner of the internet"
 ignoreFiles: 
   - "/data/"
+  - "_notes.md"
