@@ -42,9 +42,8 @@ productive if I am willing to invest the time into understanding
 how it works, but I can also use its basic functionality by just
 sitting in insert mode as if I were using `nano`. I do not want
 the web to be just like the terminal, which has also failed to
-evolve properly as an interface, but web designers could learn some
-lessons from it. [Brandur](https://brandur.org) has written a [good
-article](https://brandur.org/interfaces) on this subject.
+evolve properly as an interface, but web designers could [learn some
+lessons from it](https://brandur.org/interfaces).
 
 I want the web to be fast. I want web software to have a native-like
 interface. I want the web to go back to its decentralised roots. I want
