@@ -4,4 +4,6 @@
 {{- end -}}
 {{- $text := .Inner -}}
 {{- $.Page.Scratch.Add "footnotes" (slice $text) -}}
+{{- with $text -}}
 <sup id="fnref-{{$i}}" class="footnote-ref" title="{{ $text }}"><a href="#fn-{{ $i }}" rel="footnote">{{- $i -}}</a></sup>
+{{- end -}}
