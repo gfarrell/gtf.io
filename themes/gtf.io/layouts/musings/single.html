@@ -5,7 +5,12 @@
 <article class="musing">
     <header>
         <h1>{{ .Params.Title }}</h1>
-        <p class="subtitle">{{ .Date.Format "2006-01-02" }}</p>
+        <p class="subtitle">
+            {{ .Date.Format "2006-01-02" }}
+            {{ if not (eq (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}
+            (updated: {{ .Lastmod.Format "2006-01-02" }})
+            {{ end }}
+        </p>
     </header>
 
     <div class="item-content">
@@ -17,7 +22,7 @@
         <ol>
             {{ range $ind,$citation := $.Page.Params.citations }}
             {{ $i := add $ind 1 }}
-            <li id="citation-{{ $ind }}">
+            <li id="citation-{{ $i }}">
                 [{{ $i }}]:
                 <i>{{ $citation.label }}</i>
                 <br/>

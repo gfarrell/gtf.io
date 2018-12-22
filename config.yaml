@@ -3,6 +3,7 @@ languageCode: "en-gb"
 title: "[GTF]"
 theme: "gtf.io"
 sectionPagesMenu: "main"
+enableGitInfo: true
 params:
   repo: "https://github.com/gfarrell/gtf.io"
   description: "Gideon's small corner of the internet"
