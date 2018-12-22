@@ -6,7 +6,7 @@
     <header>
         <h1>{{ .Params.Title }}</h1>
         <p class="subtitle">
-            {{ .Date.Format "2006-01-02" }}
+            {{ dateFormat "2" .Date | humanize }} of {{ dateFormat "January, 2006" .Date }}
             {{ if not (eq (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}
             (updated: {{ .Lastmod.Format "2006-01-02" }})
             {{ end }}
