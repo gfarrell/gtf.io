@@ -8,6 +8,10 @@ tags:
 - technology
 - society
 - internet
+- creativity
+- democratisation
+- content-creation
+- platform-centralisation
 - surveillance
 
 citations:
