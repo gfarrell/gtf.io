@@ -1,7 +1,7 @@
 ---
 title: "Content, Creativity, and Monetisation in the Modern Internet"
 date: 2018-12-22
-lastmod: 2018-12-22
+lastmod: 2018-12-24
 draft: false
 
 tags:
@@ -79,7 +79,7 @@ it was an amazingly egalitarian platform. It was not democratic in all
 dimensions as it required some technical knowledge to successfully
 run a website, not to mention the hardware and infrastructure that
 was unavailable outside wealthier areas in wealthy countries. The
-lack of any dominant content platforms like Youtube and Medium{{<
+lack of any dominant content platforms like YouTube and Medium{{<
 footnote >}}And, arguably, Google which, while not a platform, has such
 control over people's access to content that it could be counted in
 the same category.{{< /footnote >}}, however, meant that there were no
