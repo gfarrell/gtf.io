@@ -1,5 +1,10 @@
 header .subtitle {
     font-size: 0.9em;
+    margin: 0.1em 0;
+
+    &.wordcount {
+        font-style: italic;
+    }
 }
 
 .item-content {
@@ -58,4 +63,15 @@ figure {
 
 .musing .item-content {
     line-height: 1.4em;
+}
+
+.item-toc {
+    ul {
+        list-style-type: none;
+
+        &:first-child {
+            margin: 0;
+            padding: 0;
+        }
+    }
 }
