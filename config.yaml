@@ -9,3 +9,4 @@ params:
 ignoreFiles: 
   - "/data/"
   - "_notes.md"
+  - "_notes/*"
