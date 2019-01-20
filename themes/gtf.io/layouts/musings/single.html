@@ -36,7 +36,7 @@
                 [{{ $i }}]:
                 <i>{{ $citation.label }}</i>
                 <br/>
-                <a href="{{ $citation.src }}" title="{{ $citation.label }}">{{ $citation.src }}</a>
+                <a href="{{ $citation.src }}" title="{{ $citation.label }}">{{ $citation.src | truncate 35 }}</a>
                 {{ if $citation.retrieved }}
                 <br/><span>Retrieved: {{ $citation.retrieved }}</span>
                 {{ end }}
