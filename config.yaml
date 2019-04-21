@@ -5,7 +5,7 @@ theme: "gtf.io"
 sectionPagesMenu: "main"
 params:
   repo: "https://github.com/gfarrell/gtf.io"
-  description: "Gideon's small corner of the internet"
+  description: "Personal website of Gideon Farrell. Contains thoughts, projects, and other things."
 ignoreFiles: 
   - "/data/"
   - "_notes.md"
