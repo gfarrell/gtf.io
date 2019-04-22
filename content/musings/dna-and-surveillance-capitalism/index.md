@@ -63,7 +63,7 @@ gvr-biometrics-market >}}increasing market{{< /cite >}}, and which has
 been largely ignored by the public debate. This echoes of the lack of
 debate ten years ago on the way large tech companies tracked us around
 the internet, which is troubling because it means that people are giving
-up their data to these companies without very little awareness of the
+up their data to these companies with very little awareness of the
 consequences.
 
 Whilst it could now be argued that a lot of the data the big tech
