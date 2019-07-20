@@ -3,3 +3,6 @@ clean:
 
 build: clean
 	hugo
+
+deploy: build
+	rsync --delete --recursive ./public $(SERVER_ADDRESS):/var/www/gtf.io
