@@ -1,6 +1,6 @@
 # Gideon's Website
 
-[![Build Status](https://travis-ci.org/gfarrell/gtf.io.svg?branch=master)](https://travis-ci.org/gfarrell/gtf.io)
+[![Build Status](https://ci.gtf.io/api/badges/gfarrell/gtf.io/status.svg)](https://ci.gtf.io/gfarrell/gtf.io)
 
 This is the source of my website at [www.gtf.io](https://www.gtf.io). It's
 mainly to host my musings, projects, and some other things like podcasts,

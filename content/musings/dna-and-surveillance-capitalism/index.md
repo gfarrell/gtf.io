@@ -1,7 +1,7 @@
 ---
 title: "DNA and Surveillance Capitalism"
 date: 2019-04-21
-lastmod: 2019-04-21
+lastmod: 2019-04-22
 draft: false
 
 tags:
