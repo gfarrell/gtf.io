@@ -6,7 +6,7 @@ steps:
     image: debian:buster-slim
     commands:
       - apt-get update
-      - apt-get install -y wget make
+      - apt-get install -y wget make git
       - wget -O "./hugo.deb" "https://github.com/gohugoio/hugo/releases/download/v0.55.6/hugo_extended_0.55.6_Linux-64bit.deb"
       # TODO: verify checksum
       - dpkg -i "./hugo.deb"
