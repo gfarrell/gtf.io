@@ -14,6 +14,13 @@
         </p>
     </header>
 
+    {{ if and (gt .WordCount 400) (.Params.toc) }}
+    <aside class="item-toc">
+        <h2>Contents</h2>
+        {{ .TableOfContents }}
+    </aside>
+    {{ end }}
+
     <div class="item-content">
         {{ .Content }}
     </div>
