@@ -27,6 +27,7 @@
         {{ .Content }}
     </div>
 
+    {{ if $.Page.Params.citations }}
     <footer class="bibliography">
         <h2>References</h2>
         <ol>
@@ -44,5 +45,6 @@
             {{ end }}
         </ol>
     </footer>
+    {{ end }}
 </article>
 {{ end }}
