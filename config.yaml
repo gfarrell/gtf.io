@@ -6,7 +6,11 @@ sectionPagesMenu: "main"
 params:
   repo: "https://github.com/gfarrell/gtf.io"
   description: "Personal website of Gideon Farrell. Contains thoughts, projects, and other things."
-ignoreFiles: 
+ignoreFiles:
   - "/data/"
   - "_notes.md"
   - "_notes/*"
+markup:
+  highlight:
+    codefences: true
+    style: lovelace
