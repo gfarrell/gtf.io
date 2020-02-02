@@ -1,0 +1,276 @@
+---
+title: "Coding in Haskell: a new adventure"
+date: 2020-02-02
+lastmod: 2020-02-02
+draft: false
+
+tags:
+- programming
+- haskell
+- functional-programming
+- research-log
+
+citations:
+- id: "why-research-blog"
+  src: "http://gregorygundersen.com/blog/2020/01/12/why-research-blog/"
+  label: "Why I keep a research blog"
+  retrieved: "2020-02-02"
+
+toc: true
+
+---
+
+I was reading Gregory Gunderson's blog post {{< cite why-research-blog
+>}}"Why I keep a research blog"{{< /cite >}} while, at the same time,
+writing [an exciting new project in Haskell][1] which made me think it
+would be quite fun to document the process of learning to make something
+_real-ish_ in a completely new language.
+
+I have not programmed in a pure, functional language like Haskell since
+we were forced to learn Standard ML in my first year at Cambridge, but I
+have toyed with the idea of writing in Haskell for some time, attracted
+by the mathematical style of expression, the strong type system,
+and a general love of applying many of the principles of functional
+programming in languages that are not purely functional like Javascript
+(which makes it fairly easy).
+
+I first tried my hand at this when I was playing with the [Advent of
+Code 2019][2] challenge. Unfortunately, I did not really have much time
+for it, and I was not particularly inspired by doing the challenges
+while also learning a new language, and entire paradigm of programming.
+
+When it came to this new project (about which I will write separately),
+however, I was fairly settled in my mind that I would at least attempt
+it in Haskell rather than Python or Javascript (which would have been my
+go-to languages for toys like this).
+
+## Growing up.
+
+I have been programming for most of my life, but when I was younger
+I was somewhat enamoured of object oriented programming. I liked
+structure, and I found the ability to create endlessly complex
+frameworks and hierarchies of objects gave me a sense of power and
+allowed me to show how "clever" I was. At the time, I had not really
+been exposed to any functional programming, but had certainly spent
+a lot of time building things. When we were made to use Standard ML
+at University, I found this new way of doing things quite painful and
+frustrating. I wanted to build systems, but ML restricted the sorts
+of functions I could write, and I could not see a way out of this
+restriction, even while I appreciated the mathematical style of the
+language.
+
+Fast forward a few years, and I found myself increasingly preferring
+"simple" solutions to problems, and appreciating a more functional
+approach to programming. This drove a [brief foray into clojure]({{< ref
+"projects/boggle-solver" >}}) which I enjoyed but never ended up taking
+very far.
+
+This post is a collection of my first impressions of Haskell, what I
+have liked, and what I have not.
+
+## Some of the annoyances
+
+### Stack, Cabal, and the toolchain
+
+Working out how to get going with Haskell took me some time. It was
+not really clear what the best way of starting a project was, how I
+could install dependencies, etc.. By contract, the Rust project is very
+opinionated on this, officially, and points you in the direction of
+`Cargo`. `Cargo` seems to have learnt all the lessons of `npm` and is
+exceptionally easy to use.
+
+I have still have been unable to get the Haskell IDE Engine to work
+properly with COC and NeoVim despite following instructions. As a
+result, and form of intelligent autocompletion, etc., have gone out the
+window.
+
+Once I settled on using `stack` to manage my Haskell projects, a lot of
+this became easier, but it was not obvious to a beginner that `stack`
+was the way to go.
+
+### Cryptic compiler errors
+
+The amazing thing about learning Rust is that the compiler is very
+helpful, and often makes it obvious exactly how to go about fixing your
+problems. It references help articles and gives suggestions. When one
+starts out learning a language, one has not yet developed the instinct
+for the sorts of things for which one should be looking out, and so even
+very simple errors can be extremely difficult to debug.
+
+Haskell's compiler gives terrible errors, and most often I am just
+left with `parse error` and not much more to work out. It is true that
+sometimes the type errors can be very helpful as they make it clear
+where things have gone wrong, but I have spent an inordinate amount of
+time trying to work out how to make a cryptic `parse error` go away.
+
+Sometimes this is an indentation problem (it would be nice to have a
+separate class of error for this), and sometimes I have misunderstood
+some syntax or the proper way to achieve something. The cryptic errors
+just make it harder to find one's way.
+
+### Accessing the properties of records
+
+This is something that just feels inexcusably wrong in Haskell. If I were to
+have a data record defined and initialised as follows:
+
+```haskell
+data Person = Person { name :: String
+                     , age :: Integer
+                     }
+me :: Person
+me = Person { name="Gideon", age=29 }
+```
+
+In most languages one would access those properties using something like
+the dot operator (or some other infix to denote the hierarchy of class
+&rarr; property. For example in Javascript or Python, one would write
+`me.name`. In Haskell, however, the property accessors become functions
+at the module level, which means they have to be explicitly imported
+and exported. Therefore in my example above, `name` actually becomes a
+function with the signature `name :: Person -> String`, and is accessed
+by writing `name me`.
+
+As several people have noted, this creates problems with namespacing,
+and is just generally somewhat irritating as one often has to remember
+to explicitly import and export these property accessor functions.
+
+## What I have loved so far
+
+### The type system
+
+Haskell's type system is great. There is no doubt that I have barely
+scratched the surface of what it unlocks, but so far I have really
+enjoyed working with it.
+
+One of the ways it stands out is the way in which one declares how
+certain classes work with new types. In many languages, if you wanted
+to declare an interface for dealing with equality (`==`, `/=`, etc.),
+you would have to do this in the equality interface itself. Not so for
+Haskell, for example my `Agent` record type should consider equality
+only on the `name` property, so I do the following:
+
+```haskell
+type AgentID = Integer
+data Agent = Agent { name :: AgentID
+                   , generosity :: Double
+                   , selfishness :: Double
+                   , score :: Double
+                   } deriving Show
+
+instance Eq Agent where
+  (==) a b = name a == name b
+  (/=) a b = name a /= name b
+```
+
+Now, anywhere a function has a constraint on a type that requires `Eq
+a`, my `Agent` type is suddenly compatible. Comparing this to the
+verbosity I found in Rust for doing something similar I much prefer the
+Haskell way.
+
+### Cognitive load up front
+
+The thing I like *best* about writing in Haskell is that it forces me
+to break down problems, and makes it quite difficult to write big,
+sprawling functions. Single-purpose functions, separation of concerns,
+and pure functions with immutable data structures are all principles
+to which I adhere (and which I have instilled in my engineering team),
+but when writing a new project it is often easy to be a little lazy to
+try to get it done "quickly". In reality, this approach is much slower,
+as the functions and structures quickly sprawl and become confusing.
+In Haskell, one is nearly forced to create small functions which have
+clearly defined purposes, often obvious from their signatures.
+
+For example, the following code took me a long time to work out how
+to write, but the writing itself was very fast. Haskell is forcing me
+to do the cognitive work up front, and to work at a higher level of
+abstraction. One of the most notable results of this is that, most of
+the time, I find that my tests just work with the first version of my
+implementation that compiles.
+
+```haskell
+-- Given a Reactor function, this acts on a list of InteractionHistories
+-- and interacts each agent with each other agent, providing the next
+-- iteration of the InteractionHistories.
+interactAll :: Reactor -> [InteractionHistory] -> IO [InteractionHistory]
+interactAll react histories = interactAll' histories
+  where interactAll' :: [InteractionHistory] -> IO [InteractionHistory]
+        interactAll' []           = return []
+        interactAll' ((me, _):hs) = do
+          new_histories  <- sequence [ interactionFactory react me x
+                                     | x <- histories, fst x /= me
+                                     ]
+          tail_histories <- interactAll' hs
+          return ((me, new_histories) : tail_histories)
+```
+
+My working method has started to become:
+
+1. Work out what the function signature should be.
+2. Write a dummy implementation so it compiles.
+3. Write tests.
+4. Work out the implementation.
+5. Tests pass, move on.
+
+Which is basically TDD, but the nice part is that Haskell is just naturally
+forcing this way of working. It makes you think about the contracts your
+functions fulfil before you write the implementation, partly because the way
+such a purely functional language works makes it hard to make those functions
+sprawl.
+
+### Hspec and testing
+
+The Javascript testing landscape is probably nonpareil. There is a large
+number of options, with very flexible test runners (like mocha and
+jest), expressive assertion libraries (like chai), and lots of smaller
+libraries for making it easy to write assertions for whatever libraries
+and frameworks you are using to write applications. As such, I think
+the Javascript ecosystem is probably impossible to beat in this regard
+(although I do not have experience with the ruby ecosystem, the python
+ecosystem is not nearly as replete).
+
+`Hspec` feels, by contrast, to be a fairly basic framework for writing
+tests in Haskell, but I was surprised at how easy I found it to get
+started, and I was writing tests from the beginning of my project.
+I did not have to fight with it at all, and the syntax was fairly
+similar to the unit-testing frameworks I was used to (`describe`, `it`,
+`shouldBe`).
+
+### Monads: IO and Maybe
+
+One of the things I have really loved about Haskell was the use of
+Monads to encapsulate things like uncertainty and side-effects. This
+means that I can encapsulate things in the type system that I could not
+otherwise encapsulate except by using a lot of guards and checks in the
+codebase itself.
+
+The `Maybe` monad is a very powerful way of encapsulating something that
+may or may not have a value. For example, I have the following function
+which finds interactions between agents. The problem is that there is
+no guarantee that these agents have previously interacted. In some
+languages we would cope with this by returning `null`, or `None`, but
+in these loosely typed languages (Javascript and Python respectively)
+we always have to remember to check the value of the result. With the
+`Maybe` monad, we can make these checks explicit in the type signature,
+and therefore avoid some silly errors.
+
+```haskell
+findMyInteractions :: AgentID -> [Interaction] -> [Interaction]
+findMyInteractions me = filter (\ (Interaction a b _ _) -> (a==me) || (b==me))
+
+findInteraction :: AgentID -> AgentID -> [Interaction] -> Maybe Interaction
+findInteraction a b interactions =
+  let found = findMyInteractions a . findMyInteractions b $ interactions
+  in case length found of 0 -> Nothing
+                          _ -> Just (head found)
+```
+
+Similarly, the `IO` monad is a great way of encapsulating side effects.
+My programme deals a lot with random numbers as a way of generating
+probabilistic responses. Randomness, however, is not a pure operation
+as you can obtain different results with the same input. The `IO` monad
+ensures that anything which is affected by this impurity is explicitly
+acknowledged as such, making it much clearer when one is dealing with
+pure functions and when one is not.
+
+[1]: https://github.com/gfarrell/eye-for-an-eye
+[2]: https://github.com/gfarrell/aoc2019
