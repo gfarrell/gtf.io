@@ -123,7 +123,7 @@ me = Person { name="Gideon", age=29 }
 
 In most languages one would access those properties using something like
 the dot operator (or some other infix to denote the hierarchy of class
-&rarr; property. For example in Javascript or Python, one would write
+&rarr; property). For example in Javascript or Python, one would write
 `me.name`. In Haskell, however, the property accessors become functions
 at the module level, which means they have to be explicitly imported
 and exported. Therefore in my example above, `name` actually becomes a
