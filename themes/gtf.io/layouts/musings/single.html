@@ -1,10 +1,10 @@
 {{ define "title" }}
-    Musing on {{ .Params.Title }}
+{{ if .Params.draft }}[DRAFT] {{ end }}Musing on {{ .Params.Title }}
 {{ end }}
 {{ define "main" }}
 <article class="musing">
     <header>
-        <h1>{{ .Params.Title }}</h1>
+        <h1>{{ if .Params.draft }}[DRAFT] {{ end }}{{ .Params.Title }}</h1>
         <p class="subtitle">
             {{ dateFormat "2" .Date | humanize }} of {{ dateFormat "January, 2006" .Date }}
             {{ if not (eq (.Date.Format "2006-01-02") (.Lastmod.Format "2006-01-02")) }}

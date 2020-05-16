@@ -10,12 +10,12 @@
             the problems he faced</span>.</p>
     </header>
     <hr />
-    <ul>{{ range .Pages }}
+    <ul>{{ range .Pages }}{{ if not .Params.draft }}
         <li>
             <a href="{{ .Permalink }}">
                 {{ .Title }} ({{ .Date.Format "2006-01-02" }})
             </a>
         </li>
-    {{ end }}</ul>
+    {{ end }}{{ end }}</ul>
 </main>
 {{ end }}

@@ -3,6 +3,8 @@ languageCode: "en-gb"
 title: "[GTF]"
 theme: "gtf.io"
 sectionPagesMenu: "main"
+enableGitInfo: true
+buildDrafts: true
 params:
   repo: "https://github.com/gfarrell/gtf.io"
   description: "Personal website of Gideon Farrell. Contains thoughts, projects, and other things."
