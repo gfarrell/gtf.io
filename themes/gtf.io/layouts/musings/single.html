@@ -1,5 +1,5 @@
 {{ define "title" }}
-{{ if .Params.draft }}[DRAFT] {{ end }}Musing on {{ .Params.Title }}
+{{ if .Params.draft }}[DRAFT] {{ end }}{{ .Params.Title }}
 {{ end }}
 {{ define "main" }}
 <article class="musing">
