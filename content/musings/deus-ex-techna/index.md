@@ -10,6 +10,32 @@ tags:
 - history
 
 citations:
+- id: "sawyer-ghg"
+  src: "https://ui.adsabs.harvard.edu/abs/1972Natur.239...23S/abstract"
+  label: >
+    Sawyer, J.S. (1972). "Man-made Carbon Dioxide and the 'Greenhouse' Effect".
+    In: Nature, Volume 239, Issue 5366, pp. 23-26 (1972)
+  retrieved: "2020-05-17"
+- id: "swine-flu"
+  src: https://en.wikipedia.org/wiki/Swine_influenza#History
+  label: Swine Influenza on Wikipedia
+  retrieved: "2020-05-17"
+- id: "avian-flu"
+  src: https://en.wikipedia.org/wiki/Avian_influenza#H5N1
+  label: "Avian Influenza H5N1 on Wikipedia"
+  retrieved: "2020-05-17"
+- id: "ebola"
+  src: https://en.wikipedia.org/wiki/Ebola
+  label: "Ebola on Wikipedia"
+  retrieved: "2020-05-17"
+- id: "sars"
+  src: https://en.wikipedia.org/wiki/Severe_acute_respiratory_syndrome-related_coronavirus
+  label: "SARS on Wikipedia"
+  retrieved: "2020-05-17"
+- id: "mers"
+  src: https://en.wikipedia.org/wiki/Middle_East_respiratory_syndrome
+  label: "MERS on Wikipedia"
+  retrieved: "2020-05-17"
 
 ---
 
@@ -20,10 +46,10 @@ control to avoid them entirely or mitigate their effects.
 
 Unfortunately, humans do not like to change their behaviour, especially
 if that behavioural change induces any form of present pain. Even when
-we know, full well, how we need to change our behaviour, we still avoid
-it. Past societies might be forgiven their ignorance, but many of our
-modern societies have understood the crises on the horizon but have made
-no real attempt to avert them, or, if we have, the cost of such evasive
+we know exactly how we need to change our behaviour, we still avoid it.
+Past societies might be forgiven their ignorance, but many of our modern
+societies have understood the crises on the horizon but have made no
+real attempt to avert them, or, if we have, the cost of such evasive
 action has been extremely high because we have left it so late.
 
 Our dislike of inducing present-pain through behavioural change, which
@@ -55,16 +81,15 @@ This narrative is soothing because, in the face of an enormous and
 scary potential crisis, the thought that we _ought_ to be acting (and
 therefore the inevitable guilt or shame we feel when our aversion to
 discomfort causes us not to act) is taken away, for there is nothing
-that we as individuals or societies need to do. Yet it rests on a
-unsound basis: we believe that because technology appears to advance at
-an ever-increasing rate, unimaginable solutions will appear to these
-problems but this is both far from guaranteed (there is no natural law
-which requires that technology be invented to avert disasters), and
-possibly based on a false premise -- that technology _is_ advancing at
-an ever-increasing rate. If we compare some of the innovations over the
-last century, it is not clear that the rate of serious breakthroughs
-really is increasing (as new consumer applications do not, on this
-scale, count as serious breakthroughts).
+that we as individuals or societies need to do. Technology will save us.
+
+Yet this narrative rests on an unsound basis: that the perceived rate
+of technological change in recent history implies that some, currently
+unimaginable solution will emerge. This is far from guaranteed, as there
+is no natural law which requires that technology be invented to avert
+disasters. Furthermore, it is unclear that real technological change is
+occurring at an ever-increasing rate, compared to previous points over
+the last century.
 
 Furthermore, while we have often been successful in our use of
 technology to resist any requirement to change our behaviours, this
@@ -124,36 +149,56 @@ like climate change and global pandemics{{< footnote >}}When I first
 drafted this essay in mid-2019, the coronavirus pandemic was not even
 something I would have considered a possibility. How quickly our
 lives have changed!{{< /footnote >}}. This is where I would consider
-techno-optimism to be at its most fanatical and most dangerous.
-Combatting climate change will take serious changes to our societies,
-expectations, and behaviours as individuals. It will affect everything:
-our attitude to food production (especially cheap meat), our extreme
-wastefulness of materials, our &lsquo;need&rsquo; for instant delivery
-and satisfaction of every whim (the fact that Amazon Prime Now exists
-is testament to this). Yet even sacrificing some of these very minor
-comforts like next-day delivery seems unthinkable to large parts of
-our societies, and if we cannot even drop those more basic things,
-what hope is there for large-scale reform of our material consumption
-patterns, or food production systems? Instead, we focus on technological
-solutions &mdash; perhaps it will be carbon-capture technologies, or we
-will drive down manufacturing to be carbon neutral, or, screw it, we
-can just jet off to Mars and settle that planet instead. None of these
-technological solutions require us to change how we act, and most of
-them are sufficiently magical to most people that they are no different
-to praying to the Gods to take pity on us. Perhaps prayer was more
-honest, for at least it does not assume that we _will_ be saved.
+techno-optimism to be at its most fanatical and most dangerous. We have
+known about the causes of climate change since {{< cite sawyer-ghg
+>}}at least the 1970s{{< /cite >}}. Combatting climate change will
+take serious changes to our societies, expectations, and behaviours as
+individuals. It will affect everything: our attitude to food production
+(especially cheap meat), our extreme wastefulness of materials, our
+&lsquo;need&rsquo; for instant delivery and satisfaction of every whim
+(the fact that Amazon Prime Now exists is testament to this). Yet even
+sacrificing some of these very minor comforts like next-day delivery
+seems unthinkable to large parts of our societies, and if we cannot
+even drop those more basic things, what hope is there for large-scale
+reform of our material consumption patterns, or food production systems?
+Instead, we focus on technological solutions &mdash; perhaps it will be
+carbon-capture technologies, or we will drive down manufacturing to be
+carbon neutral, or, screw it, we can just jet off to Mars and settle
+that planet instead. None of these technological solutions require us
+to change how we act, and most of them are sufficiently magical to most
+people that they are no different to praying to the Gods to take pity on
+us. Perhaps prayer was more honest, for at least it does not assume that
+we _will_ be saved.
 
-To be clear, none of this is to suggest that individual action is
-sufficient, or that technology does not play a part in the solutions
-to these crises. We are facing some enormous challenges as a species,
-but also as individual societies, and if we are to have any hope of
-overcoming them, ultimately we must take direct responsibility for the
-world we want to create. While technology has a part to play, this will
-involve huge changes to our behaviours, and some of those changes will
-be uncomfortable, at least at first. Yet if we do not take ownership,
-and acknowledge that human problems require human solutions, then we
-are only fooling ourselves: the deus ex techna is not guaranteed and
-the Gods will not take pity on us. Technology alone cannot solve social
-problems, it can only obfuscate them and create new ones.
+Writing in the middle of the coronavirus pandemic, it is worth noting
+that there has been an enormous shift in behaviour in the majority of
+societies across the globe. We have gone into complete lockdown, and in
+the UK vast tracts of the population are being supported directly by the
+government paying their wages. This was totally unimaginable six months
+ago. COVID-19 is a direct and present threat, and our response has been
+appropriate, but more notable is the fact that we knew that this was a
+threat, and we knew we were underprepared and yet we did nothing. There
+were plenty of warnings, {{< cite sars >}}SARS in the early 2000s{{<
+/cite >}}, {{< cite mers >}}MERS from 2012 onwards{{< /cite >}}, {{<
+cite swine-flu >}}swine flu in 2009{{< /cite >}}, {{< cite avian-flu
+>}}avian flu in 2013{{< /cite >}}, and {{< cite ebola >}}ebola from
+2013{{< /cite >}}. Perhaps, however, there is some hope. This crisis has
+shown that we _can_ effect massive social change, and that our paradigms
+for the role of the state _can_ change quickly. The real question with
+this pandemic is whether we will address the underlying causes of it, or
+whether our behaviour will revert to type, given enough time. Moreover,
+when faced with far more consequential, and slow moving, threats like
+climate change, will we act or will we pray?
+
+We are facing some enormous challenges as a species, but also as
+individual societies, and if we are to have any hope of overcoming
+them, ultimately we must take direct responsibility for the world we
+want to create. This is a singularly political act. The creation of new
+technologies has a part to play but this cannot be seen as a replacement
+for social change. This will involve huge changes to our behaviours,
+and some of those changes will be uncomfortable at first. Yet if we do
+not take ownership, and acknowledge that human problems require human
+solutions, then we are only fooling ourselves: the deus ex techna is
+not guaranteed and the Gods will not take pity on us.
 
 {{< footnotes >}}
