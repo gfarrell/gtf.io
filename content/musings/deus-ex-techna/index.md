@@ -1,6 +1,6 @@
 ---
 title: "Deus Ex Techna"
-date: 2020-05-16
+date: 2020-05-17
 draft: true
 
 tags:
@@ -27,9 +27,11 @@ no real attempt to avert them, or, if we have, the cost of such evasive
 action has been extremely high because we have left it so late.
 
 Our dislike of inducing present-pain through behavioural change, which
-is hard, results in a desparate search to find a solution _extra nos_.
-In the past, this might have entailed an entreaty (or a surrender)
-to divine or supernatural forces. Modern societies have killed the
+is hard, coupled with the fact that these crises often have complex
+causes and solutions which induces a great deal of uncertainty,
+results in a desparate search to find a solution _extra nos_. In
+the past, this might have entailed an entreaty (or a surrender) to
+divine or supernatural forces. Modern societies have killed the
 Gods, and replaced them with a pantheon of _Techne_, most often
 technologies that few understand{{< footnote >}}Therefore making them
 very appropriate replacements for the Gods, since, as Arthur C. Clarke
@@ -70,8 +72,11 @@ is still avoiding the underlying problem which is, ultimately, the
 behaviours and values of the societies in which we live. These are
 solely within our power to change (and, one might argue, our duty).
 
-There are many recent examples of where this is most egregious (at least
-in my milieu).
+There are many recent examples of where this form of techno-optimism{{<
+footnote >}}Alternatively, techno-fatalism, but to me this also
+implies a whole raft of other issues in which people resign themselves
+to the &lsquo;inevitability&rsquo; of some systems like surveillance
+capitalism.{{< /footnote >}} is most egregious (at least in my milieu).
 
 Firstly, there are the political problems like Brexit, Trump, and the
 rise of majoritarian populists{{< footnote >}}Populist is an overused,
@@ -95,7 +100,7 @@ is a problem with them not a problem with the society of which we are
 all a part. Similarly, fake news is an invisible enemy, infecting our
 minds, but ultimately coming from outside (the enemy being the social
 media companies perhaps){{< footnote >}}And, of course, there is no way
-we could ever be susceptible to it, only those _other_ people are so
+we could ever be susceptible to it, only those other people are so
 gullible.{{< /footnote >}}.
 
 Secondly, there are the epistemic problems, of which fake news is
@@ -138,14 +143,17 @@ them are sufficiently magical to most people that they are no different
 to praying to the Gods to take pity on us. Perhaps prayer was more
 honest, for at least it does not assume that we _will_ be saved.
 
-We are facing some enormous challenges as a species, but also as
-individual societies, and if we are to have any hope of overcoming them,
-ultimately we must take direct responsibility for the world we want to
-create. This will involve huge changes to our behaviours, and some of
-those changes will be uncomfortable, at least at first. Yet if we do
-not take ownership, and acknowledge that human problems require human
-solutions, then we are only fooling ourselves: the deus ex techna is not
-guaranteed, and technology cannot solve social problems, it can only
-obfuscate them and create new ones.
+To be clear, none of this is to suggest that individual action is
+sufficient, or that technology does not play a part in the solutions
+to these crises. We are facing some enormous challenges as a species,
+but also as individual societies, and if we are to have any hope of
+overcoming them, ultimately we must take direct responsibility for the
+world we want to create. While technology has a part to play, this will
+involve huge changes to our behaviours, and some of those changes will
+be uncomfortable, at least at first. Yet if we do not take ownership,
+and acknowledge that human problems require human solutions, then we
+are only fooling ourselves: the deus ex techna is not guaranteed and
+the Gods will not take pity on us. Technology alone cannot solve social
+problems, it can only obfuscate them and create new ones.
 
 {{< footnotes >}}
