@@ -9,9 +9,9 @@ params:
   repo: "https://github.com/gfarrell/gtf.io"
   description: "Personal website of Gideon Farrell. Contains thoughts, projects, and other things."
 ignoreFiles:
-  - "/data/"
-  - "_notes.md"
-  - "_notes/*"
+  - data/*
+  - _notes.md
+  - _notes/*
 markup:
   highlight:
     codefences: true
