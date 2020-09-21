@@ -1,6 +1,6 @@
 <nav>
     {{ $currentPage := . }}
-    <span class="nav-item{{ if eq .URL "/" }} active{{ end }}">
+    <span class="nav-item{{ if eq .RelPermalink "/" }} active{{ end }}">
         <a href="/" title="Go to the home page">home</a>
     </span>
     {{ range .Site.Menus.main }}
