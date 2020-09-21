@@ -1,13 +1,12 @@
 baseURL: "https://www.gtf.io"
 languageCode: "en-gb"
-title: "[GTF]"
+title: "Gideon's corner of Internet"
 theme: "gtf.io"
 sectionPagesMenu: "main"
 enableGitInfo: true
 buildDrafts: true
 params:
   repo: "https://github.com/gfarrell/gtf.io"
-  description: "Personal website of Gideon Farrell. Contains thoughts, projects, and other things."
 ignoreFiles:
   - data/*
   - _notes.md

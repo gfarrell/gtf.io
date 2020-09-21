@@ -3,6 +3,14 @@ title: "DNA and Surveillance Capitalism"
 date: 2019-04-21
 lastmod: 2019-04-22
 draft: false
+abstract: >-
+  More and more companies offer services centred around DNA-sequencing
+  technologies, promising to tell one's heritage, warn of health
+  risks, and so on. This essay argues that these services are not only
+  misguided, but actively dangerous to the rights of citizens and
+  are part of a surveillance capitalism that treats human futures as
+  tradeable goods, while also enabling a powerful surveillance state to
+  restrict our freedoms.
 
 tags:
 - technology

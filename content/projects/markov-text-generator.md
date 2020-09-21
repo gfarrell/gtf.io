@@ -3,6 +3,9 @@ title: "Markov Text Generator"
 github: "https://github.com/gfarrell/markov-writer-py"
 language: "python"
 draft: false
+abstract: >-
+  Using markov chains to generate text based on some source corpus
+  (Shakespeare's plays in this case). Written in python just for fun.
 date: 2018-08-16
 category: programming
 ---

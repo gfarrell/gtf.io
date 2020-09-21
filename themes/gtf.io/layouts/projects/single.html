@@ -1,6 +1,5 @@
-{{ define "title" }}
-{{ .Params.Title }}
-{{ end }}
+{{ define "title" }}{{ .Params.Title }}{{ end }}
+{{ define "description" }}{{ if .Params.abstract }}{{ .Params.abstract }}{{ else }}{{ truncate 300 .Content }}{{ end }}{{ end }}
 {{ define "main" }}
 <article class="project">
     <header>

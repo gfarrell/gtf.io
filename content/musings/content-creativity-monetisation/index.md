@@ -3,6 +3,15 @@ title: "Content, Creativity, and Monetisation in the Modern Internet"
 date: 2018-12-22
 lastmod: 2018-12-24
 draft: false
+abstract: >-
+  The modern internet, as compared to the internet of the 1990s -
+  2000s, is increasingly monetised (mostly through advertising).
+  This is resulting in an agglomeration of content platforms,
+  cementing unhealthy power structures and incentivising hollow,
+  algorithmically-determined content. This essay explores this trend,
+  asking whether increased democratisation of access inevitably leads to
+  centralisation and degradation, and also makes the case against the
+  trends underlying the development of the modern internet.
 
 tags:
 - technology

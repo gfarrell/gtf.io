@@ -2,10 +2,8 @@
 <html lang="en">
     <head>
         {{- partial "head.html" . -}}
-
-        <title>{{ block "title" . }}
-            {{ .Site.Title }}
-        {{ end }}</title>
+        <meta name="description" content="{{ block "description" . }}{{ end }}" />
+        <title>[GTF]: {{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     </head>
     <body>
         {{ partial "header.html" . }}

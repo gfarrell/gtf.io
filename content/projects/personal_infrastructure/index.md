@@ -4,6 +4,12 @@ github: "https://github.com/gfarrell/infra"
 language: "docker"
 draft: false
 date: 2019-06-22
+abstract: >-
+  While I have tried using various cloud-hosting services to run my
+  personal infrastructure, including this website, I wanted to get
+  away from this in order to have more control and also as a great
+  learning experience for devops. Ended up based on docker-compose,
+  nginx, mailman, drone-ci, and postgresql.
 category: devops
 toc: true
 ---

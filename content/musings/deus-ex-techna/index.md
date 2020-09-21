@@ -2,6 +2,14 @@
 title: "Deus Ex Techna"
 date: 2020-05-17
 draft: false
+abstract: >-
+  Too often the technology industry (and society more generally)
+  treats human-created problems as magically tractable in the face of
+  technology. This essay argues that this is a result of our dislike of
+  present-pain and behavioural change, preferring to worship Gods than
+  to take action into our own hands. This techno-optimistic narrative is
+  dangerously complacent, and will only lead to these problems becoming
+  increasingly existential to our societies and our species.
 
 tags:
 - society

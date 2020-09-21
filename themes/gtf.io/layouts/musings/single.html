@@ -1,6 +1,5 @@
-{{ define "title" }}
-{{ if .Params.draft }}[DRAFT] {{ end }}{{ .Params.Title }}
-{{ end }}
+{{ define "title" }}{{ if .Params.draft }}[DRAFT] {{ end }}{{ .Params.Title }}{{ end }}
+{{ define "description" }}{{ if .Params.abstract }}{{ .Params.abstract }}{{ else }}{{ truncate 300 .Content }}{{ end }}{{ end }}
 {{ define "main" }}
 <article class="musing">
     <header>

@@ -3,6 +3,12 @@ title: "Boggle Solver"
 github: "https://github.com/gfarrell/boggle-solver-clojure"
 language: "clojure"
 draft: false
+abstract: >-
+  Boggle is a great word game I play with my family, but I was always
+  curious about how many words I could actually get. So while learning
+  to code in clojure I decided to build a Boggle-solver which would
+  algorithmically determine all the possible words in a board using a
+  dictionary.
 date: 2017-08-17
 category: programming
 ---

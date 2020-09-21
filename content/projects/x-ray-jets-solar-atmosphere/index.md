@@ -3,6 +3,20 @@ title: "Temperature Bounds on X-ray jets in the solar atmosphere (Master's
 Thesis)"
 category: astrophysics
 date: 2014-04-30
+abstract: >-
+  Coronal X-ray jets are small phenomena found in coronal holes,
+  distinguished by an outward collimated plasma flow and brightening
+  at the base of the flow. Such jets could have some impact in two
+  questions in heliophysics, the first being that of what powers
+  the solar wind, and the second being that of the coronal heating
+  problem. While many properties of jets have been thoroughly studied
+  with large sample sets, the temperature of these jets is less well
+  known. This project looks at data taken from the Atmospheric Imaging
+  Assembly aboard the Solar Dynamics Observatory for four jet events,
+  three "blowout" jets and one "standard" jet, and uses regularised
+  differential emission measure inversion to analyse their temperatures.
+  It was found that jets have strong emissions in the 0.8-3MK range,
+  with blowout jets also exhibiting emissions at around 10MK.
 pdf: "gtf_temp_bounds_xray_jets_msci_thesis.pdf"
 citations:
 - id: "wiki-chp"
@@ -16,7 +30,7 @@ citations:
 ## Abstract
 
 _Coronal X-ray jets are small phenomena found in coronal holes,
-distinguished by an out- ward collimated plasma flow and brightening at
+distinguished by an outward collimated plasma flow and brightening at
 the base of the flow. Such jets could have some impact in two questions
 in heliophysics, the first being that of what powers the solar wind,
 and the second being that of the coronal heating problem. While many

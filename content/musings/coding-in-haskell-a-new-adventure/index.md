@@ -3,6 +3,12 @@ title: "Coding in Haskell: a new adventure"
 date: 2020-02-02
 lastmod: 2020-02-02
 draft: false
+abstract: >-
+  I recently started to learn Haskell and came to love it. This musing
+  details some of my findings as a beginner in Haskell, namely that I
+  love the language, especially the type system, monads, and how it
+  forces the cognitive load up front, and also some of the annoyances
+  with the toolchain and compiler.
 
 tags:
 - programming

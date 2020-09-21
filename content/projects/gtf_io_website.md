@@ -3,6 +3,12 @@ title: "This Website"
 github: "https://github.com/gfarrell/gtf.io"
 language: "html/css/go"
 draft: false
+abstract: >-
+  All about the motivation and reasoning behind the inception and design
+  of my personal website, built on Hugo (which is written in Go), with a
+  minimalist (if not Spartan) aesthetic. The website is designed to be
+  very fast with almost no resources being loaded, and, importantly, no
+  tracking scripts.
 date: 2018-08-27
 category: web-development
 ---
@@ -17,8 +23,8 @@ times, with Wordpress initially, then Ghost, and a little with Medium.
 
 This website was the result of a desire to have a simple, fully-static
 site which I could use to host various [musings](/musings) and
-[projects](/projects), as well as other [things](/things) like podcasts,
-wine listings, &amp;c..
+[projects](/projects), as well as other things like podcasts, wine
+listings, &amp;c..
 
 The design is purposefully spartan. Web design often seems to favour
 form over function. This is not just a contemporary issue, in the early
@@ -51,4 +57,3 @@ the web to shed the over-burdened designs that have made it so hard to
 get information out of many websites. This is just a small corner of a
 very large information ocean, but it is my corner, and I will make it as
 I want it to be.
-

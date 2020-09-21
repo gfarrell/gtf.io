@@ -4,6 +4,12 @@ date: 2019-01-04
 lastmod: 2019-01-04
 draft: false
 toc: true
+abstract: >-
+  I love email, but increasingly dislike Google. Having originally
+  set up my family's email using the then new and shiny Google Apps
+  platform, this musing details my journey away from Google's email
+  provision, including how I selected a provider and did the actual
+  migration process.
 
 tags:
 - technology
