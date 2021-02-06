@@ -1,0 +1,23 @@
+{{ if $.Page.Params.citations }}
+<footer class="bibliography">
+  <h2>References</h2>
+  <ol>
+    {{ range $ind,$citation := $.Page.Params.citations }}
+    {{ $i := add $ind 1 }}
+    <li id="citation-{{ $i }}">
+      [{{ $i }}]:
+      {{ if $citation.book }}
+      {{ delimit (sort $citation.authors) ", " ", and " }}: <i>{{ $citation.title }}</i>. {{ $citation.year }}, {{ $citation.publisher }}.
+      {{ else }}
+      <i>{{ $citation.label }}</i>
+      <br/>
+      <a href="{{ $citation.src }}" title="{{ $citation.label }}">{{ $citation.src | truncate 35 }}</a>
+      {{ if $citation.retrieved }}
+      <br/><span>Retrieved: {{ $citation.retrieved }}</span>
+      {{ end }}
+      {{ end }}
+    </li>
+    {{ end }}
+  </ol>
+</footer>
+{{ end }}
