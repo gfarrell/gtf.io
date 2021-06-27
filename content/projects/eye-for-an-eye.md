@@ -37,7 +37,7 @@ round) of the simulation, the resulting action for `A` is:
 - `B` cooperated &rarr; `A` cooperates
 - `B` defected &rarr; `A` defects
 
-Once all the inter-`Agent` `Interaction`s have been computed, a scoring matrix
+Once all the inter-`Agent` `Interactions` have been computed, a scoring matrix
 is applied to each `Agent` (called the `RewardsVector`). This determines the
 score increment for each `Agent` in the following scenarios:
 
