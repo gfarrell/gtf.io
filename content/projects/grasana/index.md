@@ -2,7 +2,7 @@
 title: "Grasana: representing Asana projects as graphs/trees"
 github: "https://github.com/gfarrell/grasana"
 language: "haskell + typescript"
-draft: true
+draft: false
 abstract: >-
   CLI tool to represent Asana projects and their tasks/subtasks as trees or
   graphs, for rendering using DOT (graphviz) or HTML (d3).
