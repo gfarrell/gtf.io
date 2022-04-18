@@ -45,7 +45,7 @@ Broadly this means that you can use `return` to insert a value `a` into
 a monadic context `m`, and you can chain together computations which
 operate on that inner value using `bind` (or `>>=`).
 
-There are three monad laws to which any instance of the `Monad`
+There are three monad laws with which any instance of the `Monad`
 typeclass must comply:
 
 1. Left identity: `return a >>= f ≡ f a`
@@ -210,7 +210,7 @@ tricky, meaning that the typescript compiler might not be very helpful
 for avoiding mistakes.
 
 Whether we use this Haskell-esque syntax or the original `Promise`
-syntax, however, I think that representing computations in this was
+syntax, however, I think that representing computations in this way
 (monadically) is much more ergonomic for a programmer, rather than
 relying on nested `try ... catch` clauses which are required for
 `async/await`.
