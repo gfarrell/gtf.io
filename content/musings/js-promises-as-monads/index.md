@@ -17,25 +17,24 @@ toc: true
 
 ---
 
-While `async/await` has become extremely popular in the javascript
-and typescript communities (to which I'm just going to refer as
-javascript or `js` henceforth), probably because it allows one to write
-asynchronous code as though it were synchronous, which _feels_ much
-nicer, I found myself irritated with the ergonomics of error handling
-in javascript. I came back to writing js after a spell writing almost
-exclusively in Haskell, and was struck how old `Promise`-based code I
-had written had far more in common with the Haskell I was now writing
-than the newer `async/await`-based code I had written before moving away
-from js. So I set out to see if I was right -- can we treat `Promise`
-like an instance of `Monad` (probably `ExceptT e IO a`), even if much
-more loosely-typed (in typescript, for example, we can't specify the
-type of the error with which a `Promise` might `reject()`).
+While `async/await` has become extremely popular in the javascript and
+typescript communities (to which I'm just going to refer as javascript
+or `js` henceforth), having spent the last two years writing almost
+exclusively in Haskell, I found myself irritated with the ergonomics
+of error handling in javascript when using this paradigm. Coming back
+to js, I was struck how old `Promise`-based code I had written had far
+more in common with the monadic Haskell I was now writing than my newer
+`async/await`-based code. So I
+set out to see if I was right -- can we treat `Promise` like an instance
+of `Monad` (probably more like `ExceptT e IO a`), even if much more
+loosely-typed (in typescript, for example, we can't specify the type of
+the error with which a `Promise` might `reject()`).
 
 ## Monads and Monad Laws
 
-Monads are defined {{footnote}}While there are formal definitions of
+Monads are defined{{< footnote >}}While there are formal definitions of
 Monads from category theory, for the purposes of this exploration a
-code-based definition will suffice.{{/footnote}} (in Haskell) through
+code-based definition will suffice.{{< /footnote >}} (in Haskell) through
 two functions which apply to them: `bind` and `return`:
 
     class Monad m where
@@ -219,3 +218,5 @@ relying on nested `try ... catch` clauses which are required for
 There is an executable script version of all the code in this exploration
 [on Github](https://gist.github.com/gfarrell/d2504d12f85e80a8cc2933d587d320b3),
 in case you want to play around with it yourself.
+
+{{< footnotes >}}
