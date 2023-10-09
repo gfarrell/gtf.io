@@ -70,7 +70,7 @@ which I love, I could perfectly easily programme without if I had to (I
 did use VS Code for a few weeks while my laptop was being repaired and
 it was fine).
 
-In my experience, these devtools, in a large number of cases, has
+In my experience, these devtools, in a large number of cases, have
 engendered a form of learned helplessness in programmers such that they
 struggle to conceive of programming without them, and believe that they
 are necessary for their own productivity. I would go further and posit,
