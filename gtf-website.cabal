@@ -1,0 +1,73 @@
+cabal-version:      3.4
+name:               gtf-website
+synopsis:           Software for running the gtf.io website
+homepage:           https://www.gtf.io/
+license:            BSD-3-Clause
+
+-- The package version.
+-- See the Haskell package versioning policy (PVP) for standards
+-- guiding when and how versions should be incremented.
+-- https://pvp.haskell.org
+-- PVP summary:     +-+------- breaking API changes
+--                  | | +----- non-breaking API additions
+--                  | | | +--- code changes with no API change
+version:            0.1.0.0
+
+
+-- The file containing the license text.
+license-file:       LICENSE
+
+author:             Gideon Farrell
+maintainer:         gideon@gtf.io
+category:           Web
+build-type:         Simple
+
+-- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
+extra-doc-files:    CHANGELOG.md
+
+common warnings
+    ghc-options: -Wall
+
+common lang
+    default-language: GHC2021
+    default-extensions:
+      NoImplicitPrelude,
+      OverloadedStrings,
+      LambdaCase
+
+common deps
+  build-depends:
+      base ^>=4.17.2.0,
+      bytestring,
+      either,
+      megaparsec,
+      network-uri,
+      parser-combinators,
+      text,
+      wai,
+      warp,
+
+library
+    import: warnings, lang, deps
+    hs-source-dirs: src
+    exposed-modules:
+      CommonPrelude
+
+executable gtf-website-server
+    import: warnings, lang, deps
+    main-is: Main.hs
+    build-depends:    
+      gtf-website
+    hs-source-dirs: app
+
+test-suite gtf-website-tests
+    import: warnings, lang, deps
+    main-is: Spec.hs
+    type: exitcode-stdio-1.0
+    build-depends:
+      gtf-website,
+      hspec,
+      hspec-megaparsec
+    hs-source-dirs: test
+    other-modules:
+
