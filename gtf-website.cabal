@@ -40,6 +40,8 @@ common deps
       base ^>=4.17.2.0,
       bytestring,
       either,
+      http-types,
+      lucid,
       megaparsec,
       network-uri,
       parser-combinators,
@@ -51,7 +53,12 @@ library
     import: warnings, lang, deps
     hs-source-dirs: src
     exposed-modules:
-      CommonPrelude
+      CommonPrelude,
+      GTF.Router
+    other-modules:
+      GTF.URL,
+      GTF.Pages.Layout,
+      GTF.Pages.Error
 
 executable gtf-website-server
     import: warnings, lang, deps
