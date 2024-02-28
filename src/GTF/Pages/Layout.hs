@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module GTF.Pages.Layout
   ( defaultLayout,
   )
@@ -6,11 +8,12 @@ where
 import CommonPrelude
 import Lucid.Base (Html, toHtml)
 import Lucid.Html5
+import GTF.Assets (cssFile)
 
 siteCss :: Html ()
 siteCss = link_ [
     rel_ "stylesheet",
-    href_ "main.css"
+    href_ $(cssFile "main")
   ]
 
 defaultLayout :: Text -> Html () -> Html ()
