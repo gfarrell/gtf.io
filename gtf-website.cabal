@@ -61,7 +61,8 @@ library
     other-modules:
       GTF.URL,
       GTF.Pages.Layout,
-      GTF.Pages.Error
+      GTF.Pages.Error,
+      GTF.Assets
 
 executable gtf-website-server
     import: warnings, lang, deps
