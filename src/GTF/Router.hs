@@ -4,8 +4,10 @@ import CommonPrelude
 import GTF.Pages.Error qualified as Pages
 import GTF.URL (UrlPath (UrlPath))
 import Lucid.Base (Html, renderBS)
-import Network.HTTP.Types (ResponseHeaders, Status, status404)
-import Network.Wai (Application, Request (rawPathInfo), Response, pathInfo, responseLBS)
+import Network.HTTP.Types (ResponseHeaders, Status, status404, status200)
+import Network.Wai (Application, Request (rawPathInfo), Response, pathInfo, responseLBS, ResponseReceived)
+
+import GTF.Pages.Colophon qualified as Colophon
 
 standardHeaders :: ResponseHeaders
 standardHeaders =
@@ -18,4 +20,9 @@ sendWith status =
 
 routes :: Application
 routes req res = case pathInfo req of
+  ["colophon"] -> page Colophon.content
   _ -> res . sendWith status404 . Pages.error404 . UrlPath $ rawPathInfo req
+
+  where
+    page :: Html () -> IO ResponseReceived
+    page = res . sendWith status200

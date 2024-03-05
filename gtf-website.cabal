@@ -61,6 +61,8 @@ library
     other-modules:
       GTF.URL,
       GTF.Pages.Layout,
+      GTF.Pages.Colophon,
+      GTF.Pages.Helpers,
       GTF.Pages.Error,
       GTF.Assets
 

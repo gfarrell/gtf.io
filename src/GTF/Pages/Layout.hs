@@ -19,7 +19,7 @@ siteCss = link_ [
 defaultLayout :: Text -> Html () -> Html ()
 defaultLayout pageTitle pageContent = html_ $ do
   head_ $ do
-    title_ (toHtml pageTitle)
+    title_ $ "GTF :: " <> toHtml pageTitle
     siteCss
   body_ $ do
-    pageContent
+    main_ [class_ "page-home content-container", role_ "main"] pageContent
