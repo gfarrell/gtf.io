@@ -65,6 +65,7 @@ library
       GTF.Pages.Colophon,
       GTF.Pages.Helpers,
       GTF.Pages.Error,
+      GTF.Pages.Partials.Nav,
       GTF.Assets,
       GTF.Style.Main
 
