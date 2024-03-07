@@ -7,5 +7,5 @@ module GTF.URL (
 import CommonPrelude
 import Data.ByteString (ByteString)
 
-newtype UrlPath = UrlPath ByteString
+newtype UrlPath = UrlPath { unUrlPath :: ByteString }
   deriving newtype (Show, Eq)

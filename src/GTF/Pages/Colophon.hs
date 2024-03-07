@@ -3,11 +3,13 @@ module GTF.Pages.Colophon (content) where
 import CommonPrelude
 import GTF.Pages.Helpers (commaList, internal)
 import GTF.Pages.Layout (defaultLayout)
+import GTF.URL (UrlPath)
 import Lucid (Html, ToHtml (toHtmlRaw))
 import Lucid.Html5
 
-content :: Html ()
-content = defaultLayout
+content :: UrlPath -> Html ()
+content currentPath = defaultLayout
+  currentPath
   "Colophon"
   $ do
     h1_ "About this site"
@@ -17,7 +19,7 @@ content = defaultLayout
       " primarily, it's a place to put my thoughts, insofar as I am able to complete them enough to actually commit them to the source; it also serves as a bit of a playground for me to test new things when the urge takes me."
 
     section_ $ do
-      h2_ "Stack"
+      h2_ "Tools"
       p_ $ do
         "While it has been through many iterations, the current version is built in "
         a_ [href_ "https://www.haskell.org", title_ "Haskell language website"] "Haskell"
@@ -31,7 +33,11 @@ content = defaultLayout
         a_ [href_ "https://www.djot.net/", title_ "djot website"] "Djot"
         ", although I have written my own extensions in a "
         a_ [href_ "https://github.com/gfarrell/djoths", title_ "djoths custom fork"] "custom fork of the Djot implementation for Haskell"
-        ". Yes, that means it exists as a binary running on a server, not some statically-generated load of HTML, nor a Javascript-heavy SPA. Old school, but that's a game I'm enjoying at the moment."
+        ". The previous iteration was a static site built with "
+        a_ [href_ "https://gohugo.io", title_ "Hugo website"] "Hugo"
+        " and served by "
+        a_ [href_ "https://nginx.org", title_ "nginx website"] "nginx"
+        "."
       p_ $ do
         "The site is hosted on a "
         a_ [href_ "https://www.digitalocean.com", title_ "Digital Ocean website"] "Digital Ocean"
@@ -51,16 +57,15 @@ content = defaultLayout
         a_ [href_ "https://github.com/gfarrell/dotfiles", title_ "Gideon's dotfiles"] "dotfiles"
         "."
 
-
     section_ $ do
       h2_ "Design and Taxonomy"
       p_ $ do
         "The site has a several types of page: "
-        commaList [
-          "there are the general pages (like this one)",
-          "musings (essays and reflections)",
-          "codices (digital \"books\" on a particular topic)",
-          "projects"
+        commaList
+          [ "there are the general pages (like this one)",
+            "musings (essays and reflections)",
+            "codices (digital \"books\" on a particular topic)",
+            "projects"
           ]
         ". While I have changed the structure over time, the site also obeys the Cool URIs idea laid out by "
         a_ [href_ "https://www.w3.org/Provider/Style/URI", title_ "Cool URIs don't change"] "Tim Berners-Lee"
@@ -72,8 +77,10 @@ content = defaultLayout
     section_ $ do
       h2_ "Inspiration"
       p_ "There are several websites which have inspired both how I have structured this one, but also how I have built it:"
-      ul_ $ foldMap li_ [
-        a_ [href_ "https://www.fosskers.ca/en/about", title_ "Fosskers' website"] "Colin Woodbury",
-        a_ [href_ "https://doriantaylor.com/colophon", title_ "Dorian Taylor's website"] "Dorian Taylor",
-        "and many others, which I'll add here as I remember them!"
-        ]
+      ul_
+        $ foldMap
+          li_
+          [ a_ [href_ "https://www.fosskers.ca/en/about", title_ "Fosskers' website"] "Colin Woodbury",
+            a_ [href_ "https://doriantaylor.com/colophon", title_ "Dorian Taylor's website"] "Dorian Taylor",
+            "and many others, which I'll add here as I remember them!"
+          ]

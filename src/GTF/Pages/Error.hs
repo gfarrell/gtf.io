@@ -11,7 +11,7 @@ import Lucid.Base (Html, toHtml)
 import Lucid.Html5
 
 error404 :: UrlPath -> Html ()
-error404 (UrlPath path) = defaultLayout "We've lost it, precious!" $
+error404 currentPath@(UrlPath path) = defaultLayout currentPath "We've lost it, precious!" $
   section_ [class_ "error-page error-404"] $ do
     h1_ "I just don't know where it is!"
     p_ . toHtml $
