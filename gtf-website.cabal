@@ -39,6 +39,7 @@ common deps
   build-depends:
       base ^>=4.17.2.0,
       bytestring,
+      clay,
       directory,
       filepath,
       either,
@@ -64,7 +65,8 @@ library
       GTF.Pages.Colophon,
       GTF.Pages.Helpers,
       GTF.Pages.Error,
-      GTF.Assets
+      GTF.Assets,
+      GTF.Style.Main
 
 executable gtf-website-server
     import: warnings, lang, deps
