@@ -41,15 +41,21 @@ common deps
       bytestring,
       clay,
       directory,
-      filepath,
+      djot,
       either,
+      filepath,
+      generic-lens,
       http-types,
       lucid,
       megaparsec,
+      mime-types,
+      mtl,
       network-uri,
       parser-combinators,
       template-haskell,
       text,
+      time,
+      yaml,
       wai,
       warp,
 
@@ -58,21 +64,26 @@ library
     hs-source-dirs: src
     exposed-modules:
       CommonPrelude,
+      GTF.Content.Doc,
+      GTF.Content.Meta,
+      GTF.Content.Musings,
       GTF.Router
     other-modules:
-      GTF.URL,
-      GTF.Pages.Layout,
-      GTF.Pages.Colophon,
-      GTF.Pages.Helpers,
-      GTF.Pages.Error,
-      GTF.Pages.Partials.Nav,
       GTF.Assets,
-      GTF.Style.Main
+      GTF.Content.Loader,
+      GTF.Pages.Colophon,
+      GTF.Pages.Error,
+      GTF.Pages.Helpers,
+      GTF.Pages.Layout,
+      GTF.Pages.Musings,
+      GTF.Pages.Partials.Nav,
+      GTF.Style.Main,
+      GTF.URL
 
 executable gtf-website-server
     import: warnings, lang, deps
     main-is: Main.hs
-    build-depends:    
+    build-depends:
       gtf-website
     hs-source-dirs: app
 
@@ -86,4 +97,6 @@ test-suite gtf-website-tests
       hspec-megaparsec
     hs-source-dirs: test
     other-modules:
+      GTF.Content.MetaSpec,
+      GTF.Content.MusingsSpec
 

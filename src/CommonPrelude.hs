@@ -16,5 +16,9 @@ import Control.Monad ((>=>))
 import Control.Applicative ((<|>))
 import Data.Functor (($>), (<&>))
 import Data.Text (Text)
+import Language.Haskell.TH.Syntax (Lift (..), liftData)
+import Data.Time (Day)
 import Prelude as X
 
+instance Lift Day where
+  lift = liftData

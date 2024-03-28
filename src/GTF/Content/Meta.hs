@@ -1,0 +1,35 @@
+module GTF.Content.Meta (
+  parseMeta,
+  MetadataParseError (..),
+) where
+
+import CommonPrelude
+import Control.Monad (void)
+import Data.Void (Void)
+import Text.Megaparsec (Parsec, parse, anySingle, manyTill, MonadParsec (eof))
+import Text.Megaparsec.Byte (string)
+import Data.Yaml (decodeEither', FromJSON)
+import Data.ByteString (ByteString, pack)
+import Data.Bifunctor (first)
+
+type Parser = Parsec Void ByteString
+
+data MetadataParseError =
+  MetaSectionMissing
+  | MetaParseFailure
+  deriving (Show, Eq)
+
+docSep_ :: Parser ()
+docSep_ = void $ string "---"
+
+rawMeta_ :: Parser ByteString
+rawMeta_ = pack <$> (docSep_ >> manyTill anySingle docSep_)
+
+restOfDoc_ :: Parser ByteString
+restOfDoc_ = pack <$> manyTill anySingle eof
+
+parseMeta :: FromJSON a => ByteString -> Either MetadataParseError (a, ByteString)
+parseMeta bs = do
+  (metaBS, docBS) <- first (const MetaSectionMissing) $ parse ((,) <$> rawMeta_ <*> restOfDoc_) "file meta" bs
+  meta <- first (const MetaParseFailure) $ decodeEither' metaBS
+  pure (meta, docBS)
