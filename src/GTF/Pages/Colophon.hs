@@ -7,10 +7,11 @@ import GTF.URL (UrlPath)
 import Lucid (Html, ToHtml (toHtmlRaw))
 import Lucid.Html5
 
-content :: UrlPath -> Html ()
-content currentPath = defaultLayout
-  currentPath
-  "Colophon"
+content :: UrlPath -> Maybe (Html ())
+content currentPath = Just
+  $ defaultLayout
+    currentPath
+    "Colophon"
   $ do
     h1_ "About this site"
     p_ $ do

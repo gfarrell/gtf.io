@@ -23,29 +23,28 @@ sendWith status =
 
 routes :: Application
 routes req res = case pathInfo req of
-  ["styles", n] -> res $ renderAsset (Asset Stylesheet n)
+  ["styles", n] -> renderAsset (Asset Stylesheet n)
   ["musings"] -> page Musings.indexPage
-  ["musings", n] -> res $ case Musings.itemPage n (UrlPath $ rawPathInfo req) of
-    Just p -> sendWith status200 p
-    Nothing -> sendWith status404 . Pages.error404 . UrlPath $ rawPathInfo req
+  ["musings", n] -> page (Musings.itemPage n)
   ["colophon"] -> page Colophon.content
-  _ -> res . sendWith status404 . Pages.error404 . UrlPath $ rawPathInfo req
+  _ -> page (const Nothing)
   where
-    page :: (UrlPath -> Html ()) -> IO ResponseReceived
-    page content = res . sendWith status200 . content . UrlPath . rawPathInfo $ req
+    page :: (UrlPath -> Maybe (Html ())) -> IO ResponseReceived
+    page content =
+      let path = UrlPath . rawPathInfo $ req
+       in res $ case content path of
+            Just html -> sendWith status200 html
+            Nothing -> sendWith status404 $ Pages.error404 path
 
-    renderAsset :: Asset -> Response
+    renderAsset :: Asset -> IO ResponseReceived
     renderAsset asset =
       case loadAsset asset of
-        Nothing ->
-          sendWith status404
-            . Pages.error404
-            . UrlPath
-            $ rawPathInfo req
+        Nothing -> page (const Nothing)
         Just content ->
-          responseLBS
-            status200
-            [("Content-Type", getMimeType asset)]
+          res
+            $ responseLBS
+              status200
+              [("Content-Type", getMimeType asset)]
             . fromStrict
             $ content
 

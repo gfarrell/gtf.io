@@ -24,8 +24,8 @@ import Lucid.Html5
 musings :: [ParsedDoc Musing]
 musings = $(loadFilesTH (Proxy @Musing) "src/GTF/Pages/Musings/content" (const True))
 
-indexPage :: UrlPath -> Html ()
-indexPage currentPath = defaultLayout currentPath "All Musings" $ do
+indexPage :: UrlPath -> Maybe (Html ())
+indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
   h1_ $ toHtmlRaw ("muse | mju&#720;z |" :: String)
   p_ $ i_ "verb [no object]"
   p_ $ "by absorbed in thought: " <> i_ "he was musing on the problems he faced."
