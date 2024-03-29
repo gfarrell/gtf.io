@@ -14,7 +14,7 @@ import Djot (RenderOptions (..))
 import Djot.Html (renderHtml)
 import GTF.Content.Doc (ParsedDoc (..))
 import GTF.Content.Loader (loadFilesTH)
-import GTF.Content.Musings (Category (..), DocMeta (..), Musing)
+import GTF.Content.Musings (Category (..), DocMeta (..), Musing, wordcount)
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (defaultLayout)
 import GTF.URL (UrlPath)
@@ -60,6 +60,8 @@ itemPage name currentPath =
       article_ $ do
         header_ $ do
           h1_ . toHtml $ title m
-          p_ [class_ "subtitle"] . humantime $ created m
+          p_ [class_ "subtitle"] $ do
+            humantime $ created m
+            ", " <> toHtml (show $ wordcount d) <> " words"
         div_ [class_ "item-content"] . toHtmlRaw . toLazyByteString $ renderHtml (RenderOptions False) d
     _ -> Nothing
