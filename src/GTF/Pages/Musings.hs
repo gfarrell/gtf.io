@@ -3,14 +3,13 @@
 
 module GTF.Pages.Musings
   ( indexPage,
-    itemPage
+    itemPage,
   )
 where
 
 import CommonPrelude
 import Data.ByteString.Builder (toLazyByteString)
 import Data.Proxy (Proxy (Proxy))
-import Data.Text.Encoding (decodeUtf8, encodeUtf8)
 import Djot (RenderOptions (..))
 import Djot.Html (renderHtml)
 import GTF.Content.Doc (ParsedDoc (..))
@@ -18,7 +17,7 @@ import GTF.Content.Loader (loadFilesTH)
 import GTF.Content.Musings (Category (..), DocMeta (..), Musing)
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (defaultLayout)
-import GTF.URL (UrlPath (UrlPath))
+import GTF.URL (UrlPath)
 import Lucid (Html, ToHtml (toHtml, toHtmlRaw))
 import Lucid.Html5
 
@@ -54,7 +53,7 @@ indexPage currentPath = defaultLayout currentPath "All Musings" $ do
             )
             list
 
-itemPage ::  Text -> UrlPath -> Maybe (Html ())
+itemPage :: Text -> UrlPath -> Maybe (Html ())
 itemPage name currentPath =
   case filter ((== name) . slug . meta) musings of
     [ParsedDoc m d] -> Just $ defaultLayout currentPath (title m) $ do
