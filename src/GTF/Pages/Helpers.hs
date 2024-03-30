@@ -1,10 +1,11 @@
-module GTF.Pages.Helpers (commaList, internal, datetime, humantime) where
+module GTF.Pages.Helpers (commaList, internal, datetime, humantime, now) where
 
 import CommonPrelude
 import Data.String (IsString)
 import Data.Text (pack)
-import Data.Time (Day, defaultTimeLocale, formatTime)
+import Data.Time (Day, UTCTime (utctDay), defaultTimeLocale, formatTime, getCurrentTime)
 import Data.Time.Format.ISO8601 (iso8601Show)
+import Language.Haskell.TH.Syntax (Exp, Q, lift, runIO)
 import Lucid (Html, toHtml)
 import Lucid.Html5
 
@@ -33,3 +34,6 @@ humantime d =
   time_ [datetime_ . pack $ iso8601Show d]
     $ toHtml
     $ formatTime defaultTimeLocale "%e %b, %Y" d
+
+now :: Q Exp
+now = runIO (utctDay <$> getCurrentTime) >>= lift
