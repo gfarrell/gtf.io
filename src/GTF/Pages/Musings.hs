@@ -26,9 +26,10 @@ musings = $(loadFilesTH (Proxy @Musing) "src/GTF/Pages/Musings/content" (const T
 
 indexPage :: UrlPath -> Maybe (Html ())
 indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
-  h1_ $ toHtmlRaw ("muse | mju&#720;z |" :: String)
-  p_ $ i_ "verb [no object]"
-  p_ $ "by absorbed in thought: " <> i_ "he was musing on the problems he faced."
+  header_ $ do
+    h1_ $ toHtmlRaw ("muse | mju&#720;z |" :: String)
+    p_ $ i_ "verb [no object]"
+    p_ $ "by absorbed in thought: " <> i_ "he was musing on the problems he faced."
   hr_ []
   makeSection "General Essays" $ filter ((== General) . category . meta) musings
   makeSection "Informatics" $ filter ((== Informatics) . category . meta) musings
