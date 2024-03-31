@@ -1,14 +1,27 @@
 module GTF.Pages.Layout
   ( defaultLayout,
+    defaultLayoutWithMeta,
+    PageMeta (..),
   )
 where
 
 import CommonPrelude
+import Data.Text (intercalate)
 import GTF.Pages.Partials.Footer (footer)
 import GTF.Pages.Partials.Nav (navbar)
 import GTF.URL (UrlPath)
 import Lucid.Base (Html, toHtml)
 import Lucid.Html5
+
+data PageMeta = PageMeta
+  { pageTitle :: Text,
+    pageDescription :: Maybe Text,
+    pageKeywords :: Maybe [Text]
+  }
+  deriving (Show, Eq)
+
+basicMeta :: Text -> PageMeta
+basicMeta title = PageMeta title Nothing Nothing
 
 siteCss :: Html ()
 siteCss =
@@ -18,9 +31,17 @@ siteCss =
     ]
 
 defaultLayout :: UrlPath -> Text -> Html () -> Html ()
-defaultLayout currentPath pageTitle pageContent = html_ $ do
+defaultLayout currentPath pageTitle =
+  defaultLayoutWithMeta currentPath (basicMeta pageTitle)
+
+defaultLayoutWithMeta :: UrlPath -> PageMeta -> Html () -> Html ()
+defaultLayoutWithMeta currentPath metadata pageContent = html_ $ do
   head_ $ do
-    title_ $ "GTF :: " <> toHtml pageTitle
+    title_ $ "GTF :: " <> toHtml (pageTitle metadata)
+    maybe mempty (\c -> meta_ [name_ "description", content_ c])
+      $ pageDescription metadata
+    maybe mempty (\tags -> meta_ [name_ "keywords", content_ $ intercalate ", " tags])
+      $ pageKeywords metadata
     siteCss
   body_ $ do
     header_ [class_ "site-header"] $ do

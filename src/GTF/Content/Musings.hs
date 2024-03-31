@@ -7,15 +7,15 @@
 module GTF.Content.Musings (Category (..), Musing, DocMeta (..), wordcount) where
 
 import CommonPrelude
+import Data.ByteString (ByteString)
 import Data.ByteString.Char8 qualified as BS
 import Data.Text (unpack)
 import Data.Time (Day)
 import Data.Yaml (FromJSON (..), withText)
-import Djot.AST (Doc (docBlocks), Block (..), Inline (..), Caption (..), Cell (Cell))
+import Djot.AST (Block (..), Caption (..), Cell (Cell), Doc (docBlocks), Inline (..))
 import GHC.Generics (Generic)
 import GTF.Content.Doc (ContentDoc (..))
 import Language.Haskell.TH.Syntax (Lift)
-import Data.ByteString (ByteString)
 
 data Musing
 
@@ -39,7 +39,8 @@ instance ContentDoc Musing where
       category :: Category,
       created :: Day,
       updated :: Maybe Day,
-      abstract :: Maybe Text
+      abstract :: Maybe Text,
+      tags :: Maybe [Text]
     }
     deriving (Show, Eq, Generic, Lift)
     deriving anyclass (FromJSON)
