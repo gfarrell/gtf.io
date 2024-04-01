@@ -22,6 +22,9 @@ maintainer:         gideon@gtf.io
 category:           Web
 build-type:         Simple
 
+extra-source-files:
+  src/GTF/Pages/**/*.djot
+
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
 
