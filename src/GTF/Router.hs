@@ -14,7 +14,7 @@ import Network.Wai (Application, Request (rawPathInfo), Response, ResponseReceiv
 
 standardHeaders :: ResponseHeaders
 standardHeaders =
-  [ ("Content-Type", "text/html")
+  [ ("Content-Type", "text/html; charset=utf8")
   ]
 
 sendWith :: Status -> Html () -> Response
