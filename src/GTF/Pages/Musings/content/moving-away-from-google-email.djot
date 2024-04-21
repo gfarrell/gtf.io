@@ -1,9 +1,8 @@
 ---
 title: "Moving Away From Google Email"
-date: 2019-01-04
-lastmod: 2019-01-04
-draft: false
-toc: true
+created: 2019-01-04
+slug: moving-away-from-google-email
+category: general
 abstract: >-
   I love email, but increasingly dislike Google. Having originally
   set up my family's email using the then new and shiny Google Apps
@@ -19,20 +18,6 @@ tags:
 - surveillance
 - privacy
 - howto
-
-citations:
-- id: "leave-gmail-10-steps"
-  src: "https://blog.dipasquale.fr/en/2018/12/02/leave-gmail-in-10-steps/"
-  label: "Leave Gmail in 10 steps"
-  retrieved: "2018-12-31"
-- id: "aus-enc-bill"
-  src: "https://www.nytimes.com/2018/12/06/world/australia/encryption-bill-nauru.html"
-  label: "Australian Government Passes Contentious Encryption Law"
-  retrieved: "2018-12-31"
-- id: "fastmail-blog"
-  src: "https://fastmail.blog/2018/12/21/advocating-for-privacy-aabill-australia/"
-  label: "Advocating for privacy in Australia"
-  retrieved: "2018-12-31"
 
 ---
 
@@ -78,22 +63,20 @@ I have slowly extricated myself from services which do not respect my
 privacy, my email was always kept within Google's realm.
 
 For the last couple of years, however, I have been flirting with
-alternatives, and have had a strong desire to move my family's data
-outside of Google's reach. I recently read {{< cite leave-gmail-10-steps
->}} about leaving Gmail{{< /cite >}}, and with the time afforded to me
-by the Christmas holidays I decided to jump.
+alternatives, and have had a strong desire to move my family's
+data outside of Google's reach. I recently read about leaving
+Gmail[^cite-leave-gmail-10-steps], and with the time afforded to me by
+the Christmas holidays I decided to jump.
 
-The main motivation for this is privacy{{< footnote >}}The other, which
-is that Google is an Evil company in my view, will have to wait for
-a separate article.{{< /footnote >}}. Google's entire business model
-is predicated on offering me free (or cheap) services in return for
-my data, which is sells on to advertisers, insurers, governments, and
-anyone else who will pay. The things that really spooked me recently
-was understanding exactly how much knowledge Google has pulled from
-my emails (things like knowing all my shopping habits since so many
-services send email receipts), and also the new writing assistance that
-Gmail offers online, "helping" you to write emails by suggesting words
-based on other emails you, and others, have written.
+The main motivation for this is privacy[^evil-google]. Google's entire
+business model is predicated on offering me free (or cheap) services
+in return for my data, which is sells on to advertisers, insurers,
+governments, and anyone else who will pay. The things that really
+spooked me recently was understanding exactly how much knowledge Google
+has pulled from my emails (things like knowing all my shopping habits
+since so many services send email receipts), and also the new writing
+assistance that Gmail offers online, "helping" you to write emails by
+suggesting words based on other emails you, and others, have written.
 
 ## Searching for an alternative
 
@@ -125,19 +108,18 @@ I explored a couple of options. The first was
 by everyone I have seen use them, and the team really does care about
 privacy. Unfortunately, they are hosted in Australia, a country which
 is not only in the five-eyes intelligence-sharing network, but which
-recently {{< cite aus-enc-bill >}}passed a bill{{< /cite >}} which does
-away any hope for judicial oversight of surveillance. Fastmail has {{<
-cite fastmail-blog >}}written online that the bill will not have an
-impact on its services{{< /cite >}} but I simply cannot trust a service
-based in Australia, with servers in the USA, no matter how much I like
-the team.
+recently passed a bill[^cite-aus-enc-bill] which does away any hope for
+judicial oversight of surveillance. Fastmail has written online that the
+bill will not have an impact on its services[^cite-fastmail-blog] but I
+simply cannot trust a service based in Australia, with servers in the
+USA, no matter how much I like the team.
 
 With Fastmail out of the running, I looked at
 [ProtonMail](https://protonmail.com), a service whose raison d'être
 is privacy. ProtonMail is well known, and many people who value their
 privacy use it. To be honest, however, while I care about my privacy, I
 am mostly trying to avoid being swept up in mass surveillance, rather
-than reasonably ordered, court backed, searches --- I can see an
+than reasonably ordered, court backed, searches — I can see an
 argument for this being a valid route for law enforcement to pursue.
 ProtonMail encrypts everything at rest, which is great, but such a
 strong protection is not as high on my list as basic privacy, and their
@@ -227,7 +209,7 @@ emails, it is unclear how to delete folders, the "back" button does
 not always work as expected. Ultimately I have found it practically
 unusable. Unfortunately the new beta interface is not much better, and
 where it has a very updated look (although, in my opinion, it is still
-very poorly designed) it has lots functionlity when compared to RB6 ---
+very poorly designed) it has lots functionlity when compared to RB6 —
 no tags, it is perpetually "synching", and often my emails do not even
 show up in the inbox.
 
@@ -258,4 +240,11 @@ just relieved that my family's data no longer reside within the Google
 leviathan's belly, and for that I am willing to suffer a substandard
 webmail experience.
 
-{{< footnotes >}}
+[^cite-leave-gmail-10-steps]: <https://blog.dipasquale.fr/en/2018/12/02/leave-gmail-in-10-steps/> (retrieved 2018-12-31)
+
+[^cite-aus-enc-bill]: <https://www.nytimes.com/2018/12/06/world/australia/encryption-bill-nauru.html> (retrieved 2018-12-31)
+
+[^cite-fastmail-blog]: <https://fastmail.blog/2018/12/21/advocating-for-privacy-aabill-australia/> (retrieved 2018-12-31)
+
+[^evil-google]: The other, which is that Google is an Evil company in my
+view, will have to wait for a separate article.

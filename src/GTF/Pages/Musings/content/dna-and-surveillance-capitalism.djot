@@ -1,8 +1,9 @@
 ---
 title: "DNA and Surveillance Capitalism"
-date: 2019-04-21
-lastmod: 2019-04-22
-draft: false
+created: 2019-04-21
+updated: 2019-04-22
+category: general
+slug: dna-and-surveillance-capitalism
 abstract: >-
   More and more companies offer services centred around DNA-sequencing
   technologies, promising to tell one's heritage, warn of health
@@ -21,63 +22,26 @@ tags:
 - privacy
 
 citations:
-- id: "sz-surveillance-capitalism"
-  src: "https://profilebooks.com/surveillance"
-  label: "Zuboff, S., \"The Age of Surveillance Capitalism\", 2019."
-- id: "gvr-biometrics-market"
-  src: "https://www.grandviewresearch.com/industry-analysis/biometrics-industry"
-  label: "Biometrics Technology Market Analysis Report By End-Use (Government, Banking & Finance, Transport/Logistics, Defense & Security), By Application (AFIS, Iris, Non-AFIS), and Segment Forecasts, 2018 - 2025"
-  retrieved: "2019-04-21"
-- id: "genome-seq-costs"
-  src: "https://www.genome.gov/sequencingcosts/"
-  label: "The Cost of Sequencing a Human Genome"
-  retrieved: "2019-04-21"
-- id: "axios-dna-sharing"
-  src: "https://www.axios.com/dna-test-results-privacy-genetic-data-sharing-4687b1a0-f527-425c-ac51-b5288b0c0293.html"
-  label: "Genetic testing firms share your DNA data more than you think"
-  retrieved: "2019-04-21"
-- id: "familytree-fbi"
-  src: "https://www.bloomberg.com/news/articles/2019-02-01/major-dna-testing-company-is-sharing-genetic-data-with-the-fbi"
-  label: "Major DNA Testing Company Sharing Genetic Data With the FBI"
-  retrieved: "2019-04-21"
-- id: "china-hrw"
-  src: "https://www.hrw.org/news/2017/12/13/china-minority-region-collects-dna-millions"
-  label: "China: Minority Region Collects DNA from Millions"
-  retrieved: "2019-04-21"
-- id: "nyt-china-dna"
-  src: "https://www.nytimes.com/2019/02/21/business/china-xinjiang-uighur-dna-thermo-fisher.html"
-  label: "China Uses DNA to Track Its People, With the Help of American Expertise"
-  retrieved: "2019-04-21"
 
 ---
 
 There has been an increasing public debate in the last few years around
 the use of data by states and tech companies. This has mostly been
 focussed on companies like Google and Facebook selling futures on human
-behaviour{{< footnote >}}Shoshana Zuboff talks about the concept of
-{{< cite sz-surveillance-capitalism >}}"futures on human behaviour"{{<
-/cite >}} which means that these advertising companies are not selling
-eyeballs, or clicks, but a certain number of buyers. They can do this
-because they have data on the most effective ways to make people perform
-certain actions. A contrived example might be noticing that men in their
-forties are more likely to buy an expensive car when they exhibit signs
-of depression. Google might notice this, and take the opportunity to
-serve up an advert for a new Porsche. To Porsche, Google sells a certain
-number of middle-aged males who will buy their cars.{{< /footnote >}},
-mostly to an advertising market, based on the vast quantity of data
-they hoover up from our online activities. There is another category of
-data, however, genomic or biometric data, for which there is an {{< cite
-gvr-biometrics-market >}}increasing market{{< /cite >}}, and which has
-been largely ignored by the public debate. This echoes of the lack of
-debate ten years ago on the way large tech companies tracked us around
-the internet, which is troubling because it means that people are giving
-up their data to these companies with very little awareness of the
-consequences.
+behaviour[^zuboff-futures], mostly to an advertising market, based on
+the vast quantity of data they hoover up from our online activities.
+There is another category of data, however, genomic or biometric data,
+for which there is an increasing market[^cite-gvr-biometrics-market],
+and which has been largely ignored by the public debate. This echoes of
+the lack of debate ten years ago on the way large tech companies tracked
+us around the internet, which is troubling because it means that people
+are giving up their data to these companies with very little awareness
+of the consequences.
 
 Whilst it could now be argued that a lot of the data the big tech
 companies ingest are taken by stealth, through the many websites that
-integrate Google adwords, or Facebook’s beacon and other “community
-engagement” functionality, at the beginning, most users (myself
+integrate Google adwords, or Facebook’s beacon and other "community
+engagement" functionality, at the beginning, most users (myself
 included) seemed perfectly happy, in our naivety, to supply these
 behemoths with our primary (e.g. photos, status updates, and web
 searches) and ancillary (e.g. what we clicked on, with whom we’re
@@ -85,33 +49,33 @@ connected, when we perform actions and how those actions are correlated)
 data, gratis, in exchange for services which were ostensibly provided to
 us for no charge at all.
 
-Since the {{< cite genome-seq-costs >}}drastic reduction in the cost of
-genomic sequencing{{< /cite >}} over the past decade, numerous companies
-have appeared, offering sequencing services at a low price which purport
-to reveal your vulnerability to a host of diseases, or to help you piece
-together your ancestry. Just as our browsing and social data were given
-to companies who have been using them for purposes to which we might
-well have objected had we forseen them, countless individuals are giving
-up their genetic data, ostensibly for one purpose, whilst having no
-understanding, visibility, or control over the future purposes to which
-these data might be put. It is highly disturbing to see the willingness
-with which people will give up data which are so intrinsic to them
-without the slightest guarantee that these companies will not use their
-data for more nefarious purposes further down the line.
+Since the drastic reduction in the cost of genomic
+sequencing[^cite-genome-seq-costs] over the past decade, numerous
+companies have appeared, offering sequencing services at a low price
+which purport to reveal your vulnerability to a host of diseases,
+or to help you piece together your ancestry. Just as our browsing
+and social data were given to companies who have been using them for
+purposes to which we might well have objected had we forseen them,
+countless individuals are giving up their genetic data, ostensibly for
+one purpose, whilst having no understanding, visibility, or control
+over the future purposes to which these data might be put. It is highly
+disturbing to see the willingness with which people will give up data
+which are so intrinsic to them without the slightest guarantee that
+these companies will not use their data for more nefarious purposes
+further down the line.
 
 There are two obvious uses to which these data are likely to be put
-(and {{< cite axios-dna-sharing >}}already are{{< /cite >}}). The
-first is an analogue of the advertising model, except that instead of
-selling futures on human behaviour, genomics companies will sell futures
-on human needs and health, most likely to insurers and healthcare
-providers, who can target advertising and price services according
-to each user’s genetic makeup. This is, in fact, a lot more sinister
-than the uses to which our browsing data are put, since not only is it
-going to be very difficult to obscure oneself from the view of such
-companies once these data are submitted (genetic data are not going to
-substantially change throughout an individual’s lifetime), the accuracy
-of the models does not matter because we have no way of determining it
-ourselves.
+(and already are[^cite-axios-dna-sharing]). The first is an analogue
+of the advertising model, except that instead of selling futures on
+human behaviour, genomics companies will sell futures on human needs
+and health, most likely to insurers and healthcare providers, who can
+target advertising and price services according to each user’s genetic
+makeup. This is, in fact, a lot more sinister than the uses to which our
+browsing data are put, since not only is it going to be very difficult
+to obscure oneself from the view of such companies once these data are
+submitted (genetic data are not going to substantially change throughout
+an individual’s lifetime), the accuracy of the models does not matter
+because we have no way of determining it ourselves.
 
 That is to say that we have no way of knowing, without an intermediary
 (who may have a vested interest), towards which health outcomes we are
@@ -135,9 +99,9 @@ really interested in Barbie dolls, and therefore increased the number of
 Barbie dolls I was shown as I browsed, I would be no more likely to buy
 Barbie dolls — the model was simply wrong.
 
-The second obvious use is to bolster the surveillance state, as in the
-example of {{< cite familytree-fbi >}}FamilyTreeDNA opening up access
-to the FBI{{< /cite >}}. We have already seen this in action with the
+The second obvious use is to bolster the surveillance state,
+as in the example of FamilyTreeDNA opening up access to the
+FBI[^cite-familytree-fbi]. We have already seen this in action with the
 case of the Golden State killer, who was traced using the DNA of two
 distant relatives who had uploaded their data to an online repository
 of genetic data. This is doubly pernicious as that individual did not
@@ -153,12 +117,11 @@ is why governments frequently cite these examples whenever they are
 trying to argue for a reduction in citizens’ rights (to privacy, fair
 trial, etc.). The consequences of accepting this argument is to open
 the floodgates to all sorts of abuses. Consider what is happening in
-China, where {{< cite china-hrw >}}the biometric data of the Uighurs are
-being forcibly collected{{< /cite >}}. These data can be used to {{<
-cite nyt-china-dna >}}keep track of dissidents{{< /cite >}} and further
-harass an already persecuted minority. These arguments are already well
-rehearsed in the debate about communications data (and metadata), and
-apply to biometric data as well.
+China, where the biometric data of the Uighurs are being forcibly
+collected[^cite-china-hrw]. These data can be used to keep track of
+dissidents[^cite-nyt-china-dna] and further harass an already persecuted
+minority. These arguments are already well rehearsed in the debate about
+communications data (and metadata), and apply to biometric data as well.
 
 This market in genetic data raises an extremely important question
 which has existed for other forms of data, but never so obviously as
@@ -169,20 +132,8 @@ friend of mine takes a photo of a group, and I happen to be in that
 group, I rarely get asked whether I consent to that photo being posted
 online. Yet now my image can be used in facial recognition databases,
 my whereabouts pinned to a given location at a given time, and my
-associations with others inferred directly by my colocation with them{{<
-footnote >}}Were you to take a photo of me with your smartphone, it
-would contain the time and location at which the photo was taken. When
-it is then uploaded to, say, Facebook, the algorithms Facebook employs
-will match my likeness to my identity (about which Facebook already
-has a conception). It will therefore be able to say that I was at a
-given location, at a given time, using just that photo. Furthermore,
-anyone else in the photo (or other photos uploaded to Facebook taken at
-approximately the same location and approximately the same time) could
-then be assumed to have been there with me, inferring an association
-between us. Therefore, with just a few photos uploaded to Facebook,
-a lot of information about my life (and the lives of others) can be
-automatically inferred, without any of us consenting to such information
-being made available.{{< /footnote >}}.
+associations with others inferred directly by my colocation with
+them[^social-data].
 
 Most people would consider the photograph to be owned by the
 photographer, yet the photographer does not own the likenesses (and
@@ -265,4 +216,41 @@ rights to privacy, as, ultimately, that’s going to be the only real
 protection against states and companies far more powerful than we are as
 individuals.
 
-{{< footnotes >}}
+[^zuboff-futures]: Shoshana Zuboff talks about the concept of "futures
+on human behaviour"[^cite-sz-surveillance-capitalism] which means that
+these advertising companies are not selling eyeballs, or clicks, but a
+certain number of buyers. They can do this because they have data on the
+most effective ways to make people perform certain actions. A contrived
+example might be noticing that men in their forties are more likely to
+buy an expensive car when they exhibit signs of depression. Google might
+notice this, and take the opportunity to serve up an advert for a new
+Porsche. To Porsche, Google sells a certain number of middle-aged males
+who will buy their cars.
+
+[^cite-sz-surveillance-capitalism]: [Zuboff, S., "The Age of Surveillance Capitalism", 2019.](https://profilebooks.com/surveillance)
+
+[^cite-gvr-biometrics-market]: Biometrics Technology Market Analysis Report By End-Use (Government, Banking & Finance, Transport/Logistics, Defense & Security), By Application (AFIS, Iris, Non-AFIS), and Segment Forecasts, 2018 - 2025 ([retrieved 2019-04-21](https://www.grandviewresearch.com/industry-analysis/biometrics-industry))
+
+[^cite-genome-seq-costs]: [The Cost of Sequencing a Human Genome](https://www.genome.gov/sequencingcosts/) (retrieved 2019-04-21)
+
+[^cite-axios-dna-sharing]: [Genetic testing firms share your DNA data more than you think](https://www.axios.com/dna-test-results-privacy-genetic-data-sharing-4687b1a0-f527-425c-ac51-b5288b0c0293.html) (retreived 2019-04-21)
+
+[^cite-familytree-fbi]: [Major DNA Testing Company Sharing Genetic Data With the FBI](https://www.bloomberg.com/news/articles/2019-02-01/major-dna-testing-company-is-sharing-genetic-data-with-the-fbi) (retrieved 2019-04-21)
+
+[^cite-china-hrw]: [China: Minority Region Collects DNA from Millions](https://www.hrw.org/news/2017/12/13/china-minority-region-collects-dna-millions) (retrieved 2019-04-21)
+
+[^cite-nyt-china-dna]: [China Uses DNA to Track Its People, With the Help of American Expertise](https://www.nytimes.com/2019/02/21/business/china-xinjiang-uighur-dna-thermo-fisher.html) (retrieved 2019-04-21)
+
+[^social-data]: Were you to take a photo of me with your smartphone, it
+would contain the time and location at which the photo was taken. When
+it is then uploaded to, say, Facebook, the algorithms Facebook employs
+will match my likeness to my identity (about which Facebook already
+has a conception). It will therefore be able to say that I was at a
+given location, at a given time, using just that photo. Furthermore,
+anyone else in the photo (or other photos uploaded to Facebook taken at
+approximately the same location and approximately the same time) could
+then be assumed to have been there with me, inferring an association
+between us. Therefore, with just a few photos uploaded to Facebook,
+a lot of information about my life (and the lives of others) can be
+automatically inferred, without any of us consenting to such information
+being made available.

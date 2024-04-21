@@ -1,7 +1,8 @@
 ---
-title: "Deus Ex Techna"
-date: 2020-05-17
-draft: false
+title: Deus Ex Techna
+slug: deus-ex-techna
+created: 2020-05-17
+category: general
 abstract: >-
   Too often the technology industry (and society more generally)
   treats human-created problems as magically tractable in the face of
@@ -25,32 +26,6 @@ tags:
 - fatalism
 
 citations:
-- id: "sawyer-ghg"
-  src: "https://ui.adsabs.harvard.edu/abs/1972Natur.239...23S/abstract"
-  label: >
-    Sawyer, J.S. (1972). "Man-made Carbon Dioxide and the 'Greenhouse' Effect".
-    In: Nature, Volume 239, Issue 5366, pp. 23-26 (1972)
-  retrieved: "2020-05-17"
-- id: "sars"
-  src: https://en.wikipedia.org/wiki/Severe_acute_respiratory_syndrome-related_coronavirus
-  label: "SARS on Wikipedia"
-  retrieved: "2020-05-17"
-- id: "mers"
-  src: https://en.wikipedia.org/wiki/Middle_East_respiratory_syndrome
-  label: "MERS on Wikipedia"
-  retrieved: "2020-05-17"
-- id: "swine-flu"
-  src: https://en.wikipedia.org/wiki/Swine_influenza#History
-  label: Swine Influenza on Wikipedia
-  retrieved: "2020-05-17"
-- id: "avian-flu"
-  src: https://en.wikipedia.org/wiki/Avian_influenza#H5N1
-  label: "Avian Influenza H5N1 on Wikipedia"
-  retrieved: "2020-05-17"
-- id: "ebola"
-  src: https://en.wikipedia.org/wiki/Ebola
-  label: "Ebola on Wikipedia"
-  retrieved: "2020-05-17"
 
 ---
 
@@ -74,10 +49,7 @@ results in a desparate search to find a solution _extra nos_. In
 the past, this might have entailed an entreaty (or a surrender) to
 divine or supernatural forces. Modern societies have killed the
 Gods, and replaced them with a pantheon of _Techne_, most often
-technologies that few understand{{< footnote >}}Therefore making them
-very appropriate replacements for the Gods, since, as Arthur C. Clarke
-noted, &ldquo;any sufficiently advanced technology is indistinguishable
-from magic.&rdquo;{{< /footnote >}}.
+technologies that few understand.[^gods-tech-clarke]
 
 It may seem ungenerous to compare the modern faith in technological
 solutions to human problems with historic resignation to the will of
@@ -92,16 +64,12 @@ and societies to change their behaviour, through a neat abnegation of
 responsibility by stating that an individual cannot hope to make a
 significant impact in any case, and therefore should not bother to try.
 
-The techno-optimistic{{< footnote >}}Alternatively, techno-fatalistic,
-but to me this also implies a whole raft of other issues in which
-people resign themselves to the &lsquo;inevitability&rsquo; of some
-systems like surveillance capitalism, e.g. by claiming that this was the
-inevitable consequence of wide-spread internet adoption.{{< /footnote >}}
-narrative is soothing because, in the face of an enormous and
-scary potential crisis, the thought that we _ought_ to be acting (and
-therefore the inevitable guilt or shame we feel when our aversion to
-discomfort causes us not to act) is taken away, for there is nothing
-that we as individuals or societies need to do. Technology will save us.
+The techno-optimistic[^techno-optimistic] narrative is soothing because,
+in the face of an enormous and scary potential crisis, the thought that
+we _ought_ to be acting (and therefore the inevitable guilt or shame
+we feel when our aversion to discomfort causes us not to act) is taken
+away, for there is nothing that we as individuals or societies need to
+do. Technology will save us.
 
 Yet this narrative rests on an unsound basis: that the perceived rate
 of technological change in recent history implies that some, currently
@@ -121,29 +89,23 @@ There are many recent examples of where this form of techno-optimism is
 most egregious (at least in my milieu).
 
 Firstly, there are the political problems like Brexit, Trump, and the
-rise of other majoritarian populists{{< footnote >}}Populist is an
-overused, and overburdened term. Here I mean a politician who sets up a
-dichotomy between &lsquo;the people&rsquo; and &lsquo;the elite&rsquo;.
-This often is tied up with a form of majoritarianism and nativism, but
-not necessarily.{{< /footnote >}}. The causes of these problems are
-complicated and not settled questions, but broadly speaking they are
-social. Whilst it is tempting to blame the Brexit vote, or the election
-of Trump, on factors _extra nos_ like racism, social media and fake
-news, or Russian interference, the truth is that we have developed
+rise of other majoritarian populists[^populism]. The causes of these
+problems are complicated and not settled questions, but broadly speaking
+they are social. Whilst it is tempting to blame the Brexit vote, or the
+election of Trump, on factors _extra nos_ like racism, social media and
+fake news, or Russian interference, the truth is that we have developed
 deeply divided societies with vast gulfs of inequality. Racism, fake
 news, social media, and Russian interference (maybe not so much the
 lattermost) all had a part to play, but if there were not already
 fertile ground for these things caused by some form of discontent, then
 they would not have taken root. Yet we focus on these potential causes
-because they do not say anything about our culpability, and do not
-force us to examine our behaviours. Blaming racism is a way of saying
-that these people are _other_, perhaps even _evil_, and therefore it
-is a problem with them not a problem with the society of which we are
-all a part. Similarly, fake news is an invisible enemy, infecting our
-minds, but ultimately coming from outside (the enemy being the social
-media companies perhaps){{< footnote >}}And, of course, there is no
-way we could ever be susceptible to it, only those other people are so
-gullible.{{< /footnote >}}.
+because they do not say anything about our culpability, and do not force
+us to examine our behaviours. Blaming racism is a way of saying that
+these people are _other_, perhaps even _evil_, and therefore it is a
+problem with them not a problem with the society of which we are all a
+part. Similarly, fake news is an invisible enemy, infecting our minds,
+but ultimately coming from outside (the enemy being the social media
+companies perhaps)[^social-media-gullible].
 
 Secondly, there are the epistemic problems, of which fake news is
 the most recent incarnation but disinformation has a long history.
@@ -161,23 +123,20 @@ new technologies which will root out fake news, or, worse, to act as
 arbiters of truth, digital Big Brothers making sure we think right.
 
 Thirdly, the elephants in the room: environmentally-driven disasters
-like climate change and global pandemics{{< footnote >}}When I first
-drafted this essay in mid-2019, the coronavirus pandemic was not even
-something I would have considered a possibility. How quickly our
-lives have changed!{{< /footnote >}}. This is where I would consider
-techno-optimism to be at its most fanatical and most dangerous. We have
-known about the causes of climate change since {{< cite sawyer-ghg
->}}at least the 1970s{{< /cite >}}. Combatting climate change will
+like climate change and global pandemics[^pandemic-drafting]. This is
+where I would consider techno-optimism to be at its most fanatical and
+most dangerous. We have known about the causes of climate change since
+at least the 1970s[^cite-sawyer72]. Combatting climate change will
 take serious changes to our societies, expectations, and behaviours as
 individuals. It will affect everything: our attitude to food production
 (especially cheap meat), our extreme wastefulness of materials, our
-&lsquo;need&rsquo; for instant delivery and satisfaction of every whim
-(the fact that _Amazon Prime Now_ exists is testament to this). Yet even
+"need" for instant delivery and satisfaction of every whim (the
+fact that _Amazon Prime Now_ exists is testament to this). Yet even
 sacrificing some of these very minor comforts like next-day delivery
 seems unthinkable to large parts of our societies, and if we cannot
 even drop those more basic things, what hope is there for large-scale
 reform of our material consumption patterns, or food production systems?
-Instead, we focus on technological solutions &mdash; perhaps it will
+Instead, we focus on technological solutions — perhaps it will
 be carbon-capture technologies, or we will make manufacturing carbon
 neutral, or, screw it, we can just jet off to Mars and settle that
 planet instead. None of these technological solutions require us to
@@ -194,18 +153,15 @@ the state paying their wages. This was totally unimaginable six months
 ago. COVID-19 is a direct and present threat, and our response has been
 appropriate, but more notable is the fact that we knew that this was
 a threat, and we knew we were underprepared, and yet we did nothing.
-There were plenty of warnings in the last two decades: {{< cite sars
->}}SARS{{< /cite >}}, {{< cite mers >}}MERS{{< /cite >}}, {{< cite
-swine-flu >}}swine flu{{< /cite >}}, {{< cite avian-flu >}}avian flu{{<
-/cite >}}, and {{< cite ebola >}}ebola{{< /cite >}}, but we appear not
-to have learnt from these near-misses. Perhaps, however, there is some
-hope. This crisis has shown that we _can_ effect massive social change,
-and that our paradigms for the role of the state _can_ change quickly.
-The real question with this pandemic is whether we will address the
-underlying causes of it, or whether our behaviour will revert to type
-once the immediate danger has past. More importantly, when faced with
-far more consequential, and slow moving, threats like climate change,
-will we act or will we pray?
+There were plenty of warnings in the last two decades: SARS, MERS, swine
+flu, avian flu, and ebola, but we appear not to have learnt from these
+near-misses. Perhaps, however, there is some hope. This crisis has shown
+that we _can_ effect massive social change, and that our paradigms for
+the role of the state _can_ change quickly. The real question with this
+pandemic is whether we will address the underlying causes of it, or
+whether our behaviour will revert to type once the immediate danger has
+past. More importantly, when faced with far more consequential, and slow
+moving, threats like climate change, will we act or will we pray?
 
 We are facing some enormous challenges as a species, but also as
 individual societies, and if we are to have any hope of overcoming
@@ -219,4 +175,30 @@ problems require human solutions, then we are only fooling ourselves:
 the deus ex techna is not guaranteed and the Gods will not take pity on
 us.
 
-{{< footnotes >}}
+[^gods-tech-clarke]: Therefore making them very appropriate replacements
+for the Gods, since, as Arthur C. Clarke noted, "any sufficiently
+advanced technology is indistinguishable from magic."
+
+[^pandemic-drafting]: When I first drafted this essay in mid-2019, the
+coronavirus pandemic was not even something I would have considered a
+possibility. How quickly our lives have changed!
+
+[^social-media-gullible]: And, of course, there is no way we could ever
+be susceptible to it, only those other people are so gullible.
+
+[^populism]: Populist is an overused, and overburdened term. Here I
+mean a politician who sets up a dichotomy between 'the people' and
+'the elite'. This often is tied up with a form of majoritarianism and
+nativism, but not necessarily.
+
+[^techno-optimistic]: Alternatively, techno-fatalistic, but to me
+this also implies a whole raft of other issues in which people resign
+themselves to the 'inevitability' of some systems like surveillance
+capitalism, e.g. by claiming that this was the inevitable consequence of
+wide-spread internet adoption.
+
+[^cite-sawyer72]: Sawyer, J.S. (1972). "Man-made Carbon
+Dioxide and the 'Greenhouse' Effect". In: Nature,
+Volume 239, Issue 5366, pp. 23-26 (1972) ([retrieved
+2020-05-17](https://ui.adsabs.harvard.edu/abs/1972Natur.239...23S/abstra
+ct)).
