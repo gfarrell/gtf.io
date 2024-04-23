@@ -1,8 +1,8 @@
 ---
 title: "Coding in Haskell: a new adventure"
-date: 2020-02-02
-lastmod: 2020-02-02
-draft: false
+created: 2020-02-02
+category: informatics
+slug: coding-in-haskell-a-new-adventure
 abstract: >-
   I recently started to learn Haskell and came to love it. This musing
   details some of my findings as a beginner in Haskell, namely that I
@@ -16,20 +16,12 @@ tags:
 - functional-programming
 - research-log
 
-citations:
-- id: "why-research-blog"
-  src: "http://gregorygundersen.com/blog/2020/01/12/why-research-blog/"
-  label: "Why I keep a research blog"
-  retrieved: "2020-02-02"
-
-toc: true
-
 ---
 
-I was reading Gregory Gunderson's blog post {{< cite why-research-blog
->}}"Why I keep a research blog"{{< /cite >}} while, at the same time,
-writing [an exciting new project in Haskell][1] which made me think it
-would be quite fun to document the process of learning to make something
+I was reading Gregory Gunderson's blog post "Why I keep a research
+blog"[^cite-why-research-blog] while, at the same time, writing [an
+exciting new project in Haskell][1] which made me think it would
+be quite fun to document the process of learning to make something
 _real-ish_ in a completely new language.
 
 I have not programmed in a pure, functional language like Haskell since
@@ -65,11 +57,11 @@ of functions I could write, and I could not see a way out of this
 restriction, even while I appreciated the mathematical style of the
 language.
 
-Fast forward a few years, and I found myself increasingly preferring
-"simple" solutions to problems, and appreciating a more functional
-approach to programming. This drove a [brief foray into clojure]({{< ref
-"projects/boggle-solver" >}}) which I enjoyed but never ended up taking
-very far.
+Fast forward a few years, and I found myself increasingly
+preferring "simple" solutions to problems, and appreciating a more
+functional approach to programming. This drove a [brief foray into
+clojure](/projects/boggle-solver) which I enjoyed but never ended up
+taking very far.
 
 This post is a collection of my first impressions of Haskell, what I
 have liked, and what I have not.
@@ -280,3 +272,5 @@ pure functions and when one is not.
 
 [1]: https://github.com/gfarrell/eye-for-an-eye
 [2]: https://github.com/gfarrell/aoc2019
+
+[^cite-why-research-blog]: Gundersen, G., "Why I keep a research blog" ([retrieved 2020-02-02](http://gregorygundersen.com/blog/2020/01/12/why-research-blog/))

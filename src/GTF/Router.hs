@@ -26,6 +26,7 @@ routes req res = case pathInfo req of
   ["styles", n] -> renderAsset (Asset Stylesheet n)
   ["musings"] -> page Musings.indexPage
   ["musings", n] -> page (Musings.itemPage n)
+  ["musings", n, "assets", f] -> undefined -- TODO: work out how to load page assets
   ["colophon"] -> page Colophon.content
   _ -> page (const Nothing)
   where

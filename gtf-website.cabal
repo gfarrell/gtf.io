@@ -58,9 +58,10 @@ common deps
       template-haskell,
       text,
       time,
-      yaml,
+      unix,
       wai,
       warp,
+      yaml,
 
 library
     import: warnings, lang, deps
