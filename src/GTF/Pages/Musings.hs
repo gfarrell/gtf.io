@@ -6,14 +6,16 @@ module GTF.Pages.Musings
     itemPage,
   )
 where
---
+
 import CommonPrelude
 import Data.ByteString.Builder (toLazyByteString)
+import Data.List (sortOn)
+import Data.Ord (Down (Down))
 import Data.Proxy (Proxy (Proxy))
 import Djot (RenderOptions (..))
 import Djot.Html (renderHtml)
 import GTF.Content.Doc (ParsedDoc (..))
-import GTF.Content.Loader (loadFilesTH, isDjot)
+import GTF.Content.Loader (isDjot, loadFilesTH)
 import GTF.Content.Musings (Category (..), DocMeta (..), Musing, wordcount)
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (PageMeta (..), defaultLayout, defaultLayoutWithMeta)
@@ -22,7 +24,10 @@ import Lucid (Html, ToHtml (toHtml, toHtmlRaw))
 import Lucid.Html5
 
 musings :: [ParsedDoc Musing]
-musings = $(loadFilesTH (Proxy @Musing) "src/GTF/Pages/Musings/content" isDjot)
+musings =
+  sortOn
+    (Down . created . meta)
+    $(loadFilesTH (Proxy @Musing) "src/GTF/Pages/Musings/content" isDjot)
 
 indexPage :: UrlPath -> Maybe (Html ())
 indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
