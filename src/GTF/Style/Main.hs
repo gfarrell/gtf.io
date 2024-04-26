@@ -71,7 +71,7 @@ stylesheet = do
     textAlign center
 
     after & do
-      content $ stringContent "\\1F74E"
+      content $ stringContent "👾"
       position relative
       top $ em $ -0.6
       padding 0 (em 0.5) 0 (em 0.5)
