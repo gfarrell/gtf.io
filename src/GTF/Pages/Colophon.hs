@@ -30,7 +30,7 @@ content currentPath = Just
             a_ [href_ "https://hackage.haskell.org/package/warp", title_ "Warp on Hackage"] "Warp",
             a_ [href_ "https://hackage.haskell.org/package/lucid", title_ "Lucid on Hackage"] "Lucid"
           ]
-        ". I write the content in a mixture of direct Haskell (using Lucid as a EDSL) and "
+        ". I write the content in a mixture of direct Haskell (using Lucid as an EDSL) and "
         a_ [href_ "https://www.djot.net/", title_ "djot website"] "Djot"
         ", although I have written my own extensions in a "
         a_ [href_ "https://github.com/gfarrell/djoths", title_ "djoths custom fork"] "custom fork of the Djot implementation for Haskell"
