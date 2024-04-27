@@ -1,75 +1,65 @@
-{-# LANGUAGE QuasiQuotes #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
-module GTF.Assets
-  ( cssFile,
-    loadAsset,
-    Asset (..),
-    AssetClass (..),
-  )
+module GTF.Assets (
+  loadAsset,
+  Asset (..),
+  Musing,
+  WholeSite,
+)
 where
 
 import Clay (Css, render)
-import CommonPrelude
-import Data.ByteString (ByteString)
-import Data.List (intercalate)
+import CommonPrelude hiding (readFile)
+import Control.Exception (IOException, try)
+import Control.Monad.Trans (lift)
+import Control.Monad.Trans.Maybe (MaybeT (MaybeT))
+import Data.ByteString (ByteString, readFile)
+import Data.Either.Combinators (rightToMaybe)
+import Data.Proxy (Proxy (Proxy))
+import Data.Text (unpack)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text.Lazy (toStrict)
+import GTF.Content.Musings (Musing)
 import GTF.Style.Main qualified as MainStylesheet
-import Language.Haskell.TH (ExpQ, runIO)
-import System.Directory (doesDirectoryExist, listDirectory)
-import System.FilePath (takeBaseName, takeExtension)
+import Paths_gtf_website (getDataFileName)
+import System.Posix (fileExist)
 
--- | Test if one string is the prefix of another. NB the empty string is the
--- prefix of all strings, so you have to be careful with that case.
-isPrefixOf :: String -> String -> Bool
-isPrefixOf a b = take (length a) b == a
+data WholeSite
 
-data Asset = Asset AssetClass Text
+class IsPageType t where
+  getAssetDir :: Proxy t -> Text -> FilePath
 
-loadAsset :: Asset -> Maybe ByteString
-loadAsset (Asset Stylesheet name) = encodeUtf8 . toStrict . render <$> getCss name
-loadAsset _ = Nothing
+instance IsPageType Musing where
+  getAssetDir _ p = unpack $ "src/GTF/Pages/Musings/content/" <> p <> "/assets"
+
+instance IsPageType WholeSite where
+  getAssetDir _ _ = "assets"
+
+data Asset t where
+  Stylesheet :: (IsPageType t) => Text -> Asset t
+  Image :: (IsPageType t) => Text -> Text -> Asset t
+
+loadFile :: FilePath -> MaybeT IO ByteString
+loadFile fp =
+  lift (fileExist fp) >>= \case
+    True -> MaybeT . fmap rightToMaybe $ readExcept fp
+    False -> MaybeT $ pure Nothing
+ where
+  readExcept :: FilePath -> IO (Either IOException ByteString)
+  readExcept = try . readFile
+
+loadAsset :: forall t. Asset t -> MaybeT IO ByteString
+loadAsset (Stylesheet name) =
+  MaybeT
+    . pure
+    $ encodeUtf8
+    . toStrict
+    . render
+    <$> getCss name
+loadAsset (Image p n) =
+  let px = Proxy :: Proxy t
+   in lift (getDataFileName $ getAssetDir px p <> "/" <> unpack n) >>= loadFile
 
 getCss :: Text -> Maybe Css
 getCss "main.css" = pure MainStylesheet.stylesheet
 getCss _ = Nothing
-
-data AssetClass
-  = Stylesheet
-  | Script
-  | Image
-  | File
-  deriving (Show, Eq)
-
-localAssetsRoot :: FilePath
-localAssetsRoot = "dist"
-
-assetDir :: AssetClass -> FilePath
-assetDir Stylesheet = "assets/styles"
-assetDir Script = "assets/scripts"
-assetDir Image = "assets/img"
-assetDir File = "assets/misc"
-
-matchVersionedAsset :: String -> String -> [FilePath] -> Maybe FilePath
-matchVersionedAsset name ext files =
-  case filter match' files of
-    [] -> Nothing
-    (f : _) -> Just f
-  where
-    match' :: FilePath -> Bool
-    match' p = "." <> ext == takeExtension p && name `isPrefixOf` takeBaseName p
-
-cssFile :: String -> ExpQ
-cssFile fname = do
-  let localDir = intercalate "/" [localAssetsRoot, assetDir Stylesheet]
-  exists <- runIO . doesDirectoryExist $ localDir
-  if not exists
-    then fail $ "local directory " <> localDir <> " does not exist"
-    else do
-      files <- runIO . listDirectory $ localDir
-      case matchVersionedAsset fname "css" files of
-        Nothing -> fail $ "Cannot locate asset " <> fname
-        Just f ->
-          let path = "/" <> intercalate "/" [assetDir Stylesheet, f]
-           in [e|path|]

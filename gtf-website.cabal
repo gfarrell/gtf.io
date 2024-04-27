@@ -13,95 +13,94 @@ license:            BSD-3-Clause
 --                  | | | +--- code changes with no API change
 version:            0.1.0.0
 
-
 -- The file containing the license text.
 license-file:       LICENSE
-
 author:             Gideon Farrell
 maintainer:         gideon@gtf.io
 category:           Web
 build-type:         Simple
-
-extra-source-files:
-  src/GTF/Pages/**/*.djot
+extra-source-files: src/GTF/Pages/**/*.djot
+data-files:         src/GTF/Pages/Musings/content/**/assets/*.png
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
 
 common warnings
-    ghc-options: -Wall
+  ghc-options: -Wall
 
 common lang
-    default-language: GHC2021
-    default-extensions:
-      NoImplicitPrelude,
-      OverloadedStrings,
-      LambdaCase
+  default-language:   GHC2021
+  default-extensions:
+    LambdaCase
+    NoImplicitPrelude
+    OverloadedStrings
 
 common deps
   build-depends:
-      base ^>=4.17.2.0,
-      bytestring,
-      clay,
-      directory,
-      djot,
-      either,
-      filepath,
-      generic-lens,
-      http-types,
-      lucid,
-      megaparsec,
-      mime-types,
-      mtl,
-      network-uri,
-      parser-combinators,
-      template-haskell,
-      text,
-      time,
-      unix,
-      wai,
-      warp,
-      yaml,
+    , base                ^>=4.17.2.0
+    , bytestring
+    , clay
+    , directory
+    , djot
+    , either
+    , filepath
+    , generic-lens
+    , http-types
+    , lucid
+    , megaparsec
+    , mime-types
+    , mtl
+    , network-uri
+    , parser-combinators
+    , template-haskell
+    , text
+    , time
+    , transformers
+    , unix
+    , wai
+    , warp
+    , yaml
 
 library
-    import: warnings, lang, deps
-    hs-source-dirs: src
-    exposed-modules:
-      CommonPrelude,
-      GTF.Content.Doc,
-      GTF.Content.Meta,
-      GTF.Content.Musings,
-      GTF.Router
-    other-modules:
-      GTF.Assets,
-      GTF.Content.Loader,
-      GTF.Pages.Colophon,
-      GTF.Pages.Error,
-      GTF.Pages.Helpers,
-      GTF.Pages.Layout,
-      GTF.Pages.Musings,
-      GTF.Pages.Partials.Nav,
-      GTF.Pages.Partials.Footer,
-      GTF.Style.Main,
-      GTF.URL
+  import:          warnings, lang, deps
+  hs-source-dirs:  src
+  exposed-modules:
+    CommonPrelude
+    GTF.Content.Doc
+    GTF.Content.Meta
+    GTF.Content.Musings
+    GTF.Router
+
+  other-modules:
+    GTF.Assets
+    GTF.Content.Loader
+    GTF.Pages.Colophon
+    GTF.Pages.Error
+    GTF.Pages.Helpers
+    GTF.Pages.Layout
+    GTF.Pages.Musings
+    GTF.Pages.Partials.Footer
+    GTF.Pages.Partials.Nav
+    GTF.Style.Main
+    GTF.URL
+    Paths_gtf_website
 
 executable gtf-website-server
-    import: warnings, lang, deps
-    main-is: Main.hs
-    build-depends:
-      gtf-website
-    hs-source-dirs: app
+  import:         warnings, lang, deps
+  main-is:        Main.hs
+  build-depends:  gtf-website
+  hs-source-dirs: app
 
 test-suite gtf-website-tests
-    import: warnings, lang, deps
-    main-is: Spec.hs
-    type: exitcode-stdio-1.0
-    build-depends:
-      gtf-website,
-      hspec,
-      hspec-megaparsec
-    hs-source-dirs: test
-    other-modules:
-      GTF.Content.MetaSpec,
-      GTF.Content.MusingsSpec
+  import:         warnings, lang, deps
+  main-is:        Spec.hs
+  type:           exitcode-stdio-1.0
+  build-depends:
+    , gtf-website
+    , hspec
+    , hspec-megaparsec
 
+  hs-source-dirs: test
+  other-modules:
+    GTF.Content.MetaSpec
+    GTF.Content.MusingsSpec
