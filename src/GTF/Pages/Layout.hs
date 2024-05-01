@@ -61,4 +61,6 @@ plainLayoutWithMeta metadata content = html_ $ do
     maybe mempty (\tags -> meta_ [name_ "keywords", content_ $ intercalate ", " tags])
       $ pageKeywords metadata
     siteCss
-  body_ $ div_ [class_ "top-container"] content
+  body_ $ do
+    div_ [class_ "top-container"] content
+    footer
