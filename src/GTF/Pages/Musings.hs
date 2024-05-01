@@ -1,10 +1,10 @@
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module GTF.Pages.Musings
-  ( indexPage,
-    itemPage,
-  )
+module GTF.Pages.Musings (
+  indexPage,
+  itemPage,
+)
 where
 
 import CommonPrelude
@@ -39,18 +39,20 @@ indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
   makeSection "General Essays" $ filter ((== General) . category . meta) musings
   makeSection "Informatics" $ filter ((== Informatics) . category . meta) musings
   makeSection "Reflections" $ filter ((== Reflection) . category . meta) musings
-  where
-    makeSection :: Text -> [ParsedDoc Musing] -> Html ()
-    makeSection sectionTitle list =
-      section_ [class_ "index_section"] $ do
+ where
+  makeSection :: Text -> [ParsedDoc Musing] -> Html ()
+  makeSection sectionTitle list =
+    if null list
+      then mempty
+      else section_ [class_ "index_section"] $ do
         h2_ $ toHtml sectionTitle
         ul_
           $ foldMap
             ( \(ParsedDoc m _) ->
                 li_
                   $ a_
-                    [ title_ $ title m,
-                      href_ ("/musings/" <> slug m)
+                    [ title_ $ title m
+                    , href_ ("/musings/" <> slug m)
                     ]
                   $ toHtml (title m)
                   <> " ("
