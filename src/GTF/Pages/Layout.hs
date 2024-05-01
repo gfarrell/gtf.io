@@ -1,8 +1,9 @@
-module GTF.Pages.Layout
-  ( defaultLayout,
-    defaultLayoutWithMeta,
-    PageMeta (..),
-  )
+module GTF.Pages.Layout (
+  defaultLayout,
+  defaultLayoutWithMeta,
+  plainLayoutWithMeta,
+  PageMeta (..),
+)
 where
 
 import CommonPrelude
@@ -14,9 +15,9 @@ import Lucid.Base (Html, toHtml)
 import Lucid.Html5
 
 data PageMeta = PageMeta
-  { pageTitle :: Text,
-    pageDescription :: Maybe Text,
-    pageKeywords :: Maybe [Text]
+  { pageTitle :: Text
+  , pageDescription :: Maybe Text
+  , pageKeywords :: Maybe [Text]
   }
   deriving (Show, Eq)
 
@@ -26,8 +27,8 @@ basicMeta title = PageMeta title Nothing Nothing
 siteCss :: Html ()
 siteCss =
   link_
-    [ rel_ "stylesheet",
-      href_ "/styles/main.css"
+    [ rel_ "stylesheet"
+    , href_ "/styles/main.css"
     ]
 
 defaultLayout :: UrlPath -> Text -> Html () -> Html ()
@@ -48,5 +49,16 @@ defaultLayoutWithMeta currentPath metadata pageContent = html_ $ do
       navbar currentPath
     div_ [class_ "top-container"]
       $ div_ [class_ "content-container"]
-      $ main_ [class_ "page-home content-container", role_ "main"] pageContent
+      $ main_ [class_ "content-container", role_ "main"] pageContent
     footer
+
+plainLayoutWithMeta :: PageMeta -> Html () -> Html ()
+plainLayoutWithMeta metadata content = html_ $ do
+  head_ $ do
+    title_ $ "GTF :: " <> toHtml (pageTitle metadata)
+    maybe mempty (\c -> meta_ [name_ "description", content_ c])
+      $ pageDescription metadata
+    maybe mempty (\tags -> meta_ [name_ "keywords", content_ $ intercalate ", " tags])
+      $ pageKeywords metadata
+    siteCss
+  body_ $ div_ [class_ "top-container"] content

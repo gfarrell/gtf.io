@@ -20,7 +20,10 @@ maintainer:         gideon@gtf.io
 category:           Web
 build-type:         Simple
 extra-source-files: src/GTF/Pages/**/*.djot
-data-files:         src/GTF/Pages/Musings/content/**/assets/*.png
+data-files:
+  src/GTF/Pages/content/assets/*.asc
+  src/GTF/Pages/content/assets/*.png
+  src/GTF/Pages/Musings/content/**/assets/*.png
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
@@ -77,6 +80,7 @@ library
     GTF.Pages.Colophon
     GTF.Pages.Error
     GTF.Pages.Helpers
+    GTF.Pages.Home
     GTF.Pages.Layout
     GTF.Pages.Musings
     GTF.Pages.Partials.Footer

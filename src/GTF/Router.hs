@@ -3,9 +3,11 @@ module GTF.Router (routes) where
 import CommonPrelude
 import Control.Monad.Trans.Maybe (runMaybeT)
 import Data.ByteString (ByteString, fromStrict)
+import Data.Text (isSuffixOf)
 import GTF.Assets (Asset (..), Musing, WholeSite, loadAsset)
 import GTF.Pages.Colophon qualified as Colophon
 import GTF.Pages.Error qualified as Pages
+import GTF.Pages.Home qualified as Home
 import GTF.Pages.Musings qualified as Musings
 import GTF.URL (UrlPath (UrlPath))
 import Lucid.Base (Html, renderBS)
@@ -36,6 +38,8 @@ routes req res = case pathInfo req of
   ["musings", n] -> page (Musings.itemPage n)
   ["musings", n, "assets", f] -> renderAsset (Image n f :: Asset Musing)
   ["colophon"] -> page Colophon.content
+  ["assets", f] -> renderAsset (mkPageAsset f)
+  [] -> res $ sendWith status200 Home.content
   _ -> page (const Nothing)
  where
   page :: (UrlPath -> Maybe (Html ())) -> IO ResponseReceived
@@ -60,3 +64,9 @@ routes req res = case pathInfo req of
   getMimeType :: Asset t -> ByteString
   getMimeType (Stylesheet{}) = "text/css"
   getMimeType (Image _ f) = mimeByExt defaultMimeMap defaultMimeType f
+  getMimeType (File _ f) = mimeByExt defaultMimeMap defaultMimeType f
+
+  mkPageAsset :: Text -> Asset WholeSite
+  mkPageAsset name
+    | ".png" `isSuffixOf` name = Image "/" name
+    | otherwise = File "/" name

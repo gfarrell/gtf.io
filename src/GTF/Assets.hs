@@ -33,11 +33,12 @@ instance IsPageType Musing where
   getAssetDir _ p = unpack $ "src/GTF/Pages/Musings/content/" <> p <> "/assets"
 
 instance IsPageType WholeSite where
-  getAssetDir _ _ = "assets"
+  getAssetDir _ _ = "src/GTF/Pages/content/assets"
 
 data Asset t where
   Stylesheet :: (IsPageType t) => Text -> Asset t
   Image :: (IsPageType t) => Text -> Text -> Asset t
+  File :: (IsPageType t) => Text -> Text -> Asset t
 
 loadFile :: FilePath -> MaybeT IO ByteString
 loadFile fp =
@@ -57,6 +58,9 @@ loadAsset (Stylesheet name) =
     . render
     <$> getCss name
 loadAsset (Image p n) =
+  let px = Proxy :: Proxy t
+   in lift (getDataFileName $ getAssetDir px p <> "/" <> unpack n) >>= loadFile
+loadAsset (File p n) =
   let px = Proxy :: Proxy t
    in lift (getDataFileName $ getAssetDir px p <> "/" <> unpack n) >>= loadFile
 
