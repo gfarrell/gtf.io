@@ -1,4 +1,4 @@
-module GTF.Pages.Helpers (commaList, internal, datetime, humantime, now, djot) where
+module GTF.Pages.Helpers (commaList, internal, datetime, humantime, now, djot, uri) where
 
 import CommonPrelude
 import Data.ByteString.Char8 (pack)
@@ -11,6 +11,7 @@ import Language.Haskell.TH.Quote (QuasiQuoter (..))
 import Language.Haskell.TH.Syntax (Exp, Q, lift, runIO)
 import Lucid (Html, toHtml)
 import Lucid.Html5
+import Network.URI (parseURI)
 
 commaList :: (IsString s, Monoid s) => [s] -> s
 commaList (x : [y]) = x <> " and " <> y
@@ -53,3 +54,16 @@ djot =
   djot' inp = case parseDoc (ParseOptions NoSourcePos) inp of
     Left err -> fail $ "Invalid source text: " <> err
     Right doc -> lift doc
+
+uri :: QuasiQuoter
+uri =
+  QuasiQuoter
+    { quoteExp = uri'
+    , quotePat = error "Usage as a pattern is not supported"
+    , quoteType = error "Usage as a type is not supported"
+    , quoteDec = error "Usage as a declaration is not supported"
+    }
+ where
+  uri' inp = case parseURI inp of
+    Just result -> lift result
+    Nothing -> fail $ "Invalid URI: " <> inp

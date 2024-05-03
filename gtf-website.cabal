@@ -72,6 +72,8 @@ library
     GTF.Content.Doc
     GTF.Content.Meta
     GTF.Content.Musings
+    GTF.Content.Projects
+    GTF.Pages.Helpers
     GTF.Router
 
   other-modules:
@@ -79,7 +81,6 @@ library
     GTF.Content.Loader
     GTF.Pages.Colophon
     GTF.Pages.Error
-    GTF.Pages.Helpers
     GTF.Pages.Home
     GTF.Pages.Layout
     GTF.Pages.Musings
@@ -108,3 +109,4 @@ test-suite gtf-website-tests
   other-modules:
     GTF.Content.MetaSpec
     GTF.Content.MusingsSpec
+    GTF.Content.ProjectsSpec
