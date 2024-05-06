@@ -21,9 +21,9 @@ content = plainLayoutWithMeta
   $ main_ [class_ "page-home content-container"]
   $ do
     header_ [class_ "home-page-header"] $ do
-      h1_ "[gtf]"
+      h1_ [class_ "brand"] "~gtf"
       p_ [class_ "health-warning"] "a work in progress"
-      navbar (UrlPath "/")
+    navbar (UrlPath "/")
     section_ [class_ "bio"]
       $ toHtmlRaw
         [djot|

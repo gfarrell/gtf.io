@@ -24,7 +24,14 @@ stylesheet = do
   header # ".site-header" ? do
     display flex
     flexDirection row
-    marginBottom $ em 2.5
+    marginBottom $ em 1
+    alignItems flexStart
+
+    ".brand" ? do
+      fontSize (em 1.2)
+      lineHeight (em 1.2)
+      fontWeight bold
+      marginRight (em 1)
 
     query Media.print [] $ display none
 
@@ -53,13 +60,6 @@ stylesheet = do
     borderTop (px 1) solid (rgba 0 0 0 0.1)
     borderBottom (px 1) solid (rgba 255 255 255 0.3)
     textAlign center
-
-    after & do
-      content $ stringContent "👾"
-      position relative
-      top $ em $ -0.6
-      padding 0 (em 0.5) 0 (em 0.5)
-      background white
 
   div # ".item-content" ? do
     display flex

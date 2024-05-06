@@ -1,8 +1,8 @@
 module GTF.Style.Nav (stylesheet) where
 
 import Clay
-import Clay.Media qualified as Media
 import CommonPrelude (($))
+import GTF.Style.Helpers (forMobile, print)
 
 stylesheet :: Css
 stylesheet = do
@@ -36,7 +36,7 @@ stylesheet = do
         -- https://github.com/sebastiaanvisser/clay/issues/263
         & borderRight 0 none white
 
-    query Media.screen [Media.maxWidth (px 400)] $ do
+    forMobile $ do
       ".nav-label" ? do
         display flex
         cursor pointer
@@ -62,3 +62,5 @@ stylesheet = do
 
       ".nav-item" ? do
         borderRight 0 solid white
+
+    query print [] $ display none
