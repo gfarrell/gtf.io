@@ -1,11 +1,12 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module GTF.Router (routes) where
+module GTF.Router (app) where
 
-import CommonPrelude
+import CommonPrelude hiding (elem)
 import Control.Monad.Trans.Maybe (runMaybeT)
 import Data.ByteString (ByteString, fromStrict)
-import Data.Text (isSuffixOf)
+import Data.Text (elem, isSuffixOf, replace)
+import Data.Text.Encoding (encodeUtf8)
 import GTF.Assets (Asset (..), IsPageType, Musing, Project, WholeSite, loadAsset)
 import GTF.Pages.Colophon qualified as Colophon
 import GTF.Pages.Error qualified as Pages
@@ -14,7 +15,7 @@ import GTF.Pages.Musings qualified as Musings
 import GTF.Pages.Projects qualified as Projects
 import GTF.URL (UrlPath (UrlPath))
 import Lucid.Base (Html, renderBS)
-import Network.HTTP.Types (ResponseHeaders, Status, status200, status404)
+import Network.HTTP.Types (ResponseHeaders, Status, status200, status301, status404)
 import Network.Mime (defaultMimeMap, defaultMimeType, mimeByExt)
 import Network.Wai (
   Application,
@@ -25,6 +26,11 @@ import Network.Wai (
   responseLBS,
  )
 
+app :: Application
+app req res = case redirects $ pathInfo req of
+  Just newloc -> res $ responseLBS status301 [("Location", encodeUtf8 newloc)] mempty
+  Nothing -> routes req res
+
 standardHeaders :: ResponseHeaders
 standardHeaders =
   [ ("Content-Type", "text/html; charset=utf8")
@@ -34,19 +40,35 @@ sendWith :: Status -> Html () -> Response
 sendWith status =
   responseLBS status standardHeaders . renderBS
 
+redirects :: [Text] -> Maybe Text
+-- I used to have a project page for this website, but now we have the colophon
+redirects ["projects", "gtf_io_website"] = pure "/colophon"
+-- There wasm some inconsistency previously between underscores and hyphens. I
+-- now use the latter, but we want to preserve the links
+redirects [c, n]
+  | (c == "musings" || c == "projects") && '_' `elem` n =
+      pure $ "/" <> c <> "/" <> replace "_" "-" n
+redirects _ = Nothing
+
 routes :: Application
-routes req res = case pathInfo req of
-  ["styles", n] -> renderAsset (Stylesheet n :: Asset WholeSite)
-  ["musings"] -> page Musings.indexPage
-  ["musings", n] -> page (Musings.itemPage n)
-  ["musings", n, "assets", f] -> renderAsset $ mkAsset @Musing n f
-  ["projects"] -> page Projects.indexPage
-  ["projects", n] -> page (Projects.itemPage n)
-  ["projects", n, "assets", f] -> renderAsset $ mkAsset @Project n f
-  ["colophon"] -> page Colophon.content
-  ["assets", f] -> renderAsset $ mkAsset @WholeSite "/" f
-  [] -> res $ sendWith status200 Home.content
-  _ -> page (const Nothing)
+routes req res =
+  case pathInfo req of
+    -- ASSETS
+    ["styles", n] -> renderAsset (Stylesheet n :: Asset WholeSite)
+    ["assets", f] -> renderAsset $ mkAsset @WholeSite "/" f
+    -- MUSINGS
+    ["musings"] -> page Musings.indexPage
+    ["musings", n] -> page (Musings.itemPage n)
+    ["musings", n, "assets", f] -> renderAsset $ mkAsset @Musing n f
+    -- PROJECTS
+    ["projects"] -> page Projects.indexPage
+    ["projects", n] -> page (Projects.itemPage n)
+    ["projects", n, "assets", f] -> renderAsset $ mkAsset @Project n f
+    -- OTHER
+    ["colophon"] -> page Colophon.content
+    [] -> res $ sendWith status200 Home.content
+    -- NOT FOUND
+    _ -> page (const Nothing)
  where
   page :: (UrlPath -> Maybe (Html ())) -> IO ResponseReceived
   page content =
