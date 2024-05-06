@@ -3,6 +3,7 @@ module GTF.Style.Main (stylesheet) where
 import Clay
 import Clay.Media qualified as Media
 import CommonPrelude (($))
+import GTF.Style.Projects qualified as Projects
 
 stylesheet :: Css
 stylesheet = do
@@ -84,3 +85,5 @@ stylesheet = do
   header |> ".subtitle" ? do
     fontSize $ em 0.9
     margin (em 0.1) 0 (em 0.1) 0
+
+  Projects.stylesheet

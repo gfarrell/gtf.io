@@ -1,14 +1,17 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module GTF.Router (routes) where
 
 import CommonPrelude
 import Control.Monad.Trans.Maybe (runMaybeT)
 import Data.ByteString (ByteString, fromStrict)
 import Data.Text (isSuffixOf)
-import GTF.Assets (Asset (..), Musing, WholeSite, loadAsset)
+import GTF.Assets (Asset (..), IsPageType, Musing, Project, WholeSite, loadAsset)
 import GTF.Pages.Colophon qualified as Colophon
 import GTF.Pages.Error qualified as Pages
 import GTF.Pages.Home qualified as Home
 import GTF.Pages.Musings qualified as Musings
+import GTF.Pages.Projects qualified as Projects
 import GTF.URL (UrlPath (UrlPath))
 import Lucid.Base (Html, renderBS)
 import Network.HTTP.Types (ResponseHeaders, Status, status200, status404)
@@ -36,9 +39,12 @@ routes req res = case pathInfo req of
   ["styles", n] -> renderAsset (Stylesheet n :: Asset WholeSite)
   ["musings"] -> page Musings.indexPage
   ["musings", n] -> page (Musings.itemPage n)
-  ["musings", n, "assets", f] -> renderAsset (Image n f :: Asset Musing)
+  ["musings", n, "assets", f] -> renderAsset $ mkAsset @Musing n f
+  ["projects"] -> page Projects.indexPage
+  ["projects", n] -> page (Projects.itemPage n)
+  ["projects", n, "assets", f] -> renderAsset $ mkAsset @Project n f
   ["colophon"] -> page Colophon.content
-  ["assets", f] -> renderAsset (mkPageAsset f)
+  ["assets", f] -> renderAsset $ mkAsset @WholeSite "/" f
   [] -> res $ sendWith status200 Home.content
   _ -> page (const Nothing)
  where
@@ -66,7 +72,7 @@ routes req res = case pathInfo req of
   getMimeType (Image _ f) = mimeByExt defaultMimeMap defaultMimeType f
   getMimeType (File _ f) = mimeByExt defaultMimeMap defaultMimeType f
 
-  mkPageAsset :: Text -> Asset WholeSite
-  mkPageAsset name
-    | ".png" `isSuffixOf` name = Image "/" name
-    | otherwise = File "/" name
+  mkAsset :: forall t. (IsPageType t) => Text -> Text -> Asset t
+  mkAsset scope assetName
+    | ".png" `isSuffixOf` assetName = Image scope assetName
+    | otherwise = File scope assetName

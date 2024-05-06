@@ -4,7 +4,9 @@ module GTF.Assets (
   loadAsset,
   Asset (..),
   Musing,
+  Project,
   WholeSite,
+  IsPageType (..),
 )
 where
 
@@ -20,6 +22,7 @@ import Data.Text (unpack)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text.Lazy (toStrict)
 import GTF.Content.Musings (Musing)
+import GTF.Content.Projects (Project)
 import GTF.Style.Main qualified as MainStylesheet
 import Paths_gtf_website (getDataFileName)
 import System.Posix (fileExist)
@@ -34,6 +37,9 @@ instance IsPageType Musing where
 
 instance IsPageType WholeSite where
   getAssetDir _ _ = "src/GTF/Pages/content/assets"
+
+instance IsPageType Project where
+  getAssetDir _ p = unpack $ "src/GTF/Pages/Projects/content/" <> p <> "/assets"
 
 data Asset t where
   Stylesheet :: (IsPageType t) => Text -> Asset t
