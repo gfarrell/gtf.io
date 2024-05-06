@@ -1,8 +1,7 @@
 ---
-title: "Boggle Solver"
-github: "https://github.com/gfarrell/boggle-solver-clojure"
-language: "clojure"
-draft: false
+title: Boggle Solver
+category: programming
+slug: boggle-solver
 abstract: >-
   Boggle is a great word game I play with my family, but I was always
   curious about how many words I could actually get. So while learning
@@ -10,7 +9,9 @@ abstract: >-
   algorithmically determine all the possible words in a board using a
   dictionary.
 date: 2017-08-17
-category: programming
+repo: https://github.com/gfarrell/boggle-solver-clojure
+language: clojure
+tags:
 ---
 
 During Summer 2017 I tried to learn clojure, as I had been curious about
@@ -43,4 +44,4 @@ that character is found, it then searches its adjacent "tiles" for the
 next letter in the word for which we are looking. This continues until
 it finds the complete word, or has exhausted its options. The completed
 words are added to a list, along with the paths through the board used
-to construct them
+to construct them.

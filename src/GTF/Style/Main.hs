@@ -82,6 +82,9 @@ stylesheet = do
     marginTop $ em 2
     textAlign justify
 
+    img ? do
+      maxWidth (pct 100)
+
   header |> ".subtitle" ? do
     fontSize $ em 0.9
     margin (em 0.1) 0 (em 0.1) 0

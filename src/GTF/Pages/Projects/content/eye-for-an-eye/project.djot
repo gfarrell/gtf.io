@@ -1,14 +1,17 @@
 ---
 title: "Evolutionary Prisoner's Dilemma Simulator"
-github: "https://github.com/gfarrell/eye-for-an-eye"
+slug: eye-for-an-eye
+category: programming
+repo: "https://github.com/gfarrell/eye-for-an-eye"
 language: "haskell"
-draft: false
 abstract: >-
   Simulator written in Haskell to run through various scenarios of the
   prisoner's dilemma and evolving them in time. Includes some visualisation
   capabilities.
 date: 2020-03-01
-category: programming
+tags:
+- simulation
+- visualisation
 ---
 
 I was discussing with a friend whether purely selfish behaviour
@@ -59,10 +62,12 @@ matrix (called a "rewards vector"). This has a scoring increment for
 each of the possible outcomes of an interaction between an agent A and a
 counteragent B:
 
-    A cooperates, B cooperates -> RewardsVector x _ _ _
-    A cooperates, B defects    -> RewardsVector _ x _ _
-    A defects,    B cooperates -> RewardsVector _ _ x _
-    A defects,    B defects    -> RewardsVector _ _ _ x
+```
+A cooperates, B cooperates -> RewardsVector x _ _ _
+A cooperates, B defects    -> RewardsVector _ x _ _
+A defects,    B cooperates -> RewardsVector _ _ x _
+A defects,    B defects    -> RewardsVector _ _ _ x
+```
 
 To additionally model how a real-world evolutionary scenario might
 work, agents can reproduce according to an encoded set of "reproductive
@@ -85,54 +90,48 @@ To therefore run a simulation with sixteen initial agents over fifty frames and
 output the data into a directory called `myworld_data`, and then to produce
 plots of those data, one would use the following script:
 
-    mkdir myworld_data
-    stack run myworld 16 50
-    cd visualise
-    poetry run visualise ../myworld_data
+```shell
+mkdir myworld_data
+stack run myworld 16 50
+cd visualise
+poetry run visualise ../myworld_data
+```
 
 ## Results
 
 In order to test the system a flat distribution of agent parameters was used,
 and the following world parameters:
 
-    World {
-      mistake_rate=0.1
-    , initial_size=read initialSize   -- script argument
-    , iterations=read iterationCount  -- script argument
-    , generator=genEvent              -- flat distribution [0 .. 1]
-    , rewards=RewardsVector 1 (-2) 2 (-1)
-    , reproduction_assumptions=basicReproAssumptions
-    }
+```haskell
+World {
+  mistake_rate=0.1
+, initial_size=read initialSize   -- script argument
+, iterations=read iterationCount  -- script argument
+, generator=genEvent              -- flat distribution [0 .. 1]
+, rewards=RewardsVector 1 (-2) 2 (-1)
+, reproduction_assumptions=basicReproAssumptions
+}
 
-    basicReproAssumptions = ReproductionAssumptions {
-      minReproProb = 0.1
-    , maxReproProb = 0.9
-    , getMinScoreScale = (/ 2)
-    , getMaxScoreScale = (* 2)
-    }
+basicReproAssumptions = ReproductionAssumptions {
+  minReproProb = 0.1
+, maxReproProb = 0.9
+, getMinScoreScale = (/ 2)
+, getMaxScoreScale = (* 2)
+}
+```
 
 The first frame of a simulation with these parameters, sixteen initial agents,
 and fifty frames gave the following results:
 
-{{< fig
-"images/sim_f1_all.png"
-"Scatter plot of selfishness and generosity in the first frame to show the initial distribution."
->}}
+![Scatter plot of all selfishness and generosity in the first frame to show the initial distribution](/projects/eye-for-an-eye/assets/sim_f1_all.png)
 
 After fifty frames, the results were as follows:
 
-{{< fig
-"images/sim_f49_gen.png"
-"Score plotted against generosity at the end of the simulation."
->}}
-{{< fig
-"images/sim_f49_sel.png"
-"Score plotted against selfishness at the end of the simulation."
->}}
-{{< fig
-"images/sim_f49_all.png"
-"Selfishness, generosity, and score plotted on a graph for the final frame. Score is indicated by a colour scale, and number of agents at that parameter location is indicated by the bubble size."
->}}
+![Score plotted against generosity at the end of the simulation.](/projects/eye-for-an-eye/assets/sim_f49_gen.png)
+
+![Score plotted against selfishness at the end of the simulation.](/projects/eye-for-an-eye/assets/sim_f49_sel.png)
+
+![Selfishness, generosity, and score plotted on a graph for the final frame. Score is indicated by a colour scale, and number of agents at that parameter location is indicated by the bubble size.](/projects/eye-for-an-eye/assets/sim_f49_all.png)
 
 ## Conclusion
 

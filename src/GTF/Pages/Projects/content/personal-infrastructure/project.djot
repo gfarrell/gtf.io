@@ -1,8 +1,9 @@
 ---
 title: "Personal Infrastructure"
-github: "https://github.com/gfarrell/infra"
+slug: personal-infrastructure
+category: programming
+repo: "https://github.com/gfarrell/infra"
 language: "docker"
-draft: false
 date: 2019-06-22
 abstract: >-
   While I have tried using various cloud-hosting services to run my
@@ -10,8 +11,11 @@ abstract: >-
   away from this in order to have more control and also as a great
   learning experience for devops. Ended up based on docker-compose,
   nginx, mailman, drone-ci, and postgresql.
-category: devops
-toc: true
+tags:
+- infrastructure
+- docker
+- linux
+- devops
 ---
 
 ## Preamble and Motivation
@@ -62,7 +66,7 @@ be exposed indirectly (without ever being directly accessible by the
 outside world), and I can handle my SSL certificates using LetsEncrypt
 and `certbot`.
 
-{{< fig "system-diagram.png" "Diagram of the overall system." >}}
+![Diagram of the overall system.](/projects/personal-infrastructure/assets/system-diagram.png)
 
 ## Mailing lists
 
@@ -121,20 +125,26 @@ Exim has some very nice debugging features to help with setup. For
 example, to understand how routing and transports worked, I could check
 what would happen to an email destined for a particular address using:
 
-	exim -bv -d+all my.list@my.domain.tld
+```
+exim -bv -d+all my.list@my.domain.tld
+```
 
 When I was trying to test my access-control lists, I could simulate an
 SMTP exchange with a spoofed host address using:
 
-	exim -bh XX.XX.XX.XX
+```
+exim -bh XX.XX.XX.XX
+```
 
 So when I was trying to see what would happen if I sent emails from the
 local subnet vs. a gmail server, I could try the following SMTP exchange
 using the different host addresses:
 
-	EHLO mx.somedomain.com
-	MAIL FROM: spammer@gmail.com
-	RCPT TO: spammee@gmail.com
+```
+EHLO mx.somedomain.com
+MAIL FROM: spammer@gmail.com
+RCPT TO: spammee@gmail.com
+```
 
 My mailman/exim setup now works, and I also had to setup DKIM and SPF to
 make it less likely that I will get marked as spam. The spf records were

@@ -1,13 +1,14 @@
 ---
 title: "Markov Text Generator"
-github: "https://github.com/gfarrell/markov-writer-py"
+slug: markov-text-generator
+category: programming
+repo: "https://github.com/gfarrell/markov-writer-py"
 language: "python"
-draft: false
 abstract: >-
   Using markov chains to generate text based on some source corpus
   (Shakespeare's plays in this case). Written in python just for fun.
 date: 2018-08-16
-category: programming
+tags:
 ---
 
 I had been fascinated for some time with the idea of generating text
@@ -31,7 +32,9 @@ were then regularised, as these pages have lots of extra characters in
 the words, which would cause words that were actually the same to be
 treated differently. A regular expression to "clean" the text was used:
 
-    (^|\s+)?(('?(\w+)([\-']?))+)(\s+|$)?
+```regex
+(^|\s+)?(('?(\w+)([\-']?))+)(\s+|$)?
+```
 
 To generate the output text, the list of speeches from a given character
 would be converted into a transition matrix, being the probability of
