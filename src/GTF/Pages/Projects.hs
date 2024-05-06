@@ -18,6 +18,7 @@ import GTF.Content.Loader (isDjot, loadFilesTH)
 import GTF.Content.Projects (DocMeta (..), Project, ProjectDetails (..))
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (PageMeta (PageMeta), defaultLayout, defaultLayoutWithMeta)
+import GTF.Pages.Partials.Highlight (highlight)
 import GTF.URL (UrlPath)
 import Lucid.Base (Html, ToHtml (..))
 import Lucid.Html5
@@ -74,6 +75,7 @@ itemPage name currentPath =
             . toHtmlRaw
             . toLazyByteString
             $ renderHtml (RenderOptions False) d
+          highlight
     _ -> Nothing
  where
   mkInfoSection :: DocMeta Project -> Html ()

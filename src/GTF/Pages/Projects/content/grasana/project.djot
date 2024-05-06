@@ -35,14 +35,14 @@ increasing my familiarity with core Haskell concepts.
 
 Grasana is quite simple to use:
 
-```shell
+```bash
 grasana -t token format projectid
 ```
 
 I typically just pipe the output to dot or to an html file and then load the
 resulting svg / html in a browser, for example:
 
-```shell
+```bash
 grasana -t token dot projectid | dot -Tsvg > project.svg
 firefox project.svg
 

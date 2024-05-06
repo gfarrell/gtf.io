@@ -90,7 +90,7 @@ To therefore run a simulation with sixteen initial agents over fifty frames and
 output the data into a directory called `myworld_data`, and then to produce
 plots of those data, one would use the following script:
 
-```shell
+```bash
 mkdir myworld_data
 stack run myworld 16 50
 cd visualise

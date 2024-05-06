@@ -19,6 +19,7 @@ import GTF.Content.Loader (isDjot, loadFilesTH)
 import GTF.Content.Musings (Category (..), DocMeta (..), Musing, wordcount)
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (PageMeta (..), defaultLayout, defaultLayoutWithMeta)
+import GTF.Pages.Partials.Highlight (highlight)
 import GTF.URL (UrlPath)
 import Lucid (Html, ToHtml (toHtml, toHtmlRaw))
 import Lucid.Html5
@@ -39,7 +40,7 @@ indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
       span_
         [class_ "defn-example"]
         "he was musing on the problems he faced."
-  hr_ []
+  hr_ mempty
   makeSection "General Essays" $ filter ((== General) . category . meta) musings
   makeSection "Informatics" $ filter ((== Informatics) . category . meta) musings
   makeSection "Reflections" $ filter ((== Reflection) . category . meta) musings
@@ -81,4 +82,5 @@ itemPage name currentPath =
             . toHtmlRaw
             . toLazyByteString
             $ renderHtml (RenderOptions False) d
+          highlight
     _ -> Nothing

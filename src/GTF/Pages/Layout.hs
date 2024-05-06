@@ -36,6 +36,11 @@ siteCss =
     [ rel_ "stylesheet"
     , href_ "/styles/main.css"
     ]
+    <> link_
+      [ rel_ "stylesheet"
+      , href_
+          "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/base16/papercolor-light.min.css"
+      ]
 
 defaultLayout :: UrlPath -> Text -> Html () -> Html ()
 defaultLayout currentPath pageTitle =

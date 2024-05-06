@@ -65,13 +65,17 @@ stylesheet = do
     display flex
     flexDirection column
     justifyContent center
-    alignItems center
+    alignItems flexStart
     marginTop $ em 2
     textAlign justify
 
-    img ? maxWidth (pct 100)
+    img ? do
+      alignSelf center
+      maxWidth (pct 100)
 
-    pre ? alignSelf flexStart
+    pre ? do
+      overflowX scroll
+      maxWidth (vw 90)
 
   header |> ".subtitle" ? do
     fontSize $ em 0.9

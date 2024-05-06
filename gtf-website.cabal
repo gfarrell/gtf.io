@@ -85,6 +85,7 @@ library
     GTF.Pages.Layout
     GTF.Pages.Musings
     GTF.Pages.Partials.Footer
+    GTF.Pages.Partials.Highlight
     GTF.Pages.Partials.Nav
     GTF.Pages.Projects
     GTF.Style.Helpers
