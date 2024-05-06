@@ -10,15 +10,18 @@ import Lucid.Html5
 
 navbar :: UrlPath -> Html ()
 navbar currentPath =
-  nav_
-    $ foldMap
-      mkMenuItem
-      [ ("home", "/")
-      , ("musings", "/musings")
-      , ("projects", "/projects")
-      , ("codices", "/codices")
-      , ("colophon", "/colophon")
-      ]
+  nav_ $ do
+    input_ [type_ "checkbox", id_ "nav-control"]
+    label_ [class_ "nav-label", for_ "nav-control"] "oh the places you'll go"
+    div_ [class_ "nav-content"]
+      $ foldMap
+        mkMenuItem
+        [ ("home", "/")
+        , ("musings", "/musings")
+        , ("projects", "/projects")
+        , ("codices", "/codices")
+        , ("colophon", "/colophon")
+        ]
  where
   mkMenuItem :: (Text, ByteString) -> Html ()
   mkMenuItem (label, url) =

@@ -24,6 +24,12 @@ data PageMeta = PageMeta
 basicMeta :: Text -> PageMeta
 basicMeta title = PageMeta title Nothing Nothing
 
+commonMetaItems :: Html ()
+commonMetaItems = do
+  meta_ [charset_ "utf8"]
+  meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
+  meta_ [name_ "robots", content_ "index, follow"]
+
 siteCss :: Html ()
 siteCss =
   link_
@@ -39,6 +45,7 @@ defaultLayoutWithMeta :: UrlPath -> PageMeta -> Html () -> Html ()
 defaultLayoutWithMeta currentPath metadata pageContent = html_ $ do
   head_ $ do
     title_ $ "GTF :: " <> toHtml (pageTitle metadata)
+    commonMetaItems
     maybe mempty (\c -> meta_ [name_ "description", content_ c])
       $ pageDescription metadata
     maybe mempty (\tags -> meta_ [name_ "keywords", content_ $ intercalate ", " tags])
@@ -56,6 +63,7 @@ plainLayoutWithMeta :: PageMeta -> Html () -> Html ()
 plainLayoutWithMeta metadata content = html_ $ do
   head_ $ do
     title_ $ "GTF :: " <> toHtml (pageTitle metadata)
+    commonMetaItems
     maybe mempty (\c -> meta_ [name_ "description", content_ c])
       $ pageDescription metadata
     maybe mempty (\tags -> meta_ [name_ "keywords", content_ $ intercalate ", " tags])

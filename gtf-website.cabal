@@ -87,7 +87,9 @@ library
     GTF.Pages.Partials.Footer
     GTF.Pages.Partials.Nav
     GTF.Pages.Projects
+    GTF.Style.Home
     GTF.Style.Main
+    GTF.Style.Nav
     GTF.Style.Projects
     GTF.URL
     Paths_gtf_website

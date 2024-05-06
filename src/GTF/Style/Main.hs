@@ -3,6 +3,8 @@ module GTF.Style.Main (stylesheet) where
 import Clay
 import Clay.Media qualified as Media
 import CommonPrelude (($))
+import GTF.Style.Home qualified as Home
+import GTF.Style.Nav qualified as Nav
 import GTF.Style.Projects qualified as Projects
 
 stylesheet :: Css
@@ -18,25 +20,6 @@ stylesheet = do
 
   main_ ? do
     textAlign justify
-
-  nav ? do
-    display flex
-    flexDirection row
-
-    ".nav-item" ? do
-      padding (em 0) (em 1) (em 0) (em 1)
-      borderRight (px 1) solid (rgb 204 204 204)
-
-      ".active" & do
-        fontWeight bold
-
-        a ? do
-          color black
-          textDecoration none
-
-      lastChild
-        -- this should be "border-right: none" but see https://github.com/sebastiaanvisser/clay/issues/263
-        & borderRight 0 none white
 
   header # ".site-header" ? do
     display flex
@@ -79,14 +62,21 @@ stylesheet = do
       background white
 
   div # ".item-content" ? do
+    display flex
+    flexDirection column
+    justifyContent center
+    alignItems center
     marginTop $ em 2
     textAlign justify
 
-    img ? do
-      maxWidth (pct 100)
+    img ? maxWidth (pct 100)
+
+    pre ? alignSelf flexStart
 
   header |> ".subtitle" ? do
     fontSize $ em 0.9
     margin (em 0.1) 0 (em 0.1) 0
 
+  Nav.stylesheet
+  Home.stylesheet
   Projects.stylesheet
