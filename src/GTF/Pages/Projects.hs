@@ -46,7 +46,7 @@ indexPage currentPath = Just $ defaultLayout currentPath "All Projects" $ do
         [class_ "defn-example"]
         "a research project | a project to build a new power station"
   hr_ mempty
-  ul_ $ foldMap mkProjectRow projects
+  ul_ [class_ "page-list"] $ foldMap mkProjectRow projects
  where
   mkProjectRow :: ParsedDoc Project -> Html ()
   mkProjectRow (ParsedDoc m _) =

@@ -90,6 +90,7 @@ library
     GTF.Pages.Projects
     GTF.Style.Helpers
     GTF.Style.Home
+    GTF.Style.Lists
     GTF.Style.Main
     GTF.Style.Nav
     GTF.Style.Projects

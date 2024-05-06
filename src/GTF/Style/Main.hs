@@ -4,6 +4,7 @@ import Clay
 import Clay.Media qualified as Media
 import CommonPrelude (($))
 import GTF.Style.Home qualified as Home
+import GTF.Style.Lists qualified as Lists
 import GTF.Style.Nav qualified as Nav
 import GTF.Style.Projects qualified as Projects
 
@@ -82,5 +83,6 @@ stylesheet = do
     margin (em 0.1) 0 (em 0.1) 0
 
   Nav.stylesheet
+  Lists.stylesheet
   Home.stylesheet
   Projects.stylesheet

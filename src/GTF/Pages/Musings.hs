@@ -51,7 +51,7 @@ indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
       then mempty
       else section_ [class_ "index_section"] $ do
         h2_ $ toHtml sectionTitle
-        ul_
+        ul_ [class_ "page-list"]
           $ foldMap
             ( \(ParsedDoc m _) ->
                 li_
