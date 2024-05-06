@@ -19,7 +19,6 @@ navbar currentPath =
         [ ("home", "/")
         , ("musings", "/musings")
         , ("projects", "/projects")
-        , ("codices", "/codices")
         , ("colophon", "/colophon")
         ]
  where

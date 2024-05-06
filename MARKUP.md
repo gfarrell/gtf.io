@@ -6,7 +6,7 @@ forward implementations of [quotation attribution](attr-issue),
 [citations](citations-issue) and [cross-references](refs-issue) into
 `djot`.
 
-## Captions
+## Captions (TODO)
 
 Many block-level elements can have captions attached to them, like
 images, tables, blockquotations, etc.. Captions are delimited with the
@@ -17,7 +17,7 @@ caret (`^`) symbol, for example:
 ^ Number of visitors to this website from 1856 to 2030
 ```
 
-### Attributing Quotations
+### Attributing Quotations (TODO)
 
 If you have a block-quotation, you can use the caption (`^`) delimeter
 to attribute it:
@@ -28,7 +28,7 @@ to attribute it:
 ^ Cardinal Richelieu (apocryphal) as in [+@Hoyt, p. 763]
 ```
 
-## Citations
+## Citations (TODO)
 
 You can insert inline citations using the `[+@label, loc; @label2]`
 syntax for author-in-text citations, and simply `[@label, loc]` for
@@ -46,7 +46,7 @@ This will render as:
 > As can be seen in Farrell (2024, p. 42), this sort of thing has been
 > previously discussed. Generally, citations are useful (Farrell 2024, p. 27).
 
-## Cross-referencing
+## Cross-referencing (TODO)
 
 In order to cross-reference one part of your text in another, you need
 two things: an anchor (the source of the reference) and a reference
