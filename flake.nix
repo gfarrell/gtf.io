@@ -16,7 +16,6 @@
   }: let
     ulib = flake-utils.lib;
     ghcVersion = "ghc947";
-    # ^ `nix-env -f "<nixpkgs>" -qaP -A haskell.compiler` suggests we should have 947 but nix is complaining
   in
     ulib.eachSystem ["x86_64-linux"] (system: let
       pkgs = import nixpkgs {
@@ -29,9 +28,10 @@
         packageName = "gtf-website";
         hsPkgsOverrides = hfinal: hprev: {
           # https://ryantm.github.io/nixpkgs/languages-frameworks/haskell/#haskell-derivation-args
-          djot = hfinal.mkDerivation {
-            src = "https://github.com/gfarrell/djoths.git";
-          };
+          djot = hfinal.callCabal2nix "djot" (builtins.fetchGit {
+            url = "git@github.com:gfarrell/djoths.git";
+            rev = "bad299275d650e71b7915ae6da4cfef6a869ab1a";
+          }) {};
         };
       };
     in {
