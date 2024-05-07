@@ -1,11 +1,12 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ViewPatterns #-}
 
 module GTF.Router (app) where
 
 import CommonPrelude hiding (elem)
 import Control.Monad.Trans.Maybe (runMaybeT)
 import Data.ByteString (ByteString, fromStrict)
-import Data.Text (elem, isSuffixOf, replace)
+import Data.Text (elem, isSuffixOf, pack, replace, unpack)
 import Data.Text.Encoding (encodeUtf8)
 import GTF.Assets (Asset (..), IsPageType, Musing, Project, WholeSite, loadAsset)
 import GTF.Pages.Colophon qualified as Colophon
@@ -25,6 +26,7 @@ import Network.Wai (
   pathInfo,
   responseLBS,
  )
+import System.FilePath (takeFileName)
 
 app :: Application
 app req res = case redirects $ pathInfo req of
@@ -95,6 +97,7 @@ routes req res =
   getMimeType (File _ f) = mimeByExt defaultMimeMap defaultMimeType f
 
   mkAsset :: forall t. (IsPageType t) => Text -> Text -> Asset t
-  mkAsset scope assetName
+  mkAsset scope (pack . takeFileName . unpack -> assetName)
+    -- we use `takeFileName` to strip any attempts at exploring the filesystem
     | ".png" `isSuffixOf` assetName = Image scope assetName
     | otherwise = File scope assetName
