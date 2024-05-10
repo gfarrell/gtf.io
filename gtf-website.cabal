@@ -23,7 +23,7 @@ extra-source-files: src/GTF/Pages/**/*.djot
 data-files:
   src/GTF/Pages/content/assets/*.asc
   src/GTF/Pages/content/assets/*.png
-  src/GTF/Pages/Musings/content/**/assets/*.png
+  src/GTF/Pages/Musings/content/**/*.png
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
@@ -40,6 +40,7 @@ common lang
 
 common deps
   build-depends:
+    , aeson
     , base                ^>=4.17.2.0
     , bytestring
     , clay
