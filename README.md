@@ -18,3 +18,9 @@ We have a few types of page:
   * Essays (informatics)
   * Personal reflections
 * Projects, which are written in djot and are found in `src/GTF/Pages/Projects/content`
+
+## Usage
+
+There is a nix flake which you can either use to build (`nix build`), run (`nix run .#default -- 2712`), or develop in (`nix develop`).
+
+The server binary takes a single argument, the port to listen on, otherwise it will return an error (`WrongNumberOfArgs` or `InvalidPort` if you have given it a non-integer).
