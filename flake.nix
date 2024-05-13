@@ -2,47 +2,40 @@
   description = "gtf.io website";
 
   inputs = {
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    haskell-flake.url = "github:srid/haskell-flake";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    flake-utils.url = "github:numtide/flake-utils";
-    hs-flake-utils.url = "git+https://whetstone.private.storage/jcalderone/hs-flake-utils.git?ref=main";
-    hs-flake-utils.inputs.nixpkgs.follows = "nixpkgs";
+    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-    hs-flake-utils,
-  }: let
-    ulib = flake-utils.lib;
-    ghcVersion = "ghc947";
-  in
-    ulib.eachSystem ["x86_64-linux"] (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-      };
-      hslib = hs-flake-utils.lib {
-        inherit pkgs;
-        src = ./.;
-        compilerVersion = ghcVersion;
-        packageName = "gtf-website";
-        hsPkgsOverrides = hfinal: hprev: {
-          # https://ryantm.github.io/nixpkgs/languages-frameworks/haskell/#haskell-derivation-args
-          djot = hfinal.callCabal2nix "djot" (builtins.fetchGit {
-            url = "git@github.com:gfarrell/djoths.git";
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+    imports = [
+      inputs.haskell-flake.flakeModule
+      inputs.pre-commit-hooks.flakeModule
+    ];
+    systems = [ "x86_64-linux" "aarch64-linux" ];
+
+    perSystem = { config, inputs', self', ... }: {
+      haskellProjects.default = {
+        devShell.mkShellArgs.shellHook = config.pre-commit.installationScript;
+        packages = {
+          djot.source = inputs'.nixpkgs.legacyPackages.fetchFromGitHub {
+            owner = "gfarrell";
+            repo = "djoths";
             rev = "bad299275d650e71b7915ae6da4cfef6a869ab1a";
-          }) {};
+            hash = "sha256-Ud+BhyifBnvQK7gPK5ruT3GHfIrZFSCVXmUjB7HhnNw=";
+          };
         };
       };
-    in {
-      checks = hslib.checks {};
-      devShells = hslib.devShells {
-        extraBuildInputs = pkgs:
-          with pkgs; [
-            zlib
-          ];
+
+      pre-commit.settings.hooks = {
+        cabal-fmt.enable = true;
+        hlint.enable = true;
+        nixpkgs-fmt.enable = true;
+        fourmolu.enable = true;
       };
-      packages = hslib.packages {};
-      apps.release = hslib.apps.release {};
-    });
+
+      packages.default = self'.packages.gtf-website;
+    };
+  };
 }
