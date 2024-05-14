@@ -1,13 +1,16 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
 
-module GTF.Router (app) where
+module GTF.Router (app, LogLevel (..)) where
 
-import CommonPrelude hiding (elem)
+import CommonPrelude hiding (elem, putStrLn, unwords)
 import Control.Monad.Trans.Maybe (runMaybeT)
 import Data.ByteString (ByteString, fromStrict)
-import Data.Text (elem, isSuffixOf, pack, replace, unpack)
-import Data.Text.Encoding (encodeUtf8)
+import Data.Text (elem, isSuffixOf, pack, replace, unpack, unwords)
+import Data.Text.Encoding (decodeUtf8, encodeUtf8)
+import Data.Text.IO (putStrLn)
+import Data.Time.Clock (getCurrentTime)
+import Data.Time.Format.ISO8601 (iso8601Show)
 import GTF.Assets (Asset (..), IsPageType, Musing, Project, WholeSite, loadAsset)
 import GTF.Pages.Colophon qualified as Colophon
 import GTF.Pages.Error qualified as Pages
@@ -20,7 +23,7 @@ import Network.HTTP.Types (ResponseHeaders, Status, status200, status301, status
 import Network.Mime (defaultMimeMap, defaultMimeType, mimeByExt)
 import Network.Wai (
   Application,
-  Request (rawPathInfo),
+  Request (..),
   Response,
   ResponseReceived,
   pathInfo,
@@ -28,10 +31,47 @@ import Network.Wai (
  )
 import System.FilePath (takeFileName)
 
-app :: Application
-app req res = case redirects $ pathInfo req of
-  Just newloc -> res $ responseLBS status301 [("Location", encodeUtf8 newloc)] mempty
-  Nothing -> routes req res
+data LogLevel = None | RequestsOnly | Verbose
+  deriving (Show, Eq, Ord)
+
+putLog :: Text -> IO ()
+putLog msg =
+  getCurrentTime >>= \now ->
+    putStrLn
+      $ pack (iso8601Show now)
+      <> ": "
+      <> msg
+
+app :: LogLevel -> Application
+app logLevel req res =
+  logRequest
+    >> case redirects $ pathInfo req of
+      Just newloc -> logRedir newloc >> res (responseLBS status301 [("Location", encodeUtf8 newloc)] mempty)
+      Nothing -> routes req res
+ where
+  logRequest :: IO ()
+  logRequest
+    | logLevel == None = pure ()
+    | otherwise =
+        putLog
+          . unwords
+          . (decodeUtf8 <$>)
+          $ [ "REQ"
+            , requestMethod req
+            , rawPathInfo req
+            ]
+
+  logRedir :: Text -> IO ()
+  logRedir newloc
+    | logLevel < Verbose = pure ()
+    | otherwise =
+        putLog
+          . unwords
+          $ [ "RDR"
+            , decodeUtf8 $ rawPathInfo req
+            , "->"
+            , newloc
+            ]
 
 standardHeaders :: ResponseHeaders
 standardHeaders =
