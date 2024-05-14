@@ -1,9 +1,0 @@
-<ol class="footnotes">
-{{ range $ind,$footnote := ($.Page.Scratch.Get "footnotes") }}
-{{ $i := add $ind 1 }}
-    <li id="fn-{{ $i }}">
-        <i>{{ $footnote }}</i>
-        <a href="#fnref-{{ $i }}" title="go to reference {{ $i }} in the text">&uarr;</a>
-    </li>
-{{ end }}
-</ol>
