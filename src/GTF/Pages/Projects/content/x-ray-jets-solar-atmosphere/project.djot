@@ -1,0 +1,73 @@
+---
+title: "Temperature Bounds on X-ray jets in the solar atmosphere (Master's
+Thesis)"
+category: document
+slug: x-ray-jets-solar-atmosphere
+tags:
+- research
+- astrophysics
+date: 2014-04-30
+abstract: >-
+  Coronal X-ray jets are small phenomena found in coronal holes,
+  distinguished by an outward collimated plasma flow and brightening
+  at the base of the flow. Such jets could have some impact in two
+  questions in heliophysics, the first being that of what powers
+  the solar wind, and the second being that of the coronal heating
+  problem. While many properties of jets have been thoroughly studied
+  with large sample sets, the temperature of these jets is less well
+  known. This project looks at data taken from the Atmospheric Imaging
+  Assembly aboard the Solar Dynamics Observatory for four jet events,
+  three "blowout" jets and one "standard" jet, and uses regularised
+  differential emission measure inversion to analyse their temperatures.
+  It was found that jets have strong emissions in the 0.8-3MK range,
+  with blowout jets also exhibiting emissions at around 10MK.
+file: "gtf_temp_bounds_xray_jets_msci_thesis.pdf"
+
+---
+
+## Abstract
+
+_Coronal X-ray jets are small phenomena found in coronal holes,
+distinguished by an outward collimated plasma flow and brightening
+at the base of the flow. Such jets could have some impact in two
+questions in heliophysics, the first being that of what powers
+the solar wind, and the second being that of the coronal heating
+problem. While many properties of jets have been thoroughly studied
+with large sample sets, the temperature of these jets is less well
+known. This project looks at data taken from the Atmospheric Imaging
+Assembly aboard the Solar Dynamics Observatory for four jet events,
+three "blowout" jets and one "standard" jet, and uses regularised
+differential emission measure inversion to analyse their temperatures.
+It was found that jets have strong emissions in the 0.8-3MK range,
+with blowout jets also exhibiting emissions at around 10MK._
+
+## Background
+
+For part III of the Natural Sciences Tripos (which results in an MSci
+degree), I specialised in Astrophysics. The nice part of working at
+the Institute of Astronomy (IoA) in part III is that we got to do
+original research for our theses, while still contained at the Centre
+for Mathematical Sciences (CMS), essentially remaining part of the
+Department of Applied Mathematics and Theoretical Physics (DAMTP). We
+therefore got the thrill of doing something completely new, which our
+friends actually doing part III in DAMTP did not, while having the far
+superior teaching and resources of the CMS (as compared to the IoA
+itself whose teaching was, for the most part, quite dire).
+
+I worked with Prof. Helen Mason and Dr. Giulio Del Zanna, whose
+specialisms were in the study of the Sun, specifically the
+magnetohydrodynamics of our closest star.
+
+One of the big gaps in our understanding of the Sun is known as the
+[coronal heating problem][wiki-chp] (CHP): why is the Sun's coronal
+temperature 1&ndash;2M Kelvin while the photosphere is at a mere 6000
+Kelvin.
+
+My research focussed on measuring temperature bounds for tiny coronal
+mass ejections (CMEs). The exact mechanism for these CMEs is not known
+for certain, and the exact temperature ranges are not well understood
+either. Increasing the accuracy of our understanding of the temperature
+ranges will eliminate or support the various theories around these CMEs
+and the CHP.
+
+[wiki-chp]: https://en.wikipedia.org/wiki/Stellar_corona#Coronal_heating_problem

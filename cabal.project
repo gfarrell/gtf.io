@@ -1,0 +1,8 @@
+packages:
+  ./
+
+source-repository-package
+  type: git
+  location: https://github.com/gfarrell/djoths.git
+  tag: bfc8e2f76f7095600824535400c7fa59011a5f5e
+

@@ -1,0 +1,59 @@
+---
+title: "Markov Text Generator"
+slug: markov-text-generator
+category: programming
+repo: "https://github.com/gfarrell/markov-writer-py"
+language: "python"
+abstract: >-
+  Using markov chains to generate text based on some source corpus
+  (Shakespeare's plays in this case). Written in python just for fun.
+date: 2018-08-16
+tags:
+---
+
+I had been fascinated for some time with the idea of generating text
+that feels like some source text. I happened to be reading about markov
+chains one evening and decided to just try to write a generator that
+would spit out a body of text based on a set of transition matrices
+created from an input corpus.
+
+One easily-accessible (and very recognisable) source is Shakespeare's
+plays, [helpfully hosted by MIT](http://shakespeare.mit.edu). I wanted
+to create something that could "speak like Hamlet", for example.
+
+This was written in Python, partly because
+of the ease of using something like
+[`BeautifulSoup`](https://www.crummy.com/software/BeautifulSoup/) to
+parse the source.
+
+Once the source is parsed, it is split into lists of speeches by each
+character (thankfully, the MIT page structure is very regular). These
+were then regularised, as these pages have lots of extra characters in
+the words, which would cause words that were actually the same to be
+treated differently. A regular expression to "clean" the text was used:
+
+```regex
+(^|\s+)?(('?(\w+)([\-']?))+)(\s+|$)?
+```
+
+To generate the output text, the list of speeches from a given character
+would be converted into a transition matrix, being the probability of
+one word being followed by any other word (including special "words"
+for the beginning and end of a speech). This matrix would then be
+"traversed", by starting with the "speech start" word, and then choosing
+the next word from the probability distribution of words which might
+follow it. This continued until the "speech end" word was chosen.
+
+## Some examples
+
+### Hamlet
+
+> aside nay speak 'sblood there seek out at a divinity that ever the ominous horse hath made am easier to make the king's mess 'tis not shame to note that i for the death have it is fashion i' the mean my word for god's love make known now my weakness and thereabout of his visage together
+
+### Ophelia
+
+> could beauty my lord you now receive them
+
+### Laertes
+
+> think it my father comes a woodcock to my lord

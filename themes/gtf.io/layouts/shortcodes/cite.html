@@ -1,8 +1,0 @@
-{{- $id := (.Get 0) -}}
-{{- $text := .Inner -}}
-{{- range $ind,$citation := $.Page.Params.citations -}}
-{{- if eq $citation.id $id -}}
-{{- $i := add $ind 1 -}}
-<a class="citation" href="#citation-{{ $i }}" title="{{ $citation.label }}">{{ $text }} [{{ $i }}]</a>
-{{- end -}}
-{{- end -}}
