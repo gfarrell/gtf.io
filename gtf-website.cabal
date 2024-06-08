@@ -3,15 +3,7 @@ name:               gtf-website
 synopsis:           Software for running the gtf.io website
 homepage:           https://www.gtf.io/
 license:            BSD-3-Clause
-
--- The package version.
--- See the Haskell package versioning policy (PVP) for standards
--- guiding when and how versions should be incremented.
--- https://pvp.haskell.org
--- PVP summary:     +-+------- breaking API changes
---                  | | +----- non-breaking API additions
---                  | | | +--- code changes with no API change
-version:            0.1.0.0
+version:            1.0.0.0
 
 -- The file containing the license text.
 license-file:       LICENSE
