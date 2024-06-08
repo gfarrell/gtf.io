@@ -49,7 +49,6 @@ common deps
     , either
     , filepath
     , generic-lens
-    , githash
     , http-types
     , lucid
     , megaparsec
