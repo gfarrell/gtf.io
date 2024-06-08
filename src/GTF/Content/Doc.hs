@@ -1,17 +1,17 @@
+{-# LANGUAGE DeriveLift #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
-{-# LANGUAGE DeriveLift #-}
 
-module GTF.Content.Doc
-  ( -- * Document data containers
-    ContentDoc (..),
-    ParsedDoc (..),
+module GTF.Content.Doc (
+  -- * Document data containers
+  ContentDoc (..),
+  ParsedDoc (..),
 
-    -- * Tools for parsing documents
-    DocParseFailure (..),
-    parseContentDoc,
-  )
+  -- * Tools for parsing documents
+  DocParseFailure (..),
+  parseContentDoc,
+)
 where
 
 import CommonPrelude
@@ -32,8 +32,8 @@ class (Lift (DocMeta a), FromJSON (DocMeta a)) => ContentDoc a where
   data DocMeta a
 
 data ParsedDoc a = ParsedDoc
-  { meta :: DocMeta a,
-    doc :: Doc
+  { meta :: DocMeta a
+  , doc :: Doc
   }
 
 deriving instance (Show (DocMeta a)) => Show (ParsedDoc a)

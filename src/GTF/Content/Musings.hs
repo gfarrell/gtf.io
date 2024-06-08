@@ -34,13 +34,13 @@ instance FromJSON Category where
 
 instance ContentDoc Musing where
   data DocMeta Musing = MusingMeta
-    { title :: Text,
-      slug :: Text,
-      category :: Category,
-      created :: Day,
-      updated :: Maybe Day,
-      abstract :: Maybe Text,
-      tags :: Maybe [Text]
+    { title :: Text
+    , slug :: Text
+    , category :: Category
+    , created :: Day
+    , updated :: Maybe Day
+    , abstract :: Maybe Text
+    , tags :: Maybe [Text]
     }
     deriving (Show, Eq, Generic, Lift)
     deriving anyclass (FromJSON)

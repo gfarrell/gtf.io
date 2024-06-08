@@ -21,21 +21,22 @@ listWholeDirectory :: FilePath -> IO [FilePath]
 listWholeDirectory root =
   listDirectory root
     >>= mapM addFileType
-    >>= fmap mconcat . mapM recurseIfDir
-  where
-    qual :: FilePath -> FilePath
-    qual f = root <> "/" <> f
-    addFileType :: FilePath -> IO (FilePath, FileType)
-    addFileType f = 
-      getFileStatus (qual f) <&> \case
-        s
-          | isDirectory s -> (qual f, Dir)
-          | isRegularFile s -> (qual f, File)
-          | otherwise -> (qual f, Other)
-    recurseIfDir :: (FilePath, FileType) -> IO [FilePath]
-    recurseIfDir (f, Dir) = listWholeDirectory f
-    recurseIfDir (f, File) = pure [f]
-    recurseIfDir _ = pure []
+    >>= fmap mconcat
+    . mapM recurseIfDir
+ where
+  qual :: FilePath -> FilePath
+  qual f = root <> "/" <> f
+  addFileType :: FilePath -> IO (FilePath, FileType)
+  addFileType f =
+    getFileStatus (qual f) <&> \case
+      s
+        | isDirectory s -> (qual f, Dir)
+        | isRegularFile s -> (qual f, File)
+        | otherwise -> (qual f, Other)
+  recurseIfDir :: (FilePath, FileType) -> IO [FilePath]
+  recurseIfDir (f, Dir) = listWholeDirectory f
+  recurseIfDir (f, File) = pure [f]
+  recurseIfDir _ = pure []
 
 loadFiles ::
   forall m a.
@@ -48,9 +49,9 @@ loadFiles ::
 loadFiles _ dir fileFilter = do
   files <- filter fileFilter <$> liftIO (listWholeDirectory dir)
   traverse loadAndParse files
-  where
-    loadAndParse :: FilePath -> ExceptT DocParseFailure m (FilePath, ParsedDoc a)
-    loadAndParse fp = (fp,) <$> ExceptT (liftIO (readFile fp) <&> parseContentDoc)
+ where
+  loadAndParse :: FilePath -> ExceptT DocParseFailure m (FilePath, ParsedDoc a)
+  loadAndParse fp = (fp,) <$> ExceptT (liftIO (readFile fp) <&> parseContentDoc)
 
 loadFilesTH :: (ContentDoc a) => Proxy a -> FilePath -> (FilePath -> Bool) -> Q Exp
 loadFilesTH p dir fileFilter =
