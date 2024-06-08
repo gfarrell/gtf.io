@@ -18,6 +18,12 @@
     perSystem = { config, inputs', self', ... }: {
       haskellProjects.default = {
         devShell.mkShellArgs.shellHook = config.pre-commit.installationScript;
+        defaults.devShell.tools = hp: with hp; {
+          inherit
+            cabal-install
+            ghcid
+            haskell-language-server;
+        };
         packages = {
           djot.source = inputs'.nixpkgs.legacyPackages.fetchFromGitHub {
             owner = "gfarrell";
@@ -30,7 +36,7 @@
 
       pre-commit.settings.hooks = {
         cabal-fmt.enable = true;
-        hlint.enable = true;
+        hlint.enable = false; # hlint 3.6.1 is the latest available (need 3.8) due to  issue #1531
         nixpkgs-fmt.enable = true;
         fourmolu.enable = true;
       };

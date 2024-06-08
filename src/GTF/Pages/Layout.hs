@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module GTF.Pages.Layout (
   defaultLayout,
   defaultLayoutWithMeta,
@@ -7,10 +9,11 @@ module GTF.Pages.Layout (
 where
 
 import CommonPrelude
-import Data.Text (intercalate)
+import Data.Text (intercalate, pack)
 import GTF.Pages.Partials.Footer (footer)
 import GTF.Pages.Partials.Nav (navbar)
 import GTF.URL (UrlPath)
+import GitHash (giHash, tGitInfoCwd)
 import Lucid.Base (Html, toHtml)
 import Lucid.Html5
 
@@ -24,11 +27,15 @@ data PageMeta = PageMeta
 basicMeta :: Text -> PageMeta
 basicMeta title = PageMeta title Nothing Nothing
 
+getVersion :: String
+getVersion = giHash $$tGitInfoCwd
+
 commonMetaItems :: Html ()
 commonMetaItems = do
   meta_ [charset_ "utf8"]
   meta_ [name_ "viewport", content_ "width=device-width, initial-scale=1"]
   meta_ [name_ "robots", content_ "index, follow"]
+  meta_ [name_ "x-version", content_ (pack getVersion)]
 
 siteCss :: Html ()
 siteCss =
