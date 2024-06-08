@@ -19,12 +19,12 @@ content currentPath =
       # About this site
 
       This site is two things -- primarily, it's a place to put my thoughts, insofar as I am able to complete them enough to actually commit them to source; it also serves as a bit of a playground for me to test new things when the urge takes me.
-      
+
       ## Tools
 
       While it has been through many iterations, the current version is built in [Haskell](https://www.haskell.org) using [WAI](https://hackage.haskell.org/package/wai), [Warp](https://hackage.haskell.org/package/warp), [Lucid](https://hackage.haskell.org/package/lucid), and [Clay](https://hackage.haskell.org/package/clay). I write the content in a mixture of direct Haskell (using Lucid as an EDSL) and [Djot](https://www.djot.net), although I have written my own extensions in a [custom fork of the Haskell implementation](https://github.com/gfarrell/djoths). The previous iteration was a static site bilt with [Hugo](https://gohugo.io) and served with [nginx](https://nginx.org).
 
-      The site is hosted on a [Digital Ocean](https://www.digitalocean.com) droplet. I have used Digital Ocean since about 2014, and continue to do so mostly out of habit. Everything is written using [neovim](https://neovim.io) on [my machine][anaximander] which runs [archlinux (btw)](https://archlinux.org).
+      The site is hosted on a [Digital Ocean](https://www.digitalocean.com) droplet. I have used Digital Ocean since about 2014, and continue to do so mostly out of habit. The host ("Pharos") is configured using [NixOS](https://nixos.org/), which is described in my [infra repository](https://github.com/gfarrell/infra). Everything is written using [neovim](https://neovim.io) on [my machine][anaximander] which runs [archlinux (btw)](https://archlinux.org).
 
       You can find the source of this site [on Github](https://github.com/gfarrell/gtf.io) and my editor (&c.) configurations in my [dotfiles](https://github.com/gfarrell/dotfiles).
 
