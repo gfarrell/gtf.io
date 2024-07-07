@@ -4,7 +4,7 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     haskell-flake.url = "github:srid/haskell-flake";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
   };
 
@@ -15,8 +15,9 @@
     ];
     systems = [ "x86_64-linux" "aarch64-linux" ];
 
-    perSystem = { config, inputs', self', ... }: {
+    perSystem = { config, inputs', self', pkgs, ... }: {
       haskellProjects.default = {
+        basePackages = pkgs.haskell.packages.ghc948;
         devShell.mkShellArgs.shellHook = config.pre-commit.installationScript;
         defaults.devShell.tools = hp: with hp; {
           inherit
