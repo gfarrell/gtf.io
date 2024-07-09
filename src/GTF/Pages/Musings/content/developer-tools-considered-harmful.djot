@@ -13,7 +13,7 @@ abstract: >-
   like LSPs and IDEs should be considered harmful, not because they are,
   in themselves, not useful tools, but rather because of the corrosive
   effects on the mindset of programmers.
-
+toc: false
 ---
 
 Back in 1968, Edsger Dijkstra wrote a letter in the journal
