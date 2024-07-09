@@ -81,6 +81,7 @@ library
     GTF.Pages.Partials.Footer
     GTF.Pages.Partials.Highlight
     GTF.Pages.Partials.Nav
+    GTF.Pages.Partials.TableOfContents
     GTF.Pages.Projects
     GTF.Style.Helpers
     GTF.Style.Home

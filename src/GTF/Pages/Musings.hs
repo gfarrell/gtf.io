@@ -20,6 +20,7 @@ import GTF.Content.Musings (Category (..), DocMeta (..), Musing)
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (PageMeta (..), defaultLayout, defaultLayoutWithMeta)
 import GTF.Pages.Partials.Highlight (highlight)
+import GTF.Pages.Partials.TableOfContents (renderToc)
 import GTF.URL (UrlPath)
 import Lucid (Html, ToHtml (toHtml, toHtmlRaw))
 import Lucid.Html5
@@ -78,6 +79,7 @@ itemPage name currentPath =
             p_ [class_ "subtitle"] $ do
               humantime $ created m
               ", " <> toHtml (show $ wordcount d) <> " words"
+          if toc m then div_ [class_ "table-of-contents"] $ renderToc $ generateToc d else mempty
           div_ [class_ "item-content"]
             . toHtmlRaw
             . toLazyByteString
