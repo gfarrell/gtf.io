@@ -36,6 +36,7 @@ common deps
     , base                ^>=4.17.2.0
     , bytestring
     , clay
+    , containers
     , directory
     , djot
     , either

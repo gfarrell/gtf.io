@@ -24,6 +24,7 @@ spec = describe "parseContentDoc" $ do
               , "abstract: This is just the best document"
               , "tags:"
               , "- something something"
+              , "toc: true"
               , ""
               , "---"
               , "# Ok, a heading"
@@ -43,6 +44,7 @@ spec = describe "parseContentDoc" $ do
                   (Just (fromOrdinalDate 2024 6))
                   (Just "This is just the best document")
                   (Just ["something something"])
+                  True
 
   it "fails if the metadata section fails to parse"
     $ let doc =
