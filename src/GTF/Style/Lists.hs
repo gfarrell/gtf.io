@@ -17,3 +17,14 @@ stylesheet = do
       lastChild & marginBottom none
 
       before & content (stringContent "🖋 ")
+
+  ".table-of-contents" ** ol ? paddingLeft (em 1.2)
+
+  ".table-of-contents" |> ol ? do
+    listStyleType decimal
+
+    ol ? do
+      listStyleType lowerAlpha
+
+      ol ? do
+        listStyleType lowerRoman
