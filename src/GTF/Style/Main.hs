@@ -3,6 +3,7 @@ module GTF.Style.Main (stylesheet) where
 import Clay
 import Clay.Media qualified as Media
 import CommonPrelude (($))
+import GTF.Style.DraftTools qualified as DraftTools
 import GTF.Style.Home qualified as Home
 import GTF.Style.Lists qualified as Lists
 import GTF.Style.Nav qualified as Nav
@@ -86,3 +87,4 @@ stylesheet = do
   Lists.stylesheet
   Home.stylesheet
   Projects.stylesheet
+  DraftTools.stylesheet

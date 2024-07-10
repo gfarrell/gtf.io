@@ -83,6 +83,7 @@ library
     GTF.Pages.Partials.Nav
     GTF.Pages.Partials.TableOfContents
     GTF.Pages.Projects
+    GTF.Style.DraftTools
     GTF.Style.Helpers
     GTF.Style.Home
     GTF.Style.Lists
