@@ -9,6 +9,9 @@ import GTF.Style.Lists qualified as Lists
 import GTF.Style.Nav qualified as Nav
 import GTF.Style.Projects qualified as Projects
 
+contentMaxWidth :: Size LengthUnit
+contentMaxWidth = px 600
+
 stylesheet :: Css
 stylesheet = do
   div # ".top-container" ? do
@@ -18,7 +21,7 @@ stylesheet = do
 
   div # ".content-container" ? do
     padding 0 (em 1) 0 (em 1)
-    maxWidth $ px 600
+    maxWidth contentMaxWidth
 
   main_ ? do
     textAlign justify
@@ -77,7 +80,9 @@ stylesheet = do
 
     pre ? do
       overflowX scroll
-      maxWidth (vw 90)
+      -- for some reason we have to specify this otherwise the pre elements
+      -- expand beyond their container (even max-width: 100% doesn't work).
+      maxWidth contentMaxWidth
 
   header |> ".subtitle" ? do
     fontSize $ em 0.9
