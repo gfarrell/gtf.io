@@ -47,7 +47,7 @@ defaultLayout currentPath pageTitle =
   defaultLayoutWithMeta currentPath (basicMeta pageTitle)
 
 defaultLayoutWithMeta :: UrlPath -> PageMeta -> Html () -> Html ()
-defaultLayoutWithMeta currentPath metadata pageContent = html_ $ do
+defaultLayoutWithMeta currentPath metadata pageContent = doctypehtml_ $ do
   head_ $ do
     title_ $ "GTF :: " <> toHtml (pageTitle metadata)
     commonMetaItems
@@ -66,7 +66,7 @@ defaultLayoutWithMeta currentPath metadata pageContent = html_ $ do
     footer
 
 plainLayoutWithMeta :: PageMeta -> Html () -> Html ()
-plainLayoutWithMeta metadata content = html_ $ do
+plainLayoutWithMeta metadata content = doctypehtml_ $ do
   head_ $ do
     title_ $ "GTF :: " <> toHtml (pageTitle metadata)
     commonMetaItems
