@@ -1,0 +1,355 @@
+---
+title: Live Preview Server for this website
+category: programming
+slug: live-preview-server
+abstract: >-
+  Authoring articles in djot was fine until I started writing much
+  longer documents and found them a bit hard to review and edit. I made
+  a small application to preview and reload documents when they changed
+  to improve the edit-rebuild cycle I was previously dealing with. This
+  uses a lot of concurrent Haskell as there are several moving parts,
+  but it is a small application and therefore possibly instructive.
+date: 2024-07-14
+repo: https://github.com/gfarrell/gtf.io
+language: haskell
+tags:
+- haskell
+- concurrency
+- websockets
+---
+
+The content for this website is written in [Djot][djot], which is very
+readable, and therefore the write-edit-review cycle has been relatively
+easy. I have, recently, been working on a much longer article, and have
+found that somewhat more difficult to review and edit, partly because of
+the build cycle of the website.
+
+The reason for this is that I have written this site such that all the
+content is compiled into the binary. This means that, when I want to see
+the content rendered, I would have to rebuild the entire binary (which
+is quite slow). I did not intend to change this aspect for the finished
+artefact (it has some advantages), but for the authoring process, this
+would not do.
+
+What I did want, however, was a small application to help with the
+authoring process: something which would render documents from disc
+(rather than having to be recompiled with the content embedded) and
+which would automatically reload when the document is updated.
+
+The resulting application (`preview`) consists of a view different parts:
+
+1. A webserver to render the document as HTML (which can be loaded in a browser);
+2. A file-watcher to notify the application when the document is updated;
+3. A websockets server to tell the browser to reload;
+4. Some client code to trigger the browser reload.
+
+Several of these parts needed to communicate, which means they have to
+be running concurrently and safely passing messages around. Luckily
+Haskell has some nice language features and libraries for doing this
+easily.
+
+Haskell's concurrency model uses lightweight threads rather than OS
+threads (although you can use the latter if you need to) and the [`stm`
+(software transactional memory)][stm-lib] library provides some safe
+datatypes for talking between threads. This project used `TMVar`s and
+`TChan`s -- the former is simply a container for some data, and the
+latter is a channel (the sort `golang` fans love to rave about) for
+passing messages between threads.
+
+## The entry-point
+
+The `Main` module is quite simple (it's only 25 lines) and simply instantiates a channel for passing file updates from the file-watching thread to the websockets ("live-reload") thread, parses command line options, and sets all the other threads running:
+
+```haskell
+module Main where
+
+import CommonPrelude
+import Control.Concurrent (forkIO)
+import Control.Concurrent.STM (atomically, newTChan)
+import GTF.LivePreview.LiveReload (runLivereloadServer, watchFiles)
+import GTF.LivePreview.Options (Options (..), previewProgrammeDescr)
+import GTF.LivePreview.PreviewServer (runPreviewServer)
+import Network.Wai.Handler.Warp (run)
+import Options.Applicative (execParser)
+import System.Directory (doesFileExist)
+import System.Exit (die)
+import System.FilePath (takeDirectory)
+
+main :: IO ()
+main =
+  atomically newTChan >>= \chan ->
+    execParser previewProgrammeDescr >>= \(Options fpath dtype) ->
+      doesFileExist fpath >>= \case
+        True -> do
+          _ <- forkIO $ watchFiles (takeDirectory fpath) chan
+          _ <- forkIO $ runLivereloadServer chan
+          run 8080 $ runPreviewServer dtype fpath
+        False -> die $ "File not found: " <> fpath
+```
+
+## The live-reload mechanism
+
+The file-watching function `watchFiles` isn't very interesting, it
+simply uses the [`fsnotify` package][fsnotify-lib] and, when our file is
+updated, puts a message on the channel:
+
+```haskell
+watchFiles dir chan = withManager $ \mgr -> do
+  putStrLn $ "Watching " <> dir
+  _ <- watchTree mgr dir eventFilter (atomically . writeTChan chan . LRUpdate . eventPath)
+  forever $ threadDelay 1_000_000n
+```
+
+The more interesting part is how we manage our websockets clients. The
+server itself uses the [`websockets` package][websockets-lib] and,
+since the server was going to be long-lived, but the clients would be
+short-lived (as the client would close the connection every time the
+browser reloaded, which happens whenever I save the document), I needed
+to make sure I was not going to accidentally send update messages to all
+the closed client connections (as this would raise an exception).
+
+This worked by keeping a list of clients in a `TMVar` and listening
+for messages _from the clients themselves_. When the client closes the
+connection, I would receive a control message telling me the client has
+closed the connection (which happened on browser reload). When receiving
+one of these messages, I would update the state of the client in the
+client list to `LRClosed`, such that when an update message is sent, it
+would not be sent to this client.
+
+```haskell
+liveReloadApp :: TMVar LRState -> WS.ServerApp
+liveReloadApp state pending = do
+  -- Accept the request automatically, we don't need to worry about
+  -- authenticating clients.
+  conn <- WS.acceptRequest pending
+  -- Create a new client and add it to the clients list
+  newClient <- atomically $ do
+    clients <- takeTMVar state
+    let maxId = Set.foldr (max . clientId) 0 clients
+        newClient = LRClient (maxId + 1) conn LRConnected
+    putTMVar state $ Set.insert newClient clients
+    pure newClient
+  -- Run a ping/pong to keep the client connection alive
+  WS.withPingThread conn 30 (return ()) $ do
+    -- Say "hello"
+    WS.sendTextData conn (pack . show $ LRHello $ clientId newClient)
+    -- And now listen for client messages (crucially a control message to close)
+    forever $ waitForClose newClient >> threadDelay 100
+ where
+  waitForClose :: LRClient -> IO ()
+  waitForClose client = do
+    WS.receive (clientConn client) >>= \case
+      WS.ControlMessage (WS.Close{}) -> do
+        putStrLn $ "Received close message for client#" <> show (clientId client)
+        -- Update the clients list with the new client state
+        atomically
+          $ takeTMVar state
+          >>= putTMVar state
+          . Set.insert (client{clientState = LRClosed})
+          . Set.delete client
+        -- We return 'mzero' to exit the 'forever' loop
+        mzero
+      -- For other message types do nothing
+      _ -> pure ()
+```
+
+This client management function is then used in the websockets server itself:
+
+```haskell
+runLivereloadServer :: TChan LRMessage -> IO ()
+runLivereloadServer updateChan = do
+  -- Start with an empty list of clients in a 'TMVar'
+  state <- newTMVarIO (mempty :: LRState)
+  _ <-
+    forkIO -- spool out a thread
+      $ forever
+      -- every time we get a message
+      $ atomically (readTChan updateChan)
+      >>= \case
+        -- if it's a file-update message
+        msg@(LRUpdate fp) -> do
+          putStrLn $ "File updated: " <> fp
+          -- get all the clients from the state and ...
+          clients <- atomically $ readTMVar state
+          flip mapConcurrently_ clients $ \client ->
+            -- if a given client is "connected"
+            when (clientState client == LRConnected)
+              -- then we send an update to it
+              $ WS.sendTextData (clientConn client) (pack . show $ msg)
+              >> putStrLn ("Sending update to client#" <> show (clientId client))
+        msg -> putStrLn $ "Channel update: " <> show msg
+  WS.runServer "127.0.0.1" 8081 $ liveReloadApp state
+```
+
+The client code for handling all this is very simple using the [WebSockets API][docs-ws]:
+
+```javascript
+function doReload () {
+  window.location.reload();
+}
+
+function connectWS () {
+  const i = document.querySelector("\#lr-indicator");
+
+  const setIndicator = (state) => {
+    if(i !== null) {
+      switch(state) {
+        case 1:
+          i.innerHTML = "waiting for connection";
+          break;
+        case 2:
+          i.innerHTML = "connected";
+          break;
+        case 3:
+          i.innerHTML = "reloading...";
+          break;
+        default:
+          i.innerHTML = "unknown state!";
+      }
+    }
+  };
+
+  setIndicator(1);
+
+  const ws = new WebSocket("ws://127.0.0.1:8081");
+  ws.addEventListener("open", () => {
+    console.log("LR: Connected");
+    setIndicator(2);
+  });
+  ws.addEventListener("message", (event) => {
+    console.log("LR: Received: ", event.data);
+    if(event.data.startsWith("LRUpdate")) {
+      setIndicator(3);
+      setTimeout(doReload, 100);
+      ws.close();
+    }
+  });
+}
+
+connectWS();
+```
+
+## The preview server
+
+The client code above is embedded in a simple [`WAI`
+application][wai-lib] which loads the file and renders it. The web
+application itself is not very interesting (although it is made much
+nicer by having [`Lucid`][lucid-lib] and [`Clay`][clay-lib] for
+constructing HTML and CSS, respectively), but the way files are rendered
+(which is the same way they are handled in the website binary itself) is
+a bit more interesting.
+
+Since I have different types of content (e.g. "musings" and "projects"),
+I want to have different types of metadata with them (and different ways
+of rendering them). To do that, I have a polymorphic `ParsedDoc a` type,
+which takes some sort of document metadata `DocMeta a` and then the
+document itself parsed by the [`djoths` package][djoths-lib]:
+
+```haskell
+class (Lift (DocMeta a), FromJSON (DocMeta a)) => ContentDoc a where
+  data DocMeta a
+
+data ParsedDoc a = ParsedDoc
+  { meta :: DocMeta a
+  , doc :: Doc
+  }
+```
+
+This means that we can generically parse these documents by just
+specifying the "type" in our webserver:
+
+```haskell
+-- From GTF.Content.Doc
+parseContentDoc ::
+  (ContentDoc a, FromJSON (DocMeta a)) =>
+  ByteString ->
+  Either DocParseFailure (ParsedDoc a)
+parseContentDoc input = do
+  (meta, rawDoc) <- first MetadataParseFailure $ parseMeta input
+  -- parseDoc is from "Djot"
+  processedDoc <- first (DocumentParseFailure . pack) $ parseDoc (ParseOptions BlockSourcePos) rawDoc
+  pure $ ParsedDoc meta processedDoc
+
+-- From GTF.Content.Loader
+loadFile ::
+  (MonadIO m) => (ContentDoc a) => Proxy a -> FilePath -> ExceptT FileLoadError m (ParsedDoc a)
+loadFile _ fname = do
+  path <- liftIO $ getDataFileName fname
+  ExceptT $ liftIO (doesFileExist path) >>= \case
+    False -> pure . Left $ FileNotFound fname
+    True ->
+      liftIO (try $ readFile path) <&> (first FileReadError >=> first FileParseError . parseContentDoc)
+
+-- In our webserver
+renderFile :: forall m. (MonadIO m) => DocType -> FilePath -> ExceptT FileLoadError m (Html ())
+renderFile MusingDoc filename = loadFile (Proxy @Musing) filename >>= makeHtml
+ where
+  makeHtml :: ParsedDoc Musing -> ExceptT FileLoadError m (Html ())
+  makeHtml doc = ExceptT $ return . Right $ layout filename $ renderMusingContent doc
+renderFile ProjectDoc filename = loadFile (Proxy @Project) filename >>= makeHtml
+ where
+  makeHtml :: ParsedDoc Project -> ExceptT FileLoadError m (Html ())
+  makeHtml doc = ExceptT $ return . Right $ layout filename $ renderProjectContent doc
+```
+
+As an aside: the normal webserver binary includes the files via a template-haskell splice:
+
+```haskell
+loadFiles ::
+  forall m a.
+  (MonadIO m) =>
+  (ContentDoc a) =>
+  Proxy a ->
+  FilePath ->
+  (FilePath -> Bool) ->
+  ExceptT DocParseFailure m [(FilePath, ParsedDoc a)]
+loadFiles _ dir fileFilter = do
+  files <- filter fileFilter <$> liftIO (listWholeDirectory dir)
+  traverse loadAndParse files
+ where
+  loadAndParse :: FilePath -> ExceptT DocParseFailure m (FilePath, ParsedDoc a)
+  loadAndParse fp = (fp,) <$> ExceptT (liftIO (readFile fp) <&> parseContentDoc)
+
+loadFilesTH :: (ContentDoc a) => Proxy a -> FilePath -> (FilePath -> Bool) -> Q Exp
+loadFilesTH p dir fileFilter =
+  runIO (runExceptT $ loadFiles p dir fileFilter) >>= \case
+    Left err -> fail $ "Unable to load content files: " <> show err
+    Right docs ->
+      -- if we don't use 'addDependentFile' then cabal doesn't know when to rebuild
+      ListE <$> mapM (\(fp, d) -> addDependentFile fp >> lift d) docs
+
+-- This is then used, for example, in GTF.Pages.Musings as follows:
+musings :: [ParsedDoc Musing]
+musings =
+  sortOn
+    (Down . created . meta)
+    $(loadFilesTH (Proxy @Musing) "src/GTF/Pages/Musings/content" isDjot)
+```
+
+## Using it
+
+This has made authoring content _far nicer_ as I neither have to wait
+for the entire application to rebuild to see my changes, nor have to
+review text _in djot_, but instead I can see it nicely rendered in HTML.
+
+```shell
+cabal run -- -t project --file ./src/GTF/Pages/Projects/content/live-preview-server.djot
+```
+
+## Epilogue
+
+The most fun part of this project really was playing with the
+concurrency aspect and finding out that the websockets API was actually
+trivially easy to use (the last time I tried I was faffing around with
+`socket.io` about 8 years ago). Now maybe I can get back to that really
+very long article...
+
+[djot]: https://djot.net/
+[stm-lib]: https://hackage.haskell.org/package/stm
+[fsnotify-lib]: https://hackage.haskell.org/package/fsnotify
+[websockets-lib]: https://hackage.haskell.org/package/websockets
+[docs-ws]: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+[wai-lib]: https://hackage.haskell.org/package/wai
+[djoths-lib]: https://github.com/gfarrell/djoths
+[lucid-lib]: https://hackage.haskell.org/package/lucid
+[clay-lib]: https://hackage.haskell.org/package/clay
