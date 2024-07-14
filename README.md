@@ -19,8 +19,21 @@ We have a few types of page:
   * Personal reflections
 * Projects, which are written in djot and are found in `src/GTF/Pages/Projects/content`
 
-## Usage
+## Running the website
 
 There is a nix flake which you can either use to build (`nix build`), run (`nix run .#default -- 2712`), or develop in (`nix develop`).
 
 The server binary takes a single argument, the port to listen on, otherwise it will return an error (`WrongNumberOfArgs` or `InvalidPort` if you have given it a non-integer).
+
+## Preview tool
+
+To make authoring easier when writing in a markup language (even a very readable one like djot) there is a small application called `preview` which runs a server on 8080 (websockets on 8081) and will render the document you're working on as well as automatically reloading the browser when the document changes.
+
+You can run this with cabal (`cabal run preview -- -h`) or with nix (`nix run .#preview -- -h`). It takes two arguments:
+
+* the document type (`-t`) which will control how the document is rendered (e.g.
+  `project` or `musing`);
+* the file you're working on (`--file`), whose _directory_ will be watched for
+  changes.
+
+You can then open up your browser to `localhost:8080` and you will see the document.
