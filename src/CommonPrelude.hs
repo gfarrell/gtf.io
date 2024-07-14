@@ -29,7 +29,7 @@ import Lucid (ToHtml (..))
 import Prelude as X
 #if !MIN_VERSION_aeson(2,2,0)
 import Data.Aeson (FromJSON (parseJSON), withText)
-import Network.URI (URI(URI), parseURI)
+import Network.URI (URI, parseURI)
 #endif
 
 instance Lift Day where
