@@ -3,6 +3,7 @@
 module GTF.Pages.Projects (
   indexPage,
   itemPage,
+  renderProjectContent,
 )
 where
 
@@ -59,27 +60,22 @@ indexPage currentPath = Just $ defaultLayout currentPath "All Projects" $ do
       <> " "
       <> parens (datetime . date $ m)
 
-itemPage :: Text -> UrlPath -> Maybe (Html ())
-itemPage name currentPath =
-  case filter ((== name) . slug . meta) projects of
-    [ParsedDoc m d] -> pure
-      $ defaultLayoutWithMeta currentPath (PageMeta (title m) (abstract m) (tags m))
-      $ do
-        article_ $ do
-          header_ $ do
-            h1_ . toHtml $ title m
-            p_ [class_ "projects__info"]
-              $ span_ [class_ "projects__info-item"] (humantime . date $ m)
-              <> mkInfoSection m
-          div_ [class_ "item-content"]
-            . toHtmlRaw
-            . toLazyByteString
-            $ renderHtml (RenderOptions False) d
-          highlight
-    _ -> Nothing
+renderProjectContent :: ParsedDoc Project -> Html ()
+renderProjectContent (ParsedDoc m d) =
+  article_ $ do
+    header_ $ do
+      h1_ . toHtml $ title m
+      p_ [class_ "projects__info"]
+        $ span_ [class_ "projects__info-item"] (humantime . date $ m)
+        <> mkInfoSection
+    div_ [class_ "item-content"]
+      . toHtmlRaw
+      . toLazyByteString
+      $ renderHtml (RenderOptions False) d
+    highlight
  where
-  mkInfoSection :: DocMeta Project -> Html ()
-  mkInfoSection m = case details m of
+  mkInfoSection :: Html ()
+  mkInfoSection = case details m of
     DocProject filename ->
       a_
         [ class_ "projects__info-item"
@@ -92,3 +88,12 @@ itemPage name currentPath =
         [class_ "projects__info-item", href_ $ pack . show $ repo, title_ "Project repository"]
         "go to repo"
       span_ [class_ "projects__info-item", role_ "project-language"] $ toHtml lang
+
+itemPage :: Text -> UrlPath -> Maybe (Html ())
+itemPage name currentPath =
+  case filter ((== name) . slug . meta) projects of
+    [doc@(ParsedDoc m _)] ->
+      pure
+        $ defaultLayoutWithMeta currentPath (PageMeta (title m) (abstract m) (tags m))
+        $ renderProjectContent doc
+    _ -> Nothing

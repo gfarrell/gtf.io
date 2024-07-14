@@ -1,18 +1,43 @@
-module GTF.Content.Loader (loadFilesTH, isDjot) where
+module GTF.Content.Loader (
+  -- * Errors
+  FileLoadError (..),
+
+  -- * Loading files
+
+  -- ** In normal operation
+  loadFiles,
+  loadFile,
+
+  -- ** In TH splices
+  loadFilesTH,
+
+  -- * Common file filters
+  isDjot,
+)
+where
 
 import CommonPrelude hiding (readFile)
+import Control.Exception (try)
 import Control.Monad.Except (ExceptT (ExceptT), runExceptT)
 import Control.Monad.IO.Class (MonadIO (liftIO))
+import Data.Bifunctor (Bifunctor (first))
 import Data.ByteString.Char8 (readFile)
 import Data.Proxy (Proxy)
 import GTF.Content.Doc (ContentDoc (..), DocParseFailure, ParsedDoc (..), parseContentDoc)
 import Language.Haskell.TH (Exp (ListE), Q, runIO)
 import Language.Haskell.TH.Syntax (Lift (lift), addDependentFile)
-import System.Directory (listDirectory)
+import Paths_gtf_website (getDataFileName)
+import System.Directory (doesFileExist, listDirectory)
 import System.FilePath (takeExtension)
 import System.Posix.Files (getFileStatus, isDirectory, isRegularFile)
 
 data FileType = Dir | File | Other deriving (Show, Eq)
+
+data FileLoadError
+  = FileNotFound FilePath
+  | FileReadError IOError
+  | FileParseError DocParseFailure
+  deriving (Show, Eq)
 
 isDjot :: FilePath -> Bool
 isDjot = (== ".djot") . takeExtension
@@ -37,6 +62,16 @@ listWholeDirectory root =
   recurseIfDir (f, Dir) = listWholeDirectory f
   recurseIfDir (f, File) = pure [f]
   recurseIfDir _ = pure []
+
+-- | Loads a single file and parses it
+loadFile ::
+  (MonadIO m) => (ContentDoc a) => Proxy a -> FilePath -> ExceptT FileLoadError m (ParsedDoc a)
+loadFile _ fname = do
+  path <- liftIO $ getDataFileName fname
+  ExceptT $ liftIO (doesFileExist path) >>= \case
+    False -> pure . Left $ FileNotFound fname
+    True ->
+      liftIO (try $ readFile path) <&> (first FileReadError >=> first FileParseError . parseContentDoc)
 
 loadFiles ::
   forall m a.

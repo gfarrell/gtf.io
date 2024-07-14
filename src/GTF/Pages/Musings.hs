@@ -4,6 +4,7 @@
 module GTF.Pages.Musings (
   indexPage,
   itemPage,
+  renderMusingContent,
 )
 where
 
@@ -67,22 +68,25 @@ indexPage currentPath = Just $ defaultLayout currentPath "All Musings" $ do
             )
             list
 
+renderMusingContent :: ParsedDoc Musing -> Html ()
+renderMusingContent (ParsedDoc m d) = article_ $ do
+  header_ $ do
+    h1_ . toHtml $ title m
+    p_ [class_ "subtitle"] $ do
+      humantime $ created m
+      ", " <> toHtml (show $ wordcount d) <> " words"
+  if toc m then div_ [class_ "table-of-contents"] $ renderToc $ generateToc d else mempty
+  div_ [class_ "item-content"]
+    . toHtmlRaw
+    . toLazyByteString
+    $ renderHtml (RenderOptions False) d
+  highlight
+
 itemPage :: Text -> UrlPath -> Maybe (Html ())
 itemPage name currentPath =
   case filter ((== name) . slug . meta) musings of
-    [ParsedDoc m d] -> pure
-      $ defaultLayoutWithMeta currentPath (PageMeta (title m) (abstract m) (tags m))
-      $ do
-        article_ $ do
-          header_ $ do
-            h1_ . toHtml $ title m
-            p_ [class_ "subtitle"] $ do
-              humantime $ created m
-              ", " <> toHtml (show $ wordcount d) <> " words"
-          if toc m then div_ [class_ "table-of-contents"] $ renderToc $ generateToc d else mempty
-          div_ [class_ "item-content"]
-            . toHtmlRaw
-            . toLazyByteString
-            $ renderHtml (RenderOptions False) d
-          highlight
+    [doc@(ParsedDoc m _)] ->
+      pure
+        $ defaultLayoutWithMeta currentPath (PageMeta (title m) (abstract m) (tags m))
+        $ renderMusingContent doc
     _ -> Nothing

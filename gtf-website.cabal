@@ -64,41 +64,60 @@ library
   exposed-modules:
     CommonPrelude
     GTF.Content.Doc
+    GTF.Content.Loader
     GTF.Content.Meta
     GTF.Content.Musings
     GTF.Content.Projects
     GTF.Pages.Helpers
+    GTF.Pages.Musings
+    GTF.Pages.Projects
     GTF.Router
+    GTF.Style.Main
+    Paths_gtf_website
 
   other-modules:
     GTF.Assets
-    GTF.Content.Loader
     GTF.Pages.Colophon
     GTF.Pages.Error
     GTF.Pages.Home
     GTF.Pages.Layout
-    GTF.Pages.Musings
     GTF.Pages.Partials.Footer
     GTF.Pages.Partials.Highlight
     GTF.Pages.Partials.Nav
     GTF.Pages.Partials.TableOfContents
-    GTF.Pages.Projects
     GTF.Style.DraftTools
     GTF.Style.Helpers
     GTF.Style.Home
     GTF.Style.Lists
-    GTF.Style.Main
     GTF.Style.Nav
     GTF.Style.Projects
     GTF.URL
-    Paths_gtf_website
 
 executable gtf-website-server
   import:         warnings, lang, deps
   main-is:        Main.hs
   build-depends:  gtf-website
-  hs-source-dirs: app
+  hs-source-dirs: app/website
   ghc-options:    -threaded -rtsopts -with-rtsopts=-N
+
+executable preview
+  import:         warnings, lang, deps
+  main-is:        Main.hs
+  build-depends:
+    , async
+    , fsnotify
+    , gtf-website
+    , optparse-applicative
+    , stm
+    , string-interpolate
+    , websockets
+
+  hs-source-dirs: app/preview
+  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
+  other-modules:
+    GTF.LivePreview.LiveReload
+    GTF.LivePreview.Options
+    GTF.LivePreview.PreviewServer
 
 test-suite gtf-website-tests
   import:         warnings, lang, deps
