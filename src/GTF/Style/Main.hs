@@ -2,7 +2,7 @@ module GTF.Style.Main (stylesheet) where
 
 import Clay
 import Clay.Media qualified as Media
-import CommonPrelude (($))
+import CommonPrelude (($), (<>))
 import GTF.Style.DraftTools qualified as DraftTools
 import GTF.Style.Home qualified as Home
 import GTF.Style.Lists qualified as Lists
@@ -14,18 +14,6 @@ contentMaxWidth = px 600
 
 stylesheet :: Css
 stylesheet = do
-  div # ".top-container" ? do
-    display flex
-    flexDirection row
-    justifyContent center
-
-  div # ".content-container" ? do
-    padding 0 (em 1) 0 (em 1)
-    maxWidth contentMaxWidth
-
-  main_ ? do
-    textAlign justify
-
   header # ".site-header" ? do
     display flex
     flexDirection row
@@ -57,6 +45,11 @@ stylesheet = do
 
     query Media.print [] $ display none
 
+  div # ".content-container" ? do
+    padding 0 (em 1) 0 (em 1)
+    maxWidth contentMaxWidth
+    margin (px 0) auto (px 0) auto
+
   hr ? do
     margin (em 2) auto (em 2) auto
     width $ pct 80
@@ -66,11 +59,11 @@ stylesheet = do
     borderBottom (px 1) solid (rgba 255 255 255 0.3)
     textAlign center
 
+  (h1 <> h2 <> h3 <> h4) ? textAlign start
+
+  main_ ? textAlign justify
+
   div # ".item-content" ? do
-    display flex
-    flexDirection column
-    justifyContent center
-    alignItems flexStart
     marginTop $ em 2
     textAlign justify
 
@@ -80,9 +73,6 @@ stylesheet = do
 
     pre ? do
       overflowX scroll
-      -- for some reason we have to specify this otherwise the pre elements
-      -- expand beyond their container (even max-width: 100% doesn't work).
-      maxWidth contentMaxWidth
 
   header |> ".subtitle" ? do
     fontSize $ em 0.9
