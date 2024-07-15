@@ -20,14 +20,14 @@ tags:
 
 The content for this website is written in [Djot][djot], which is very
 readable, and therefore the write-edit-review cycle has been relatively
-easy. I have, recently, been working on a much longer article, and have
-found that somewhat more difficult to review and edit, partly because of
-the build cycle of the website.
+easy for most articles. I have, recently, been working on a much longer
+article, and have found that somewhat more difficult to review and edit,
+partly because of the build cycle of the website.
 
 The reason for this is that I have written this site such that all the
-content is compiled into the binary. This means that, when I want to see
-the content rendered, I would have to rebuild the entire binary (which
-is quite slow). I did not intend to change this aspect for the finished
+content is compiled into the binary. This means that, when I want to
+see the content rendered, I have to rebuild the entire binary (which is
+quite slow). I did not intend to change this aspect for the finished
 artefact (it has some advantages), but for the authoring process, this
 would not do.
 
@@ -36,17 +36,16 @@ authoring process: something which would render documents from disc
 (rather than having to be recompiled with the content embedded) and
 which would automatically reload when the document is updated.
 
-The resulting application (`preview`) consists of a view different parts:
+The resulting application (`preview`) consists of a few different parts:
 
 1. A webserver to render the document as HTML (which can be loaded in a browser);
 2. A file-watcher to notify the application when the document is updated;
 3. A websockets server to tell the browser to reload;
 4. Some client code to trigger the browser reload.
 
-Several of these parts needed to communicate, which means they have to
-be running concurrently and safely passing messages around. Luckily
-Haskell has some nice language features and libraries for doing this
-easily.
+Several of these parts need to communicate, which means they have to be
+running concurrently and safely passing messages around. Luckily Haskell
+has some nice language features and libraries for doing this easily.
 
 Haskell's concurrency model uses lightweight threads rather than OS
 threads (although you can use the latter if you need to) and the [`stm`
@@ -58,7 +57,10 @@ passing messages between threads.
 
 ## The entry-point
 
-The `Main` module is quite simple (it's only 25 lines) and simply instantiates a channel for passing file updates from the file-watching thread to the websockets ("live-reload") thread, parses command line options, and sets all the other threads running:
+The `Main` module is quite simple (it's only 25 lines) and simply
+instantiates a channel for passing file updates from the file-watching
+thread to the websockets ("live-reload") thread, parses command line
+options, and sets all the other threads running:
 
 ```haskell
 module Main where
