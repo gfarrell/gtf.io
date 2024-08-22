@@ -1,0 +1,862 @@
+---
+title: Why Haskell?
+slug: why-haskell
+created: 2024-07-07
+category: informatics
+abstract: >-
+  Haskell is a great programming language with many features that make
+  it easier to write robust software, and yet it is rarely taken up by
+  software engineering teams. This essay aims to explain my views as to
+  why Haskell is a great choice for programmers.
+tags:
+- programming
+- programming-languages
+- haskell
+- apologia
+toc: true
+---
+
+"Impractical", "academic", "niche". These are a few of the reactions
+I get when someone discovers that my favourite programming
+language is Haskell, and not only my favourite in some sort of
+intellectually-masturbatory way, but favourite for building things, real
+things, mostly involving web servers. Hobby projects would be one thing,
+but it gets worse: I have actual teams at [Converge][converge] working
+in Haskell, too.
+
+I find this reaction quite curious: not only can any problem suitable
+to one general-purpose programming language be tackled in another, but
+a lot of the new features we see making their way into programming
+languages like Python, Rust, and Typescript, are either inspired by,
+or at least more robustly implemented in, Haskell. It seems to me
+that part of this response is a version of "choose boring technology"
+(although Haskell is far older than most of the most popular programming
+languages) twisted to suit another pernicious ideology: that programming
+is not maths, and that anything that smells of maths should be excised.
+
+This comes up in all sorts of unlikely places in which it would be quite
+awkward to have to take my interlocutors through all the reasons I think
+Haskell is probably the best choice for whatever computational problems
+they are trying to solve themselves (e.g. dinner parties, the pub, etc.)
+and thus I find myself writing this apologia.
+
+Indeed the remainder of this essay will consist of my attempt to
+reason around why I think Haskell is probably the best choice for most
+programmers[^not-all-reasons], especially if one cares about being able
+to productively write robust software, and even more so if one wants
+to have fun while doing it (which is a frequently underrated aspect of
+writing software).
+
+All mainstream, general purpose programming languages are (basically)
+Turing-complete, and therefore any programme you can write in one you
+can, in fact, write in another. There is a computational equivalence
+between them. The main differences are instead in the expressiveness
+of the languages, the guardrails they give you, and their performance
+characteristics (although this is possibly more of a runtime/compiler
+implementation question).
+
+I think that the things that make Haskell great (meaning both more
+productive and more fun) can be grouped as follows: the things that stop
+you making mistakes; the things that make you more productive; and the
+things that help you reason better about your programmes.
+
+## Unlearning and relearning
+
+The first thing to say here is that most programmers in the 2020s have
+been brought up in some sort of imperative[^imperative-oo] paradigm.
+As a result, the learning curve for a pure, functional language like
+Haskell will be steep. There are two aspects to this: one is the Haskell
+language _itself_ which, if you constrain yourself to a simple subset
+of it, is actually quite easy to learn; and the second is functional
+programming, which requires a total shift in how the programmer
+approaches constructing a programme.
+
+This process of unlearning and relearning is incredibly helpful and will
+make one a better programmer, regardless as to whether one uses Haskell
+thenceforth. As Alan Perlis writes:
+
+> A language that doesn't affect the way you think about programming is not
+> worth knowing.
+~ Perlisism #19 [^cite-perlis]
+
+### A small note on syntax
+
+In the subsequent sections there will be simple snippets of Haskell.
+Since the syntax is quite distant from C-like syntax with which many
+readers will be familiar, here is a small guide:
+
+* `::` denotes a type signature (so `myThing :: String` says I have a
+  name "myThing" and its value is of type `String`).
+* function calls do not use parentheses, you simply put the arguments,
+  space-separated, after the function name. There are good reasons for
+  this, but they're beyond the scope of this explainer (so where in one
+  language you may have `doSomething(withThis, withThat)` in Haskell you
+  have `doSomething withThis withThat`).
+* lower-case letters in type-signatures are type-variables, and just
+  represent any type (so `head :: [a] -> a` just takes a list of any type
+  `a` and returns a single value of the same type `a`).
+* comments start with `--`.
+* `return` does not mean what you think it means, it's just a regular
+  function.
+* `do` is syntactic sugar allowing you to write things that "look" imperative.
+* There are various ways of assigning values to local names
+  ("variables") which differ depending on the context. So you can
+  recognise them they either take the form `let x = <something> in
+  <expression>` or `x <- <something>`.
+
+Otherwise the syntax should be fairly easy to parse, if not for a
+detailed understanding of every aspect, at least to a sufficient level
+to get the gist of what I am trying to convey.
+
+## Make fewer mistakes
+
+In many languages, the way one tries to make sure one's code is
+"correct" (or, at least, will do the right thing in most circumstances)
+is through a large number of test cases, some of which may be automated,
+and some of which may be manual.
+
+Two aspects of Haskell drastically reduce the test-case-writing burden
+typical in other languages: one is the type system and the other is pure
+functional programming.
+
+Haskell's type system is _very_ strong, which is to say that it makes
+very specific guarantees about the programme, and enforces those
+guarantees very strictly. The concomitant expressiveness of the language
+gives the programmer the tools to more precisely and simply express
+the _meaning_ of the programme within its domain, as well as the
+general domain of programming. These two properties of the type system,
+together, reduce the space of possible mistakes, resulting in a more
+correct programme with much less effort.
+
+So far, so abstract. Some concrete features of the type system that
+reduce the "error surface" of your programme are: no nullable types;
+the ability to represent "failable" computations; pattern matching and
+completeness checks; and the avoidance of "primitive obsession" for
+free. Let's take a look at each of those.
+
+The availability of a `null` (or `nil` or `none`) value which can
+inhabit any (or the majority) of types in a language is often viewed
+as a convenience, but in practice it has a huge cost. In a language
+in which one can use such null values, the programmer can never know
+if the value they are handling is actually of the expected type or if
+it is null, and therefore is required to check wherever this value
+is consumed. Programmers can forget things, and the fact that the
+null value can inhabit many types means that the type system does not
+help prevent this, leading to errors of the sort "undefined is not a
+function" or "NoneType object has no attribute <x>". These, however, are
+runtime errors, which both means that the programme has failed in its
+principal task and also that the errors are harder to find as they occur
+in the wild. Haskell does not have null values. You can define them in
+a particular datatype (for example the `Maybe` type, which we will come
+onto shortly) but you have to explicitly define them and explicitly
+handle them. As such, the error surface available due to this flaw in
+language design is eliminated, and the programmer no longer has to think
+about it.
+
+Null values, however, are often used to represent a "failed"
+computation. For example, what if you are getting the head of an empty
+list, how do you represent the result? In languages with null values,
+such functions will often return `null` in these circumstances. This
+is a specific case of the more general question of how to deal with
+computations which may fail. There are many examples: if you are parsing
+some user input and that input is malformed, this failure to parse is
+a valid state of your programme, and therefore you need some way to
+represent it. Similarly, network requests may time out, solvers may
+fail to find a solution, users may cancel actions, and so on. There are
+two common solutions, one of which we have mentioned (null values),
+and exception handling. Both of these solutions cause a new problem
+for the programmer: you have to remember to handle them, in the case
+of exceptions at the call site rather than where you consume the value
+as with null, and nothing in the type system is going to prevent you
+forgetting.
+
+Haskell solves the problem of the representation of computations
+which may fail very differently: explicitly through the type
+system. There are types in Haskell to represent a computation
+which may fail, and because this is done in the type system,
+these are first-class entities and you can pass around your
+computation-result-which-may-or-may-not-be-a-failure as you like. When
+it comes to consuming the result of that computation, the type system
+forces you to reckon with the fact that there may be no result. This
+prevents a whole class of runtime errors without the mental burden of
+keeping track of values which may be present or which functions might
+throw an exception somewhere.
+
+The two most common of these types are `Maybe` and `Either`. `Maybe`
+represents a computation which may or may not have a result. For
+example, if you want to get the first element of a list, but you do not
+know if the list is empty, then you may want to specify that your `head`
+function can return either a result or `Nothing`. Unlike null values,
+however, you cannot just pretend that the function must have returned a
+result, as the following snippet should demonstrate:
+
+```haskell
+safeHead :: [a] -> Maybe a
+-- the implementation isn't important here, but I'm including it
+-- because it is simple and, for the curious, might be helpful
+safeHead [] = Nothing
+safeHead (x : _) = Just x
+
+myFavouriteThings = ["raindrops on roses", "whiskers on kittens"]
+emptyList = []
+
+faveThing = safeHead myFavouriteThings 
+-- ^ but what is the type of this thing? 
+-- It's not a string, it's `Maybe String`
+-- and the value is, in fact, `Just "raindrops on roses"`
+
+something = safeHead emptyList
+-- ^ and what's the type of this thing?
+-- again, it's a `Maybe String`, but in this
+-- case the value is `Nothing` because the list
+-- has no first element!
+
+-- so how can we use the value we have computed?
+printTheFirstThing :: [String] -> IO ()
+printTheFirstThing myList = case safeHead myList of
+  Just something -> putStrLn something
+  Nothing -> putStrLn "You don't have any favourite things? How sad."
+```
+
+In this example you can see that when consuming the result of a
+computation that might fail, you have to explicitly handle the failure
+case. There are many ways of doing this, and the pattern matching (
+`case x of ...`) above is just one to which we will come shortly.
+
+`Maybe` can also be used when you might want a nullable field of a
+datastructure. This is a specific case of a computation which may fail,
+but is often thought of as distinct. Here is how this would look in
+Haskell:
+
+```haskell
+data Person = Person {
+  name :: String,
+  dob :: Day,
+  favouriteThing :: Maybe String
+}
+```
+
+As before, Haskell's type system will not let you fail to handle the
+case that `favouriteThing` might be an empty value, so you will not end
+up with a runtime error as you might in a language in which you could
+forget to do so.
+
+`Maybe` is useful in these situations in which the failure condition
+is obvious, but it doesn't give you much resolution on _why_ the
+computation failed, it only tells you _that_ it has failed. By contrast,
+an `Either a b` can contain two values, `Left a` or `Right b`. By
+convention, `Left` contains a failure value, whereas `Right` contains a
+success value, so the type is often given as `Either e a` where `e` is
+for "error" and `a` is just the result type.
+
+One way in which this could be used is in parsing or validating some
+user input, in which you may want to tell the user more than just that
+what they gave you is invalid, but rather in what way it is invalid. To
+that end you could have a `validate` function that looked like this:
+
+```haskell
+validateAddress :: String -> Either AddressParseError ValidAddress
+```
+
+This gives you the ability to return more helpful errors to the user,
+which are an expected path in your programme, but it prevents you from
+failing to handle the failure case, or from treating the failure case
+like a success case accidentally.
+
+We can generalise this idea of being forced to handle the failure
+cases by saying that Haskell makes us write *total* functions rather
+than *partial* functions. This means that we have to handle the entire
+input domain rather than only part of the input domain, otherwise the
+compiler will complain at us and, sometimes, point-blank refuse to give
+us a programme. The easiest way to see how this works is to look at how
+pattern matching is done in Haskell, using a basic programme which helps
+us organise our evenings given a chosen option. Instead of implementing
+the entire programme, here is an extract to illustrate the use of
+pattern matching.
+
+::: draft-note
+TODO: Can we perhaps replace this example with the example we use in the rest
+of the text (the social club) 
+:::
+
+```haskell
+data Option =
+  NightIn
+  | Restaurant VenueName
+  | Theatre VenueName EventName
+
+data OrganiserResult = Success | NeedsSeatChoice [Seat] | Failure Reason
+
+organiseMyEvening :: Option -> IO OrganiserResult
+organiseMyEvening NightIn = do
+  cancelAllPlans 
+  return Success
+organiseMyEvening (Restaurant venue) = attemptBooking venue
+organiseMyEvening (Theatre venue event) = do
+  availableSeats <- checkForSeats venue event
+  case availableSeats of
+    [] -> return (Failure (Reason "there are no seats available, sorry :("))
+    seats -> return (NeedsSeatChoice seats)
+```
+
+In the above example, if we were to add an additional option for what we
+may want to do with our evening, like going to the cinema, and _forget_
+to update the `organiseMyEvening` function accordingly, the compiler
+would complain to us until we fix it. Without this completeness check
+in the type system, we could end up with a runtime error, but with
+this type of check, we just do not have to worry about whether we have
+_remembered_ to update all the places in which a given value is used.
+
+The final major way in which Haskell's type system makes it easy for us
+to avoid common error when programming, is related to how easy it is to
+avoid "primitive obsession". There is a hint in our evening-organising
+snippet above: our `Restaurant` and `Theatre` constructors take a
+`VenueName` and `EventName`. These could, naturally, be represented as
+plain old strings, and in many languages they are, but Haskell gives
+us a very simple, zero-cost way of representing them as something with
+more semantic value, more meaning, than just a string. It may not be
+obvious why this is a problem worth solving, however. Let's imagine we
+represented these as plain old strings, so we would have something like
+this:
+
+```haskell
+data Option =
+  NightIn
+  | Restaurant String
+  | Theatre String String -- venue name and event name respectively
+
+checkForSeats :: String -> String -> IO [Seat]
+```
+
+This is probably _ok_ the first time you write it, although you will
+need comments, as above, in order to remind yourself which value is
+which. This is where we come to our first annoyance (although not yet
+a problem) -- the type system doesn't help us remember what is what,
+we have to rely on arbitrary comments or documentation (or perhaps
+variable names) to remember, which is a lot of overhead. The problem
+comes, however, when using these values, such as in `checkForSeats`. We
+could easily mix up the venue name and event name, and we would always
+return zero seats (because we probably don't know a theatre called _King
+Lear_ in London where they are playing Shakespeare's masterful _The
+National Theatre_). This is erroneous behaviour, but is easily done,
+and the type system will not help us out. "Primitive obsession" is the
+use of primitives (strings, numbers, booleans, etc.) to represent data,
+instead of types with more semantic value. The solution is to encode
+your domain in your type system, which prevents such errors. This can
+be very cumbersome in many imperative languages, but in Haskell we can
+simply wrap a value in a `newtype` and the type system suddenly stops us
+falling into the trap of using the wrong value. Therefore our code above
+becomes:
+
+```haskell
+newtype VenueName = VenueName String
+newtype EventName = EventName String
+
+data Option =
+  NightIn
+  | Restaurant VenueName
+  | Theatre VenueName EventName
+
+checkForSeats :: VenueName -> EventName -> IO [Seat]
+```
+
+Above it is written that this is a "zero-cost" method, which means that
+unlike the normal way of creating a datastructure to wrap around some
+values, `newtypes` have exactly the same representation in memory as the
+type they wrap (with the result that they can only wrap a single type),
+they therefore only exist at the level of the type system, but have no
+impact on your programme otherwise.
+
+Thus far we have discussed four features of the type system which
+help us as programmers to write correct code with minimal mental
+overhead: the lack of nullable types, representations of "failable"
+computations, pattern matching and completeness checks, and the
+avoidance of "primitive obsession".
+
+Other languages have some of these features (notably Rust, whose type
+system was inspired by Haskell's), but most of these other languages
+lack the second pillar: pure functional programming. There are two
+aspects of a pure functional language which help us avoid common errors:
+immutable data and explicit side-effects (which, together, give us
+purity and referential transparency).
+
+Almost all data in Haskell are immutable. This means that a whole class
+of errors like data races, or objects changing between write and read,
+just do not exist. In single-threaded code this is great because you
+don't have to think about mutating state anywhere, you just use things
+like folds or traversals to achieve your goals, but where this really
+shines is in concurrent code. For concurrent Haskell you do not have
+to worry about mutices and locks because your data can't be mutated
+_anyway_. That means that if you want to parallelise a computation,
+you just fork it into different threads and wait for them all to come
+back without all of the hairy bugs of multi-threaded computations. Even
+when you do require some sort of shared, mutable state between your
+threads, the way this is constructed in Haskell (e.g. in the [`STM`
+library][stm-lib]) still avoids the problems solved by locks and mutices
+in other languages.
+
+Immutability gets you halfway towards eliminating the sorts of errors
+found in imperative languages, but _purity_ will get us the rest of
+the way. Haskell functions are pure, in the sense that they do not
+permit any side-effects, nor do they rely on anything except for the
+arguments passed into them. There are ways to encode side-effects,
+for, at some point, any useful programme needs to at least perform
+_some_ I/O, and there are ways to include things in functions which are
+not _directly_ passed as arguments (implicit parameters), but the way
+Haskell is constructed means that these ways do not violate the purity
+of the language because we use monads to encode these things.
+
+Monads: at first they throw every novice Haskeller into disarray, and
+then nearly everyone feels the need to write their own monad tutorial.
+Exactly what monads are and why they are useful is beyond the scope
+of what we want to talk about here, but the specific benefit we _are_
+looking at is how this allows us to encode side-effects and why that is
+going to help you avoid mistakes when programming.
+
+Let's look at some functions for a basic online community:
+
+```haskell
+data Response = Success | Failure FailureReason
+
+sendGreetings :: User -> IO Response
+
+updateUser :: UserId -> User -> IO Response
+
+findNewestUser :: [User] -> Maybe User
+```
+
+In many imperative languages, the activity of finding the newest
+user and sending them some sort of greeting might all be done in one
+function, or a set of deeply nested functions. There would be nothing
+to stop you, however, making database calls, sending emails, or doing
+anything else inside the simple `findNewestUser` function. This can be
+a nightmare for tracking down bugs and performance issues, as well as
+preventing tight-coupling between functions.
+
+The functions above take two forms: `findNewestUser` returns something
+by now familiar to us, `Maybe User` -- if there is a newest user, it
+will return it, otherwise it will return `Nothing`. The other two
+functions return something we have not yet seen: `IO Response`. `IO`,
+like `Maybe` wraps another type (in this case: `Response`) but instead
+of representing a failable computation as `Maybe` does, it represents
+any context in which you are permitted to perform I/O actions (like
+talking to your database or sending emails, as our cases are above). It
+is not possible to perform I/O outside of the `IO` monad -- your code
+will not compile -- and, furthermore, I/O "colours" all the functions
+which call it, because if you are calling something which returns `IO`,
+then you have to be returning `IO` as well.
+
+This might look like a lot of bureaucracy, but it actually does two
+very helpful things: firstly, it immediately tells the programmer "hey,
+this function performs side-effects in I/O" which means that they don't
+have to read the code in order to understand what it does, just the
+type signature; secondly, it means that you cannot accidentally perform
+I/O in a function you thought was pure -- this, in itself, eliminates
+whole classes of bugs in which one may think one understands all the
+dependencies of a function, but actually something is affecting it which
+you did not realise, because it can perform side-effects.
+
+This is only partially satisfying, however, as wrapping everything that
+performs side-effects in `IO` is a bit imprecise in a similar way in
+which using primitive types for values with higher-level semantics in
+the domain is also imprecise, and it can cause similar classes of error:
+there is nothing to say "in this function you can send emails, but you
+can't write to the database." The type-system has helped you _a little
+bit_ but stopped short of the guardrail we have come to expect by now.
+
+Thankfully, due to two additional language features: namely
+type-polymorphism and typclasses, we can _exactly_ encode the effects we
+want a function to be permitted to perform, and make it impossible to
+perform any others. Let's modify our example to take advantage of this, noting that `class X a where` means that we are declaring a _class_ `X` of types with some associated functions for which we have to write concrete implementations. This is similar to interfaces in some languages, or traits in Rust (which were based on Haskell's typeclasses).
+
+```haskell
+data Response = Success | Failure FailureReason
+
+class CanReadUsers m where
+  getUsers :: m (Either FailureReason [User])
+
+class CanWriteUsers m where
+  updateUser :: UserId -> User -> m Response
+
+class CanSendEmails m where
+  sendEmail :: EmailAddress -> Subject -> Body -> m Response
+
+findNewestUser :: [User] -> Maybe User
+
+sendGreetings :: CanSendEmails m => User -> m Response
+
+greetNewestUser :: (
+  CanReadUsers m,
+  CanWriteUsers m,
+  CanSendEmails m
+  ) => m Response
+```
+
+We have introduced a new function here `greetNewestUser` to illustrate
+how we can compose these _constraints_ on what we are able to do. Our
+implementation of this would do something like: find all the users,
+filter for the newest one, send an email, and mark the user as having
+been greeted. We have encoded these capabilities at the type level for
+`greetNewestUser`, whereas we have not for `sendGreetings`, so it would
+be impossible, in fact, for `sendGreetings` to fetch users from the
+database or to accidentally update the user information in the database.
+It can _only_ send emails. To finish this example off, let's see how the implementations of these functions might look:
+
+```haskell
+findNewestUser users = safeHead (sortOn joinDate users)
+
+sendGreetings user = 
+  let subject = Subject "Welcome to the club!"
+      body = Body "Remember: don't stare at the guests..."
+   in sendEmail (emailAddress user) subject body
+
+greetNewestUser = do
+  fetchResult <- getUsers
+  case fetchResult of
+    Left err -> return (Failure err)
+    Right users -> case findNewestUser users of
+      Nothing -> return (Failure NoUsers)
+      Just user -> if hasBeenGreeted user
+        then return (Failure AlreadyGreetedUser)
+        else do
+          sendGreetings user
+          let newUserData = setAlreadyGreeted user
+           in updateUser (userId user) newUserData
+```
+
+While the exact syntax may be unfamiliar, everything in this section has
+been building up to this point: we represent "failable" computations
+with datatypes which encapsulate that they can fail and how they can
+fail; we use semantically meaningful types to describe our data, rather
+than primitives; we explicitly handle failure cases rather than being
+allowed to forget about them; we cannot mutate state so we create new
+copies of our data with the requisite updates; and we explicitly encode
+the side-effects we want to perform, rather than just firing them off
+willy-nilly.
+
+That rounds off the section about the guardrails Haskell puts in place
+for you as a programmer, both through the strength of its type system
+and the purity and referential transparency of the language itself. Far
+from being an imposition on the programmer, this is incredibly freeing
+as it allows you to spend your mental energy _describing_ your problem
+and thereby solving it, not worrying about keeping track of all the ways
+in which your programme could fail.
+
+## The things which make you more productive
+
+Providing guardrails, for all the reasons listed in the previous
+section, is a very useful feature of a language, but that alone might
+make for a very slow experience of building programmes. Haskell has
+several properties which actually make it _more_ productive to construct
+such programmes, especially as those programmes grow in complexity (or
+sheer size).
+
+As before, these properties derive from the two key characteristics
+of the language[^ignore-laziness]: the strength of the type-system
+and the pure-functional semantics of the language. These two together
+give us code which is highly declarative, and therefore easily and
+unambiguously manipulable, as well as a tendency towards heavy concept
+and code re-use.
+
+Why are these useful? Starting with the former: if our programme
+is declarative rather than imperative, we can easily understand
+it ourselves, as well as simply generate other code from it (or
+documentation), and refactoring becomes a "fearless" activity. Taking
+the latter, this means that we can "discover" a set of core concepts and
+continue to build upon them, instead of having to learn disjoint sets of
+concepts for each domain or library one uses.
+
+It can be hard to explain just how radically these things transform
+the way one constructs programmes without experiencing them, but
+to take a small example, the Haskell ecosystem has a tool called
+["Hoogle"][hoogle] which allows one to search for functions by type
+signature. Not only by full type signature with concrete types, but,
+even by partial type signature with type variables instead of actual
+types. That means that, instead of searching for something which applies
+a function to each string in a list of strings (`(String -> String)
+-> [String] -> [String]`), one can instead search for something which
+applies a function to a list of things, returning a list of the results:
+(`(a -> b) -> [a] -> [b]`). You can even get the arguments the wrong way
+around, and Hoogle will still find you the right functions, so `[a] ->
+(a -> b) -> [b]` will give you the same answers (sorted differently) to
+`(a -> b) -> [a] -> [b]`!
+
+This works so well because Haskell's semantics, standard library, and
+ecosystem all rely heavily on concept re-use. Almost every library
+builds upon the core set of concepts (and there are mapped out in
+[the Typeclassopedia][typeclassopedia]). This means that if you are
+wondering how to do something, and you are faced with one library or
+set of datatypes, you can probably search for the general pattern of
+what you want to achieve and you will get what you want. Almost no other
+ecosystem[^unison-share] has something comparable to this.
+
+In order to flesh out this idea of concept generalisation and re-use,
+let's consider two examples: functors and monoids. Before we get there,
+we will start with lists.
+
+A list is Haskell looks like this `myList = [1, 2, 3] :: [Int]`. You
+can do various things with lists, like apply a function to each member
+of the list (`map`) in order to obtain a new list, or stitch two lists
+together (`[1, 2] <> [3, 4]`). In this sense, we have described two
+properties of lists which we can generalise: a list is a container over
+which you can apply a function (a "functor"), and a list is an object
+which has a binary combining operator with an identity value `[]` (a
+"monoid").
+
+Lots of other structures exhibit these properties, for example a list is
+a functor, but so is a `Maybe` or an `Either`, or even a parser! As a
+result, if you understand the core concept of functors, you have a set
+of tools which can apply to all sorts of other data structures which you
+use day-to-day, but with no extra overhead:
+
+```haskell
+fmap (+ 2) [1, 2, 3] -- [3, 4, 5]
+fmap (+ 2) (Just 2) -- Just 4
+fmap (+ 2) (Right 5) -- Right 7
+number = fmap (+ 2) decimal :: Parser Int
+-- parses a string representation of a decimal, adding 2 to it, but
+-- the nice thing here is that we don't have to explicitly handle the
+-- failure case with our `+ 2` function!
+parseMaybe number "4" -- Just 6
+```
+
+Similarly, there are plenty of monoids lurking about. Obvious
+examples might be strings, but then, for example, the [`Lucid`
+library][lucid-lib] for writing HTML represents HTML as monoids, which
+allows you to compose them with the same tools you would use for any
+other monoid. Once again, you learn a single core concept, and it
+becomes applicable across a large part of the ecosystem.
+
+```haskell
+[1, 2] <> [3, 4] -- [1, 2, 3, 4]
+"hello" <> " " <> "world" -- "hello world"
+myIntro = p_ (i_ "Don't " <> b_ "panic") -- <p><i>Don't </i><b>panic</b></p>
+```
+
+You can even use this in your own code, and can write simple instances
+for your own datastructures. This vastly reduces the amount of
+specialised code you have to write -- instead, you can simply re-use
+code and concepts from elsewhere, whether the standard library or an
+extension to those concepts like bifunctors.
+
+In short: Haskell's semantics and standard library encourage generalised
+concepts which, in turn, heavily promote both concept and code reuse,
+and this has driven the development of the ecosystem in a similar
+direction. That re-use means that the programmer need only discover
+the core concepts once, rather than for each library, providing an
+accelerating rate of learning and a much more efficient use of code.
+
+The final productivity boost to discuss here is "fearless refactoring",
+a term often thrown abotu in the Haskell community, but what does it
+actually mean? The essential point here is that the intransigence of
+the compiler makes it a useful ally when refactoring code. In languages
+with a more forgiving compiler or weaker type-system, refactoring code
+can introduce new bugs which are only discovered at runtime. When
+refactoring Haskell, because the type-system gives you the power to
+express your programme domain correctly, the process normally works as
+a constant cycle of "change, compile, change, compile" until all the
+compilation errors are gone, at which point you can be very confident
+you will not encounter runtime bugs. This reduces the cognitive load on
+the programmer, making it far faster (and less scary) to make changes to
+a codebase, whether large or small.
+
+## Reason about your programmes more easily
+
+In general, programming is about telling a machine about some problem
+domain: the ontology of it, and the logical rules governing it, and then
+asking it to compute some results. These results should have some sort
+of meaning we can interpret, which is going to depend on how well we
+understand what our programme actually _means_. Additionally, for us to
+be able to trust the results of the computations we ask of the machine,
+we need to be confident that we have done a good job describing the
+problem domain in terms that result in a "good" understanding on the
+part of the machine.
+
+A programme can have essential complexity or accidental complexity. The
+essential complexity comes from precisely describing the problem domain,
+and some domains are more complex than others. The accidental complexity
+comes from our (in)ability to express the problem domain to the machine. We
+can refer to these as _complexity_ and _complication_ to differentiate
+them.
+
+Complications are bad and should be eliminated. They make it hard to
+reason about our programmes and therefore hard to trust their results.
+It also makes it hard to write the programmes in the first place,
+because we have to deal with all these complications. It's a bit like
+trying to embroider a tapestry using a Rube Goldberg machine operated
+with thick mittens: unlikely to give you what you want.
+
+We could look at general purpose programming languages on a scale of how
+well we are able to express a problem domain to a machine, and therefore
+to what extent we are able to trust the results of the computations we
+ask of that machine. Assembly is at one end: it is all about moving
+bytes between registers and performing arithmetic on them. Yes, you can
+write anything in Assembly but it is really hard to reason about the
+results you will get. As we move along the scale towards "high-level"
+languages we gain a set of abstractions which allow us to forget about
+the semantics of the lower level (e.g. moving bytes between registers)
+because they give us new semantics which are closer to those of the
+problem domain.
+
+> The purpose of abstracting is not to be vague, but to create a new
+> semantic level in which one can be absolutely precise.
+~ Dijkstra, 1972[^cite-dijkstra-acm]
+
+Haskell improves upon most high-level languages in this regard,
+providing a level of expressivity that allows more precise descriptions
+of the problem domain, easily intelligible both to the programmer and
+the machine. Broadly there are three major contributing factors to this
+(perhaps all of them can fit under the idea of denotation semantics):
+algebraic datatypes, value-polymorphism (including typeclasses), and
+declarative programming.
+
+We can distinguish declarative and imperative programming by saying that
+declarative programming describes what a computation is supposed to
+be with respect to the problem domain, whereas imperative programming
+describes how a computation is to be carried out, step-by-step.
+
+This is useful distinction: in imperative programming the operational
+semantics of the programme (the steps a machine must execute in order
+to compute a result) are mixed into the problem domain, making it
+difficult to reason about the meaning of a programme and, therefore,
+its correctness. Declarative programming, however, does not bother
+with defining these execution steps, making programmes much simpler to
+understand and reason about.
+
+In Haskell, everything is an expression. In fact, your entire
+programme is a _single_ expression composed of sub-expressions. These
+sub-expressions have themselves some sort of meaning, as does their
+composition. This is different to imperative languages, in which is
+common for there to be many lines of function calls and loops, with,
+often, deeply nested function calls, but these are not essentially
+composable. Haskell's purity forces concise programmes composed of
+meaningful sub-expressions with no side-effects. This means that it
+takes far less time to understand the purpose of a given expression, and
+therefore reason about whether it is correct or not.
+
+As ever, we are back to our two familiar pillars: so far, we
+have discussed the pure-functional pillar (single expression,
+compositionality, no side-effects), but the type system gives us
+the tools for expressing ourselves clearly to the machine (and to
+ourselves).
+
+In fact, most of the preceding sections touch upon this in one way
+or another: we have data types for expressing the idea that some
+computations can fail in well-defined ways; we have sum types like `data
+Response = Success | Failure FailureReason` which allow us to define all
+the possible values we might get from a function; we have typeclasses
+we can use as constraints on a function to semantically express what
+the result is in the most general way (like `CanSendEmails`); and we
+have generalised concepts like `Functor` and `Monoid` which describe how
+things behave rather than the steps to implement those behaviours.
+
+Algebraic datatypes and typeclasses (and other, similar mechanics
+which deal with various polymorphisms) allow us to construct our own
+domain-specific languages within Haskell with which to write our
+programmes, while building upon common, well-established concepts to
+do so. These are declarative rather than imperative, and therefore are
+easy to reason about and to understand _semantically_ because you do
+not have to either weed out the operational semantics (the step-by-step
+instructions) nor do you have to translate from a layer of primitives
+into your own domain.
+
+This section has been necessarily abstract, because the idea is hard to
+communicate if one has not stepped outside the imperative paradigms in
+which most of modern programming sits. To try to elucidate it somewhat,
+here is a small sample programme using the concepts discussed above.
+
+This programme is a basic accounting tool: given some initial monetary value, and a set of transactions (either in or out) in a variety of currencies, allow us to calculate the final value of the account.
+
+```haskell
+data Currency = GBP | EUR | USD -- | etc.
+
+data Money = Money {
+  currency :: Currency,
+  value :: Double
+  }
+
+convert :: Currency -> Money -> Money
+convert = -- not interesting to implement here as it is basically a table of ratios
+
+zero :: Money
+zero = Money GBP 0
+
+-- Ord gives us ways of comparing things (a natural ordering)
+instance Ord Money where
+  compare m1 m2 
+    | currency m1 == currency m2 = compare (value m1) (value m2)
+    | otherwise                  = compare m1 (convert (currency m1) m2)
+
+instance Monoid Money where
+  m1 <> m2 = Money (currency m1) (convert (currency m1) m2)
+  mempty = Money GBP 0
+
+instance Functor Money where
+  fmap f (Money curr val) = Money curr (f val)
+
+data Transaction = In Money | Out Money
+
+instance Functor Transaction where
+  fmap f (In m) = In (f m)
+  fmap f (Out m) = Out (f m)
+
+correctDirection :: Transaction -> Transaction
+correctDirection transaction =
+  let m = money transaction
+   in if m < zero then Out m else In m
+
+instance Monoid Transaction where
+  t1 <> In m2 = correctDirection (fmap (<> m2) t1)
+  t1 <> Out m2 = correctDirection (fmap (<> (fmap (* (-1)) m2)) t1)
+
+apply :: Transaction -> Money -> Money
+apply (In m) initial = initial <> m
+apply (Out m) initial = initial <> fmap (* (-1)) m
+
+getAccountValue :: Money -> [Transaction] -> Money
+getAccountValue startValue transactions = apply (fold transactions) startValue
+```
+
+## Epilogue
+
+::: draft-note
+TODO write the epilogue
+
+* sum up the sections
+* refer back to the Perlis quotation: 
+    To invert Alan Perlis' quotation from the introduction:
+    any language which changes how you think about programming is worth
+    learning.
+:::
+
+
+[^cite-perlis]: Perlis, A., "Epigrams in Programming" ([retrieved 2024-07-07](http://cs.yale.edu/homes/perlis-alan/quotes.html))
+
+[^cite-boring]: McKinley, D., "Choose Boring Technology" ([retrieved 2024-07-07](https://mcfunley.com/choose-boring-technology))
+
+[^cite-foc-boring]: Future of Coding: Bonus Episode "Boring and Bad". The bonus episodes are only available to Patreon subscribers, but here is the link to the FoC website in case of interest: <https://futureofcoding.org/>.
+
+[^cite-dijkstra-acm]: Dijkstra, E.W., ACM Turing Lecture: "The Humble Programmer", 1972 ([transcript](https://www.cs.utexas.edu/~EWD/transcriptions/EWD03xx/EWD340.html))
+
+[converge]: https://www.converge.io
+
+[^not-all-reasons]: This is, however, not supposed to be an exhaustive list of all the things I think are great about Haskell, but just a subset of the most compelling reasons I recommend it to programmers. The rest they can discover for themselves.
+
+[^imperative-oo]: And quite possibly an "object-oriented" paradigm, to boot. 
+
+[stm-lib]: https://hackage.haskell.org/package/stm
+
+[lucid-lib]: https://hackage.haskell.org/package/lucid
+
+[^ignore-laziness]: Actually, what is really distinctive about Haskell
+is that it is a *lazy*, pure, functional language, but laziness can be
+confusing and is only lightly related to the benefits discussed in this
+essay, and so I am going to ignore it.
+
+[hoogle]: https://hoogle.haskell.org
+
+[typeclassopedia]: https://wiki.haskell.org/Typeclassopedia#Introduction
+
+[^unison-share]: Unison _does_ have something called Unison Share, but
+it was written by a Haskeller and directly inspired by Hoogle (and, in
+fact, Unison is based on Haskell).
