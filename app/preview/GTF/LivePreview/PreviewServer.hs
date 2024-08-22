@@ -32,7 +32,7 @@ layout filename content = doctypehtml_ $ do
       , href_
           "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/base16/papercolor-light.min.css"
       ]
-    style_ [] $ toHtml $ render Styles.stylesheet
+    style_ [] $ toHtmlRaw $ render Styles.stylesheet
   body_ $ do
     header_ [class_ "site-header"] $ do
       div_ [class_ "brand"] "~gtf"
