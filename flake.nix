@@ -19,10 +19,10 @@
       haskellProjects.default = {
         basePackages = pkgs.haskell.packages.ghc948;
         devShell.mkShellArgs.shellHook = config.pre-commit.installationScript;
+        devShell.mkShellArgs.nativeBuildInputs = with pkgs; [ alejandra nil ghciwatch ];
         defaults.devShell.tools = hp: with hp; {
           inherit
             cabal-install
-            ghcid
             haskell-language-server;
         };
         packages = {
@@ -37,7 +37,7 @@
 
       pre-commit.settings.hooks = {
         cabal-fmt.enable = true;
-        hlint.enable = false; # hlint 3.6.1 is the latest available (need 3.8) due to  issue #1531
+        hlint.enable = true;
         nixpkgs-fmt.enable = true;
         fourmolu.enable = true;
       };
