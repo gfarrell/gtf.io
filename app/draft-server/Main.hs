@@ -4,6 +4,8 @@ module Main where
 
 import Clay (render)
 import CommonPrelude
+import Control.Monad.Except (ExceptT (..), runExceptT)
+import Control.Monad.IO.Class (liftIO)
 import Data.Bifunctor (first)
 import Data.ByteString (ByteString)
 import Data.Foldable (fold)
@@ -24,6 +26,8 @@ import Network.Wai (Application, ResponseReceived, pathInfo, responseLBS)
 import Network.Wai.Handler.Warp (run)
 import Servant.Client (BaseUrl (BaseUrl), ClientError (..), Scheme (Https), mkClientEnv, runClientM)
 import Servant.Client.Core.Response (responseBody, responseStatusCode)
+import System.Environment (getArgs)
+import Text.Read (readEither)
 
 renderDoc :: DocType -> ByteString -> Either DocParseFailure (Html ())
 renderDoc MusingDoc = fmap renderMusingContent . parseContentDoc @Musing
@@ -125,5 +129,24 @@ layout ref dtype fname content = doctypehtml_ $ do
       $ div_ [class_ "content-container"]
       $ main_ [class_ "content-container", role_ "main"] content
 
+newtype Args = Args {port :: Int}
+  deriving (Show, Eq)
+
+data ProgrammeError = InvalidPort | WrongNumberOfArgs
+  deriving (Show, Eq)
+
+getAppArgs :: ExceptT ProgrammeError IO Args
+getAppArgs =
+  ExceptT $ getArgs <&> \case
+    [portString] -> Args <$> (first (const InvalidPort) . readEither $ portString)
+    _ -> Left WrongNumberOfArgs
+
 main :: IO ()
-main = newManager tlsManagerSettings >>= run 8082 . router
+main = do
+  res <-
+    runExceptT $ getAppArgs >>= \(Args port) -> do
+      liftIO . putStrLn $ "Running on " <> show port
+      liftIO $ newManager tlsManagerSettings >>= run port . router
+  case res of
+    Left err -> putStrLn $ "An error occured: " <> show err
+    Right _ -> putStrLn "Exited"
