@@ -30,6 +30,9 @@ common lang
     NoImplicitPrelude
     OverloadedStrings
 
+common exeopts
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+
 common deps
   build-depends:
     , aeson
@@ -94,14 +97,13 @@ library
     GTF.URL
 
 executable gtf-website-server
-  import:         warnings, lang, deps
+  import:         warnings, lang, deps, exeopts
   main-is:        Main.hs
   build-depends:  gtf-website
   hs-source-dirs: app/website
-  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
 
 executable preview
-  import:         warnings, lang, deps
+  import:         warnings, lang, deps, exeopts
   main-is:        Main.hs
   build-depends:
     , async
@@ -113,11 +115,25 @@ executable preview
     , websockets
 
   hs-source-dirs: app/preview
-  ghc-options:    -threaded -rtsopts -with-rtsopts=-N
   other-modules:
     GTF.LivePreview.LiveReload
     GTF.LivePreview.Options
     GTF.LivePreview.PreviewServer
+
+executable draft-server
+  import:         warnings, lang, deps, exeopts
+  main-is:        Main.hs
+  build-depends:
+    , gtf-website
+    , http-client
+    , http-client-tls
+    , http-types
+    , servant
+    , servant-client
+    , servant-client-core
+
+  hs-source-dirs: app/draft-server
+  other-modules:  GTF.DraftServ.Github
 
 test-suite gtf-website-tests
   import:         warnings, lang, deps
