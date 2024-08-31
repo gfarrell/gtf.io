@@ -147,7 +147,7 @@ function" or "NoneType object has no attribute \<x\>". These, however, are
 runtime errors, which both means that the programme has failed in its
 principal task and also that the errors are harder to find as they occur
 in the wild. Haskell does not have null values. You can define them in
-a particular datatype (for example the `Maybe` type, which we will come
+a particular data type (for example the `Maybe` type, which we will come
 onto shortly) but you have to explicitly define them and explicitly
 handle them. As such, the error surface available due to this flaw in
 language design is eliminated, and the programmer no longer has to think
@@ -224,7 +224,7 @@ case. There are many ways of doing this, and the pattern matching (
 `case x of ...`) above is just one to which we will come shortly.
 
 `Maybe` can also be used when you might want a nullable field of a
-datastructure. This is a specific case of a computation which may fail,
+data structure. This is a specific case of a computation which may fail,
 but is often thought of as distinct. Here is how this would look in
 Haskell:
 
@@ -386,7 +386,7 @@ checkForSeats :: VenueName -> EventName -> IO [Seat]
 ```
 
 Above it is written that this is a "zero-cost" method, which means that
-unlike the normal way of creating a datastructure to wrap around some
+unlike the normal way of creating a data structure to wrap around some
 values, `newtypes` have exactly the same representation in memory as the
 type they wrap (with the result that they can only wrap a single type),
 they therefore only exist at the level of the type system, but have no
@@ -463,7 +463,7 @@ by now familiar to us, `Maybe User` -- if there is a newest user, it
 will return it, otherwise it will return `Nothing`. The other two
 functions return something we have not yet seen: `IO Response`. `IO`,
 like `Maybe` wraps another type (in this case: `Response`) but instead
-of representing a failable computation as `Maybe` does, it represents
+of representing a "failable" computation as `Maybe` does, it represents
 any context in which you are permitted to perform I/O actions (like
 talking to your database or sending emails, as our cases are above). It
 is not possible to perform I/O outside of the `IO` monad -- your code
@@ -490,7 +490,7 @@ can't write to the database." The type-system has helped you _a little
 bit_ but stopped short of the guardrail we have come to expect by now.
 
 Thankfully, due to two additional language features: namely
-type-polymorphism and typclasses, we can _exactly_ encode the effects
+type-polymorphism and typeclasses, we can _exactly_ encode the effects
 we want a function to be permitted to perform, and make it impossible
 to perform any others. Let's modify our example to take advantage
 of this, noting that `class X a where` means that we are declaring
@@ -558,7 +558,7 @@ greetNewestUser = do
 
 While the exact syntax may be unfamiliar, everything in this section has
 been building up to this point: we represent "failable" computations
-with datatypes which encapsulate that they can fail and how they can
+with data types which encapsulate that they can fail and how they can
 fail; we use semantically meaningful types to describe our data, rather
 than primitives; we explicitly handle failure cases rather than being
 allowed to forget about them; we cannot mutate state so we create new
@@ -655,7 +655,7 @@ ecosystem all rely heavily on concept re-use. Almost every library
 builds upon the core set of concepts (and there are mapped out in
 [the Typeclassopedia][typeclassopedia]). This means that if you are
 wondering how to do something, and you are faced with one library or
-set of datatypes, you can probably search for the general pattern of
+set of data types, you can probably search for the general pattern of
 what you want to achieve and you will get what you want. Almost no other
 ecosystem[^unison-share] has something comparable to this.
 
@@ -703,7 +703,7 @@ myIntro = p_ (i_ "Don't " <> b_ "panic") -- <p><i>Don't </i><b>panic</b></p>
 ```
 
 You can even use this in your own code, and can write simple instances
-for your own datastructures. This vastly reduces the amount of
+for your own data structures. This vastly reduces the amount of
 specialised code you have to write -- instead, you can simply re-use
 code and concepts from elsewhere, whether the standard library or an
 extension to those concepts like bifunctors.
@@ -785,7 +785,7 @@ providing a level of expressivity that allows more precise descriptions
 of the problem domain, easily intelligible both to the programmer and
 the machine. Broadly there are three major contributing factors to this
 (perhaps all of them can fit under the idea of denotation semantics):
-algebraic datatypes, value-polymorphism (including typeclasses), and
+algebraic data types, value-polymorphism (including typeclasses), and
 declarative programming.
 
 We can distinguish declarative and imperative programming by saying that
@@ -828,7 +828,7 @@ the result is in the most general way (like `CanSendEmails`); and we
 have generalised concepts like `Functor` and `Monoid` which describe how
 things behave rather than the steps to implement those behaviours.
 
-Algebraic datatypes and typeclasses (and other, similar mechanics
+Algebraic data types and typeclasses (and other, similar mechanics
 which deal with various polymorphisms) allow us to construct our own
 domain-specific languages within Haskell with which to write our
 programmes, while building upon common, well-established concepts to
