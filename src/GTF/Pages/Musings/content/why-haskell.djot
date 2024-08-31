@@ -42,10 +42,10 @@ and thus I find myself writing this apologia.
 
 Indeed the remainder of this essay will consist of my attempt to
 reason around why I think Haskell is probably the best choice for most
-programmers[^not-all-reasons], especially if one cares about being able
-to productively write robust software, and even more so if one wants
-to have fun while doing it (which is a frequently underrated aspect of
-writing software).
+programmers[^not-all-reasons][^not-all-applications], especially if one
+cares about being able to productively write robust software, and even
+more so if one wants to have fun while doing it (which is a frequently
+underrated aspect of writing software).
 
 All mainstream, general purpose programming languages are (basically)
 Turing-complete, and therefore any programme you can write in one you
@@ -143,7 +143,7 @@ it is null, and therefore is required to check wherever this value
 is consumed. Programmers can forget things, and the fact that the
 null value can inhabit many types means that the type system does not
 help prevent this, leading to errors of the sort "undefined is not a
-function" or "NoneType object has no attribute <x>". These, however, are
+function" or "NoneType object has no attribute \<x\>". These, however, are
 runtime errors, which both means that the programme has failed in its
 principal task and also that the errors are harder to find as they occur
 in the wild. Haskell does not have null values. You can define them in
@@ -263,6 +263,36 @@ which are an expected path in your programme, but it prevents you from
 failing to handle the failure case, or from treating the failure case
 like a success case accidentally.
 
+To be clear, this means that we no longer treat known error states as
+exceptions by throwing them up the call stack [^throw-catch-goto],
+and instead we treat them as potential values for the type of our
+expression. In turn, this means that we now can have a total description
+of all the failure modes from the point of the function call _down_ the
+stack. Consider these two snippets of code:
+
+```python
+def do_something():
+  result = get_a_result()
+  if result != "a result":
+    raise InvalidResultError(result)
+  return 42
+```
+
+```haskell
+doSomething :: Either InvalidResultError Int
+doSomething = 
+  let result = getResult
+   in if result /= "a result"
+        then Left (InvalidResultError result)
+        else Right 42
+```
+
+In the first snippet, we have no idea what possible exceptions may be
+raised by `do_something`, partly because we have no way of knowing what
+exceptions may be raised by `get_a_result`. By contrast, in the second
+snippet, we know _all_ of the possible failure states immediately,
+because they are captured in the type system.
+
 We can generalise this idea of being forced to handle the failure
 cases by saying that Haskell makes us write *total* functions rather
 than *partial* functions. This means that we have to handle the entire
@@ -273,11 +303,6 @@ pattern matching is done in Haskell, using a basic programme which helps
 us organise our evenings given a chosen option. Instead of implementing
 the entire programme, here is an extract to illustrate the use of
 pattern matching.
-
-::: draft-note
-TODO: Can we perhaps replace this example with the example we use in the rest
-of the text (the social club) 
-:::
 
 ```haskell
 data Option =
@@ -465,9 +490,15 @@ can't write to the database." The type-system has helped you _a little
 bit_ but stopped short of the guardrail we have come to expect by now.
 
 Thankfully, due to two additional language features: namely
-type-polymorphism and typclasses, we can _exactly_ encode the effects we
-want a function to be permitted to perform, and make it impossible to
-perform any others. Let's modify our example to take advantage of this, noting that `class X a where` means that we are declaring a _class_ `X` of types with some associated functions for which we have to write concrete implementations. This is similar to interfaces in some languages, or traits in Rust (which were based on Haskell's typeclasses).
+type-polymorphism and typclasses, we can _exactly_ encode the effects
+we want a function to be permitted to perform, and make it impossible
+to perform any others. Let's modify our example to take advantage
+of this, noting that `class X a where` means that we are declaring
+a _class_ `X` of types with some associated functions for which we
+have to write concrete implementations. This is similar to interfaces
+in some languages, or traits in Rust (which were based on Haskell's
+typeclasses). In this example, `m` is just a type variable representing
+a "2nd order"[^hkt] type (e.g. `IO` or `Maybe`).
 
 ```haskell
 data Response = Success | Failure FailureReason
@@ -496,11 +527,12 @@ We have introduced a new function here `greetNewestUser` to illustrate
 how we can compose these _constraints_ on what we are able to do. Our
 implementation of this would do something like: find all the users,
 filter for the newest one, send an email, and mark the user as having
-been greeted. We have encoded these capabilities at the type level for
-`greetNewestUser`, whereas we have not for `sendGreetings`, so it would
-be impossible, in fact, for `sendGreetings` to fetch users from the
-database or to accidentally update the user information in the database.
-It can _only_ send emails. To finish this example off, let's see how the implementations of these functions might look:
+been greeted. We have encoded these capabilities at the type level
+for `greetNewestUser`, whereas we have not for `sendGreetings`, so it
+would be impossible, in fact, for `sendGreetings` to fetch users from
+the database or to accidentally update the user information in the
+database[^cqs]. It can _only_ send emails. To finish this example off,
+let's see how the implementations of these functions might look:
 
 ```haskell
 findNewestUser users = safeHead (sortOn joinDate users)
@@ -541,6 +573,43 @@ from being an imposition on the programmer, this is incredibly freeing
 as it allows you to spend your mental energy _describing_ your problem
 and thereby solving it, not worrying about keeping track of all the ways
 in which your programme could fail.
+
+### But \<language\> has \<feature\>, too!
+
+Some of the features of Haskell above exist, or _look like_ they
+exist, in other languages. Without trying to talk about every possible
+language, we can look at some of the common patterns and how they
+differ, or do not, from those in Haskell.
+
+Pattern matching, for example, has been introduced into many languages.
+Some of those have the same characteristics as Haskell, like Rust's
+pattern matching, which is exhaustive and enforced by the compiler,
+whereas some are quite different, especially in gradually-typed
+languages like Typescript and Python, where there is no guarantee
+that this sort of safety permeates the codebase, and there are often
+escape-hatches, because you are using optional tools external to the
+built-in toolchain.
+
+Very few languages make use of higher-order types like `Either` and
+`Maybe` to represent computations which may fail, but Rust is a notable
+exception which, like Haskell, strongly encourages representing failure
+in this way.
+
+Subclassing is commonly used in some languages to make it "easy" to
+avoid primitive obsession, but this is not as strict as Haskell's
+`newtype`s. Python, for example, has a `NewType` construction, but it
+has two weaknesses common to this type of implementation: the first is
+that subclassing means that our `VenueName` and `EventName` types can be
+passed to functions expecting `String`, because they are not treated as
+completely different types, and the second is that, unlike in Haskell,
+you cannot hide the constructors of these types, which means there are
+certain patterns you cannot fully implement like the parsing pattern (as
+opposed to validating)[^parse-dont-validate].
+
+Finally, while some libraries exist in other languages in order to
+isolate and control side-effects[^cite-armstrong-strangeloop], they are
+not enforced as part of the language in the same way, because this would
+require purity to be built into the language itself.
 
 ## The things which make you more productive
 
@@ -647,7 +716,7 @@ the core concepts once, rather than for each library, providing an
 accelerating rate of learning and a much more efficient use of code.
 
 The final productivity boost to discuss here is "fearless refactoring",
-a term often thrown abotu in the Haskell community, but what does it
+a term often thrown about in the Haskell community, but what does it
 actually mean? The essential point here is that the intransigence of
 the compiler makes it a useful ally when refactoring code. In languages
 with a more forgiving compiler or weaker type-system, refactoring code
@@ -659,6 +728,15 @@ compilation errors are gone, at which point you can be very confident
 you will not encounter runtime bugs. This reduces the cognitive load on
 the programmer, making it far faster (and less scary) to make changes to
 a codebase, whether large or small.
+
+This section goes beyond just providing guardrails, guardrails which
+are clearly inspiring other language maintainers to introduce them
+into their languages, to talk about something very fundamental to
+productivity in programming: composable, re-usable concepts and the
+ability to "fearlessly" make changes to your programme. These are
+not simply features which can be added into a language, they are
+characteristics of it, and they relate to the more abstract notions laid
+out in the next section.
 
 ## Reason about your programmes more easily
 
@@ -765,10 +843,13 @@ communicate if one has not stepped outside the imperative paradigms in
 which most of modern programming sits. To try to elucidate it somewhat,
 here is a small sample programme using the concepts discussed above.
 
-This programme is a basic accounting tool: given some initial monetary value, and a set of transactions (either in or out) in a variety of currencies, allow us to calculate the final value of the account.
+This programme is a basic accounting tool: given some initial monetary
+value, and a set of transactions (either in or out) in a variety of
+currencies, allow us to calculate the final value of the account.
 
 ```haskell
-data Currency = GBP | EUR | USD -- | etc.
+-- this is a bit like an "enum" of possible constructors of the type Currency
+data Currency = GBP | EUR | USD 
 
 data Money = Money {
   currency :: Currency,
@@ -776,7 +857,7 @@ data Money = Money {
   }
 
 convert :: Currency -> Money -> Money
-convert = -- not interesting to implement here as it is basically a table of ratios
+convert = -- not interesting to implement here as it is basically a lookup table
 
 zero :: Money
 zero = Money GBP 0
@@ -789,7 +870,7 @@ instance Ord Money where
 
 instance Monoid Money where
   m1 <> m2 = Money (currency m1) (convert (currency m1) m2)
-  mempty = Money GBP 0
+  mempty = zero
 
 instance Functor Money where
   fmap f (Money curr val) = Money curr (f val)
@@ -800,14 +881,14 @@ instance Functor Transaction where
   fmap f (In m) = In (f m)
   fmap f (Out m) = Out (f m)
 
-correctDirection :: Transaction -> Transaction
-correctDirection transaction =
+normalise :: Transaction -> Transaction
+normalise transaction =
   let m = money transaction
    in if m < zero then Out m else In m
 
 instance Monoid Transaction where
-  t1 <> In m2 = correctDirection (fmap (<> m2) t1)
-  t1 <> Out m2 = correctDirection (fmap (<> (fmap (* (-1)) m2)) t1)
+  t1 <> In m2 = normalise (fmap (<> m2) t1)
+  t1 <> Out m2 = normalise (fmap (<> (fmap (* (-1)) m2)) t1)
 
 apply :: Transaction -> Money -> Money
 apply (In m) initial = initial <> m
@@ -819,16 +900,33 @@ getAccountValue startValue transactions = apply (fold transactions) startValue
 
 ## Epilogue
 
-::: draft-note
-TODO write the epilogue
+I love writing in Haskell, and there are many reasons beyond this
+apologia why that is the case, but I also think it is an excellent
+choice for general purpose programming for anyone who wants to write
+robust software confidently and efficiently, and, of course, enjoyably.
 
-* sum up the sections
-* refer back to the Perlis quotation: 
-    To invert Alan Perlis' quotation from the introduction:
-    any language which changes how you think about programming is worth
-    learning.
-:::
+I think what makes Haskell unique is the combination of its type system
+and functional purity -- it's not enough just to have functional
+programming, much as I love LISPs, nor is it enough just to have the
+type system, much as Rust seems like a great language. Many languages
+have bits of these features, but only a few have all of them, and, of
+those languages (others include Idris, Agda, and Lean), Haskell is the
+most mature, and therefore has the largest ecosystem.
 
+While other languages are certainly adding features which I have
+mentioned above, this combination of a strong and expressive type system
+and pure functional programming is fundamental to the language: other
+languages without these axiomatic characteristics simply will not be
+able to implement them (and attempts to build some of these things into
+non-functional languages with weaker type systems is often extremely
+awkward and not very useful).
+
+Not everyone has the luxury of choosing their tools in a professional
+context, whether because there is history in their team or the decisions
+are made by others. Even in this case, if you never end up using Haskell
+professionally, it will change how you think about programming, and to
+invert Alan Perlis' quotation from the start of this essay: any language
+which changes how you think about programming is worth learning.
 
 [^cite-perlis]: Perlis, A., "Epigrams in Programming" ([retrieved 2024-07-07](http://cs.yale.edu/homes/perlis-alan/quotes.html))
 
@@ -840,7 +938,14 @@ TODO write the epilogue
 
 [converge]: https://www.converge.io
 
-[^not-all-reasons]: This is, however, not supposed to be an exhaustive list of all the things I think are great about Haskell, but just a subset of the most compelling reasons I recommend it to programmers. The rest they can discover for themselves.
+[^not-all-reasons]: This is, however, not supposed to be an exhaustive
+list of all the things I think are great about Haskell, but just a
+subset of the most compelling reasons I recommend it to programmers. The
+rest they can discover for themselves.
+
+[^not-all-applications]: Haskell is, of course, not always an
+appropriate choice. For example, it is never going to replace C or C++
+for writing software for micro-controllers.
 
 [^imperative-oo]: And quite possibly an "object-oriented" paradigm, to boot. 
 
@@ -860,3 +965,39 @@ essay, and so I am going to ignore it.
 [^unison-share]: Unison _does_ have something called Unison Share, but
 it was written by a Haskeller and directly inspired by Hoogle (and, in
 fact, Unison is based on Haskell).
+
+[^throw-catch-goto]: This is a bit like using `goto` to manage
+known failure states, which, I think, would be quite unintuitive
+if it hadn't become such a dominant way of managing such failure
+states. In any case, I think it would make [Dijkstra quite
+sad](https://dl.acm.org/doi/10.1145/362929.362947).
+
+[^parse-dont-validate]: To expand slightly on this, although
+it would be worth reading the [excellent blog post by Alexis
+King](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate
+/), this means that instead of _validating_, i.e. checking a value meets
+some criterion, we parse an "invalid" value into a "valid" value, and
+thereby change its type. The result is that you can write functions
+which are defined to take the "valid" type (e.g. `EmailAddress`) and
+which never have to worry that it might be invalid, because you simply
+cannot forget to verify it, as you can in a "validation" pattern.
+
+[^cite-armstrong-strangeloop]: Christopher Armstrong
+[gave an interesting talk at Strange Loop in
+2015](https://www.youtube.com/watch?v=D37dc9EoFus) on his python
+library, which includes an introduction to the motivation for this sort
+of pattern. This might be good follow-on content if you are interested.
+
+[^hkt]: This use of "2nd order" is not idiomatic in Haskell, as
+this is technically a higher-kinded type, whereas "order" is
+typically used to refer to functions, but just like a higher-order
+function is a function which takes another function as its
+argument, a higher-kinded type is a type which takes another
+type as an "argument", and thereby produces a "concrete type".
+Diogo Castro's [2018 blog post "Haskell's kind system -- a
+primer"](https://diogocastro.com/blog/2018/10/17/haskells-kind-system-a- primer/) 
+has more details on this.
+
+[^cqs]: For those who are familiar with the idea, this is a bit like
+command-query segregation in the imperative world, but enforced by the
+type system.
