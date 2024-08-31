@@ -95,6 +95,13 @@ readers will be familiar, here is a small guide:
 * lower-case letters in type-signatures are type-variables, and just
   represent any type (so `head :: [a] -> a` just takes a list of any type
   `a` and returns a single value of the same type `a`).
+* you will see two types of "forward" arrows: `->` and `=>`. A single
+  arrow `->` is used to describe the type of a function: `add1 :: Int ->
+  Int` describes a function which takes an integer and returns an integer.
+  A double arrow `=>` describes constraints on the type variables used,
+  and always come first: `add1 :: Num a => a -> a` describes a function
+  which takes any type `a` which satisfies `Num a`, and returns a value of
+  the same type.
 * comments start with `--`.
 * `return` does not mean what you think it means, it's just a regular
   function.
@@ -535,6 +542,13 @@ database[^cqs]. It can _only_ send emails. To finish this example off,
 let's see how the implementations of these functions might look:
 
 ```haskell
+-- these would be defined elsewhere, but just so you know the types
+joinDate :: User -> Day
+emailAddress :: User -> EmailAddress
+setAlreadyGreeted :: User -> User
+hasBeenGreeted :: User -> Bool
+userId :: User -> UserId
+
 findNewestUser users = safeHead (sortOn joinDate users)
 
 sendGreetings user = 
