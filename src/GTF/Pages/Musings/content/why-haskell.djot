@@ -340,7 +340,7 @@ this type of check, we just do not have to worry about whether we have
 _remembered_ to update all the places in which a given value is used.
 
 The final major way in which Haskell's type system makes it easy for us
-to avoid common error when programming, is related to how easy it is to
+to avoid common errors when programming is related to how easy it is to
 avoid "primitive obsession". There is a hint in our evening-organising
 snippet above: our `Restaurant` and `Theatre` constructors take a
 `VenueName` and `EventName`. These could, naturally, be represented as
@@ -496,9 +496,9 @@ there is nothing to say "in this function you can send emails, but you
 can't write to the database." The type-system has helped you _a little
 bit_ but stopped short of the guardrail we have come to expect by now.
 
-Thankfully, due to two additional language features: namely
-type-polymorphism and typeclasses, we can _exactly_ encode the effects
-we want a function to be permitted to perform, and make it impossible
+Thankfully, due to two additional language features: namely ad hoc
+polymorphisms and typeclasses, we can _exactly_ encode the effects we
+want a function to be permitted to perform, and make it impossible
 to perform any others. Let's modify our example to take advantage
 of this, noting that `class X a where` means that we are declaring
 a _class_ `X` of types with some associated functions for which we
@@ -666,12 +666,12 @@ around, and Hoogle will still find you the right functions, so `[a] ->
 
 This works so well because Haskell's semantics, standard library, and
 ecosystem all rely heavily on concept re-use. Almost every library
-builds upon the core set of concepts (and there are mapped out in
-[the Typeclassopedia][typeclassopedia]). This means that if you are
-wondering how to do something, and you are faced with one library or
-set of data types, you can probably search for the general pattern of
-what you want to achieve and you will get what you want. Almost no other
-ecosystem[^unison-share] has something comparable to this.
+builds upon the core set of concepts[^typeclassopedia]. This means that
+if you are wondering how to do something, and you are faced with one
+library or set of data types, you can probably search for the general
+pattern of what you want to achieve and you will get what you want.
+Almost no other ecosystem[^unison-share] has something comparable to
+this.
 
 In order to flesh out this idea of concept generalisation and re-use,
 let's consider two examples: functors and monoids. Before we get there,
@@ -796,11 +796,11 @@ problem domain.
 
 Haskell improves upon most high-level languages in this regard,
 providing a level of expressivity that allows more precise descriptions
-of the problem domain, easily intelligible both to the programmer and
-the machine. Broadly there are three major contributing factors to this
-(perhaps all of them can fit under the idea of denotation semantics):
-algebraic data types, value-polymorphism (including typeclasses), and
-declarative programming.
+of the problem domain, easily intelligible both to the programmer
+and the machine. Broadly there are three major contributing factors
+to this (perhaps all of them can fit under the idea of denotation
+semantics): algebraic data types, parametric and ad hoc polymorphism,
+and declarative programming.
 
 We can distinguish declarative and imperative programming by saying that
 declarative programming describes what a computation is supposed to
@@ -974,8 +974,6 @@ essay, and so I am going to ignore it.
 
 [hoogle]: https://hoogle.haskell.org
 
-[typeclassopedia]: https://wiki.haskell.org/Typeclassopedia#Introduction
-
 [^unison-share]: Unison _does_ have something called Unison Share, but
 it was written by a Haskeller and directly inspired by Hoogle (and, in
 fact, Unison is based on Haskell).
@@ -990,7 +988,7 @@ sad](https://dl.acm.org/doi/10.1145/362929.362947).
 it would be worth reading the [excellent blog post by Alexis
 King](https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate
 /), this means that instead of _validating_, i.e. checking a value meets
-some criterion, we parse an "invalid" value into a "valid" value, and
+some criterion, we parse an "unknown" value into a "valid" value, and
 thereby change its type. The result is that you can write functions
 which are defined to take the "valid" type (e.g. `EmailAddress`) and
 which never have to worry that it might be invalid, because you simply
@@ -1015,3 +1013,7 @@ has more details on this.
 [^cqs]: For those who are familiar with the idea, this is a bit like
 command-query segregation in the imperative world, but enforced by the
 type system.
+
+[^typeclassopedia]: You can find a big map of how these
+concepts related to each other by checking out the
+[Typeclassopedia](https://wiki.haskell.org/Typeclassopedia#Introduction).
