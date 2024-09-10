@@ -169,11 +169,11 @@ computations which may fail. There are many examples: if you are parsing
 some user input and that input is malformed, this failure to parse is
 a valid state of your programme, and therefore you need some way to
 represent it. Similarly, network requests may time out, solvers may
-fail to find a solution, users may cancel actions, and so on. There are
-two common solutions, one of which we have mentioned (null values),
-and exception handling. Both of these solutions cause a new problem
-for the programmer: you have to remember to handle them, in the case
-of exceptions at the call site rather than where you consume the value
+fail to find a solution, users may cancel actions, and so on. There
+are two common solutions, null values (which we have mentioned) and
+exception handling. Both of these solutions cause a new problem for
+the programmer: you have to remember to handle them, in the case of
+exceptions at the call site rather than where you consume the value
 as with null, and nothing in the type system is going to prevent you
 forgetting.
 
