@@ -40,11 +40,11 @@ Haskell is probably the best choice for whatever computational problems
 they are trying to solve themselves (e.g. dinner parties, the pub, etc.)
 and thus I find myself writing this apologia.
 
-Indeed the remainder of this essay will consist of my attempt to
-reason around why I think Haskell is probably the best choice for most
-programmers[^not-all-reasons][^not-all-applications], especially if one
-cares about being able to productively write robust software, and even
-more so if one wants to have fun while doing it (which is a frequently
+Indeed the remainder of this essay will consist of my attempt to reason
+around why I think Haskell is probably the best choice[^not-all-reasons]
+for most programmers[^not-all-applications], especially if one cares
+about being able to productively write robust software, and even more
+so if one wants to have fun while doing it (which is a frequently
 underrated aspect of writing software).
 
 All mainstream, general purpose programming languages are (basically)
