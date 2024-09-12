@@ -1007,7 +1007,7 @@ function is a function which takes another function as its
 argument, a higher-kinded type is a type which takes another
 type as an "argument", and thereby produces a "concrete type".
 Diogo Castro's [2018 blog post "Haskell's kind system -- a
-primer"](https://diogocastro.com/blog/2018/10/17/haskells-kind-system-a- primer/) 
+primer"](https://diogocastro.com/blog/2018/10/17/haskells-kind-system-a-primer/) 
 has more details on this.
 
 [^cqs]: For those who are familiar with the idea, this is a bit like
