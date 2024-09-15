@@ -2,6 +2,7 @@
 title: Why Haskell?
 slug: why-haskell
 created: 2024-09-10
+updated: 2024-09-15
 category: informatics
 abstract: >-
   Haskell is a great programming language with many features that make
@@ -851,66 +852,6 @@ easy to reason about and to understand _semantically_ because you do
 not have to either weed out the operational semantics (the step-by-step
 instructions) nor do you have to translate from a layer of primitives
 into your own domain.
-
-This section has been necessarily abstract, because the idea is hard to
-communicate if one has not stepped outside the imperative paradigms in
-which most of modern programming sits. To try to elucidate it somewhat,
-here is a small sample programme using the concepts discussed above.
-
-This programme is a basic accounting tool: given some initial monetary
-value, and a set of transactions (either in or out) in a variety of
-currencies, allow us to calculate the final value of the account.
-
-```haskell
--- this is a bit like an "enum" of possible constructors of the type Currency
-data Currency = GBP | EUR | USD 
-
-data Money = Money {
-  currency :: Currency,
-  value :: Double
-  }
-
-convert :: Currency -> Money -> Money
-convert = -- not interesting to implement here as it is basically a lookup table
-
-zero :: Money
-zero = Money GBP 0
-
--- Ord gives us ways of comparing things (a natural ordering)
-instance Ord Money where
-  compare m1 m2 
-    | currency m1 == currency m2 = compare (value m1) (value m2)
-    | otherwise                  = compare m1 (convert (currency m1) m2)
-
-instance Monoid Money where
-  m1 <> m2 = Money (currency m1) (convert (currency m1) m2)
-  mempty = zero
-
-instance Functor Money where
-  fmap f (Money curr val) = Money curr (f val)
-
-data Transaction = In Money | Out Money
-
-instance Functor Transaction where
-  fmap f (In m) = In (f m)
-  fmap f (Out m) = Out (f m)
-
-normalise :: Transaction -> Transaction
-normalise transaction =
-  let m = money transaction
-   in if m < zero then Out m else In m
-
-instance Monoid Transaction where
-  t1 <> In m2 = normalise (fmap (<> m2) t1)
-  t1 <> Out m2 = normalise (fmap (<> (fmap (* (-1)) m2)) t1)
-
-apply :: Transaction -> Money -> Money
-apply (In m) initial = initial <> m
-apply (Out m) initial = initial <> fmap (* (-1)) m
-
-getAccountValue :: Money -> [Transaction] -> Money
-getAccountValue startValue transactions = apply (fold transactions) startValue
-```
 
 ## Epilogue
 
