@@ -8,7 +8,7 @@ import Control.Monad.Trans.Maybe (runMaybeT)
 import Data.ByteString (ByteString, fromStrict)
 import Data.Text (elem, isSuffixOf, pack, replace, unpack, unwords)
 import Data.Text.Encoding (decodeUtf8, encodeUtf8)
-import Data.Text.IO (putStrLn)
+import Data.Text.IO (hPutStrLn)
 import Data.Time.Clock (getCurrentTime)
 import Data.Time.Format.ISO8601 (iso8601Show)
 import GTF.Assets (Asset (..), IsPageType, Musing, Project, WholeSite, loadAsset)
@@ -30,17 +30,17 @@ import Network.Wai (
   responseLBS,
  )
 import System.FilePath (takeFileName)
+import System.IO (hFlush, stdout)
 
 data LogLevel = None | RequestsOnly | Verbose
   deriving (Show, Eq, Ord)
 
 putLog :: Text -> IO ()
 putLog msg =
-  getCurrentTime >>= \now ->
-    putStrLn
-      $ pack (iso8601Show now)
-      <> ": "
-      <> msg
+  let h = stdout
+   in getCurrentTime >>= \now -> do
+        hPutStrLn h $ pack (iso8601Show now) <> ": " <> msg
+        hFlush h
 
 app :: LogLevel -> Application
 app logLevel req res =
