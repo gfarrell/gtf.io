@@ -40,6 +40,7 @@ content currentPath =
 
       * [Colin Woodbury](https://www.fosskers.ca/about);
       * [Dorian Taylor](https://doriantaylor.com/colophon);
+      * [Good Enough LLC](https://goodenough.us);
       * and many others, which I'll add here as I remember them.
 
       [anaximander]: https://gtf21.notion.site/Anaximander-Codex-b3ef43aa24904ad2a7a574fd3d857fb9
