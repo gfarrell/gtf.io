@@ -15,11 +15,8 @@ extra-source-files: src/GTF/Pages/**/*.djot
 data-files:
   src/GTF/Pages/content/assets/*.asc
   src/GTF/Pages/content/assets/*.png
-  src/GTF/Pages/content/assets/*.jpg
   src/GTF/Pages/Musings/content/**/*.png
-  src/GTF/Pages/Musings/content/**/*.jpg
   src/GTF/Pages/Projects/content/**/*.png
-  src/GTF/Pages/Projects/content/**/*.jpg
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
