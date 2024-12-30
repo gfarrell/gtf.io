@@ -36,11 +36,12 @@ content currentPath =
 
       ## \#Inspo
 
-      There are several websites which have inspired the structure, tooling, and content of this one:
+      There are several websites which have inspired the structure, tooling, and content of this one, or I just think are really cool examples of websites I'd love this one to be as good as (it won't):
 
       * [Colin Woodbury](https://www.fosskers.ca/about);
       * [Dorian Taylor](https://doriantaylor.com/colophon);
       * [Good Enough LLC](https://goodenough.us);
+      * [Philippa Markovics](https://trimmings.wtf);
       * and many others, which I'll add here as I remember them.
 
       [anaximander]: https://gtf21.notion.site/Anaximander-Codex-b3ef43aa24904ad2a7a574fd3d857fb9
