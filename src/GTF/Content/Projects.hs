@@ -22,6 +22,7 @@ data ProjectDetails
       { repo :: URI
       , language :: Text
       }
+  | OtherProject
   deriving (Show, Eq, Generic, Lift)
   deriving anyclass (FromJSON)
 
@@ -49,10 +50,8 @@ instance FromJSON (DocMeta Project) where
       <*> o
       .: "tags"
       <*> ( o .: "category" >>= \case
-              "programming" -> parseCodeProject o
-              "document" -> parseDocProject o
+              "programming" -> CodeProject <$> o .: "repo" <*> o .: "language"
+              "document" -> DocProject <$> o .: "file"
+              "other" -> pure OtherProject
               c -> fail $ "unknown project category " <> c
           )
-   where
-    parseCodeProject o = CodeProject <$> o .: "repo" <*> o .: "language"
-    parseDocProject o = DocProject <$> o .: "file"

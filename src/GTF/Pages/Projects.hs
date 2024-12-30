@@ -88,6 +88,7 @@ renderProjectContent (ParsedDoc m d) =
         [class_ "projects__info-item", href_ $ pack . show $ repo, title_ "Project repository"]
         "go to repo"
       span_ [class_ "projects__info-item", role_ "project-language"] $ toHtml lang
+    OtherProject -> mempty
 
 itemPage :: Text -> UrlPath -> Maybe (Html ())
 itemPage name currentPath =
