@@ -120,7 +120,6 @@ Having said that, there were some things I struggled with:
 
 ::: gallery
 
-* ![unboxing it all](leviathan/assets/1-unboxing.jpg)
 * ![the open case](leviathan/assets/2-open-case.jpg)
 * ![fitting the RAM](leviathan/assets/3-ram-fitting.jpg)
 * ![the heat pipes](leviathan/assets/4-heat-coils.jpg)
@@ -207,6 +206,16 @@ some interesting issues, however.
    optimiser ("GFX Curve Optimizer") to change the voltage delivered to the
    GPU. After some trial-and-error, and some very helpful members of the
    [archlinux forum][archforum-gpu-issue], I worked it out.
+
+My final thought it that I have not really settled on what noun to use
+for this computer. This is a bit of a weird detail, but I oscillate
+between "computer" (I guess it computes things, but I don't love it.
+Also, computers were once people); "machine" (I like this, but it's very
+broad, and people don't always know what I mean); "PC" (yeah but I don't
+use Windows, sheesh); and "desktop" (whether it's a desktop or a laptop
+is sort of immaterial -- a useful distinction for me to think about
+which one I want to use for something, but I give them names anyway). I
+will probably just use "machine" and continue romanticising it.
 
 [pcpartpicker]: https://pcpartpicker.com
 [leviathan-parts]: https://uk.pcpartpicker.com/user/gtfarrell/saved/#view=99yM3C

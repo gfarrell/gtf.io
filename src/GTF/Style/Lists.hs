@@ -49,3 +49,13 @@ stylesheet = do
       p ? margin (em 0) (em 0) (em 0) (em 0)
 
     dd <> dt ? marginBottom (em 1)
+
+  ".gallery" |> ul ? do
+    listStyleType none
+    display flex
+    flexDirection row
+    flexWrap FB.wrap
+    justifyContent FB.spaceEvenly
+
+    li ? do
+      maxWidth (pct 45)
