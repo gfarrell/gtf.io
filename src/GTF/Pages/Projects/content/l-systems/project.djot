@@ -124,7 +124,7 @@ We can translate our sets of symbols into instructions for the Turtle,
 and therefore make a diagram of our L-system as it evolves. Different
 L-system `Alphabet`s will require different translations to make the
 visualisation effective, so let's start with our binary tree system
-first (as per the translation in the [wiki page][lsystem-wiki].
+first (as per the translation in the [wiki page][lsystem-wiki]).
 
 * `0` means: draw a small line with a "fork" or "leaf" at the end
 * `1` means: draw a small line with nothing at the end
