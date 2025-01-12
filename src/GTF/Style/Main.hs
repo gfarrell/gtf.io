@@ -60,6 +60,10 @@ stylesheet = do
     textAlign center
 
   (h1 <> h2 <> h3 <> h4) ? textAlign start
+  h1 ? fontSize (em 1.8)
+  h2 ? fontSize (em 1.4)
+  h3 ? fontSize (em 1.2)
+  h4 ? fontSize (em 1)
 
   main_ ? textAlign justify
 
