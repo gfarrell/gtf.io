@@ -16,7 +16,7 @@ import Data.Text (pack)
 import Djot (RenderOptions (..), renderHtml)
 import GTF.Content.Doc (ParsedDoc (..))
 import GTF.Content.Loader (isDjot, loadFilesTH)
-import GTF.Content.Projects (DocMeta (..), Project, ProjectDetails (..))
+import GTF.Content.Projects (DocMeta (..), Project, ProjectDetails (..), ProjectLink (..))
 import GTF.Pages.Helpers (datetime, humantime)
 import GTF.Pages.Layout (PageMeta (PageMeta), defaultLayout, defaultLayoutWithMeta)
 import GTF.Pages.Partials.Highlight (highlight)
@@ -83,10 +83,10 @@ renderProjectContent (ParsedDoc m d) =
         , title_ "download"
         ]
         "download"
-    CodeProject repo lang -> do
-      a_
-        [class_ "projects__info-item", href_ $ pack . show $ repo, title_ "Project repository"]
-        "go to repo"
+    CodeProject link lang -> do
+      case link of
+        Repository repo -> a_ [class_ "projects__info-item", href_ $ pack . show $ repo, title_ "Project repository"] "go to repo"
+        File file -> a_ [class_ "projects__info-item", href_ $ slug m <> "/assets/" <> pack file, title_ "Download file"] "download"
       span_ [class_ "projects__info-item", role_ "project-language"] $ toHtml lang
     OtherProject -> mempty
 
