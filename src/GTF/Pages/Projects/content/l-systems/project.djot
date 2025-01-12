@@ -1,0 +1,380 @@
+---
+title: Playing with, and visualising, L-systems
+category: programming
+file: LSystems.hs
+language: Haskell
+slug: l-systems
+abstract: |
+  L-systems are a way of representing evolving systems using simple
+  rewriting rules. Here we play with constructing them using Typeclasses
+  in Haskell and visualising them with a Turtle-like system.
+date: 2025-01-11
+tags:
+- experiment
+- haskell
+- visualisation
+---
+
+I was reading up on the [Racket][racket-lang] programming language and
+discovered that it had specific language for writing L-systems, of which
+I had not previously heard. According to [Wikipedia][lsystem-wiki],
+L-systems are:
+
+> a parallel rewriting system and a type of formal grammar. [...]
+L-systems were introduced and developed in 1968 by Aristid Lindenmayer,
+a Hungarian theoretical biologist and botanist at the University of
+Utrecht. Lindenmayer used L-systems to describe the behaviour of plant
+cells and to model the growth processes of plant development. L-systems
+have also been used to model the morphology of a variety of organisms
+and can be used to generate self-similar fractals.
+
+There was something very appealing about a simple set of rewriting rules
+which, in some way, provided a really good model for how organic systems
+grow. Since They are so simple, and naturally recursive, I wanted to
+play around with different L-systems myself.
+
+## Defining the L-system structure
+
+An L-system essentially consists of an `Alphabet` of possible symbols
+and a rewrite rule (I'm calling `produce`) that, on each step, replaces
+a given symbol with some other symbol(s). There is also an initial
+state (which we're calling the `axiom`). Here we're using context-free
+L-systems because it rewrites on a symbol-by-symbol basis rather
+than examining what came before or after (that's a future area for
+exploration).
+
+So, we can define that structure using a type class[^nb-nonempty]:
+
+```haskell
+class CFL (a) where
+  data Alphabet a
+  axiom :: Alphabet a
+  produce :: Alphabet a -> NonEmpty (Alphabet a)
+```
+
+We can then write a simple function which steps forward in "time",
+rewriting each symbol using the `produce` function:
+
+```haskell
+step :: (CFL a) => NonEmpty (Alphabet a) -> NonEmpty (Alphabet a)
+step (a :| rest) = sconcat $ produce a :| map produce rest
+```
+
+This is now enough for us to define a simple L-system. Let's start with
+the "binary tree" example from [Wikipedia][lsystem-wiki]:
+
+```haskell
+data BinaryTree
+
+instance CFL BinaryTree where
+  data Alphabet BinaryTree = Zero | One | LBrace | RBrace
+
+  axiom _ = Zero
+
+  -- 1 -> 11
+  produce One = One :| [One]
+  -- 0 -> 1[0]0
+  produce Zero = One <| LBrace <| Zero <| RBrace :| [Zero]
+  -- [] are constants
+  produce c = singleton c
+```
+
+As far as defining a context-free L-system, that's it! With a simple
+`Show` instance to make it slightly easier to read, we can see what
+happens as we step through the growth of this binary tree system:
+
+```haskell
+λ: a = axiom @BinaryTree
+λ: show a
+"0"
+λ: mconcat . map show . toList . step . singleton $ a
+"1[0]0"
+λ: mconcat . map show . toList . step . step . singleton $ a
+"11[1[0]0]1[0]0"
+λ: mconcat . map show . toList . step . step . step . singleton $ a
+"1111[11[1[0]0]1[0]0]11[1[0]0]1[0]0"
+```
+
+Similarly, we can define the Koch L-system, also from the [wiki page][lsystem-wiki]:
+
+```haskell
+instance CFL Koch where
+  data Alphabet Koch = F | Plus | Minus
+
+  axiom = F
+
+  produce F = F <| Plus <| F <| Minus <| F <| Minus <| F <| Plus :| [F]
+  produce Plus = singleton Plus
+  produce Minus = singleton Minus
+```
+
+## Visualising
+
+Since L-systems can represent some growing system, starting from a root
+(or `axiom`), [Turtle Graphics][turtle-wiki] provide a nice way of
+visualising these systems, since the Turtle takes a set of instructions
+and moves accordingly (it's stateful in that sense). 
+
+In case you're not familiar, Turtle graphics basically consists of a
+cursor (the Turtle) and a set of instructions like "forward 50" or "left
+45" which tells the Turtle how to move. As it moves, the Turtle draws a
+path of its movement on the canvas.
+
+We can translate our sets of symbols into instructions for the Turtle,
+and therefore make a diagram of our L-system as it evolves. Different
+L-system `Alphabet`s will require different translations to make the
+visualisation effective, so let's start with our binary tree system
+first (as per the translation in the [wiki page][lsystem-wiki].
+
+* `0` means: draw a small line with a "fork" or "leaf" at the end
+* `1` means: draw a small line with nothing at the end
+* `[` means: turn anti-clockwise by 45°
+* `]` means: go back to the last `[` and turn clockwise by 45°
+
+You'll notice, therefore, that pairs of `[]` represent sub-trees.
+
+### Defining a Turtle system
+
+I decided to use SVG graphics for this (partly because my attempt to get
+OpenGL working via [Gloss][lib-gloss] totally failed). In order to keep
+track of the cursor (or Turtle), we encapsulate this state in a `State`
+monad, and define our render function, which translates a symbol to an
+SVG element, in terms of that `State` monad:
+
+```haskell
+-- Keep track of the position and direction representing a single cursor
+data TurtleState = TurtleState
+  { position :: (Float, Float),
+    angle :: Float
+  }
+
+-- The state of our renderer is a stack of at least one 'TurtleState'
+newtype RenderState = RenderState (NonEmpty TurtleState)
+
+-- And now we can compute all our translation operations in the context of this 'RenderState'
+type WorldM a = State RenderState a
+```
+
+To capture the general translation behaviour, we use a `Turtle` type
+class which turns a symbol from our `Alphabet` into an SVG element (from
+the [SVG Builder library][lib-svg]):
+
+```haskell
+class Turtle a where
+  render :: a -> WorldM SVG.Element
+```
+
+Another reason to do this with the `State` monad is that it gives us
+a nice algebra for sequencing our rendering instructions. Instead of
+having to think about how to handle the sequencing of the state changes,
+we can just `traverse` over the instruction sets and get the end result.
+
+### Translating the BinaryTree to graphical instructions
+
+If we want to turn our `BinaryTree` symbols into graphical elements, we
+need some basic operations like moving the turtle, as well as operations
+on the state like pushing and popping states on stack (so we can go back
+to a previously-saved state as with our `[]` pairs), so let's define
+some helpers:
+
+```haskell
+-- | Modifies the topmost 'TurtleState'
+turtleMod :: (TurtleState -> TurtleState) -> WorldM ()
+turtleMod f = modify $ \(RenderState (t :| rest)) -> RenderState (f t :| rest)
+
+-- | Views the topmost 'TurtleState' in the stack
+viewTurtle :: WorldM TurtleState
+viewTurtle = gets $ \(RenderState (t :| _)) -> t
+
+-- | Takes off the topmost 'TurtleState', but if there is only one, it leaves it
+-- in place as we can't have an empty stack of states
+popTurtle :: WorldM ()
+popTurtle = modify $ \(RenderState (t :| rest)) -> case NEL.nonEmpty rest of
+  Just states -> RenderState states
+  Nothing -> RenderState (t :| rest)
+
+-- | Puts a 'TurtleState' on top of the stack
+pushTurtle :: TurtleState -> WorldM ()
+pushTurtle t = modify $ \(RenderState states) -> RenderState $ t <| states
+
+-- | Move from one point some distance, at some angle, to another point
+vecMove :: (Float, Float) -> Float -> Float -> (Float, Float)
+vecMove (x1, y1) distance theta = (x1 + distance * sin theta, y1 + distance * cos theta)
+```
+
+Now we're ready to write our translation from the `Alphabet BinaryTree`
+to drawing instructions (or, really, SVG elements):
+
+```haskell
+-- For the sake of making things uniform, let's define some basic sizes on the canvas
+size :: Float
+size = 1600
+
+baseLength :: Float
+baseLength = 10
+
+baseWidth :: Float
+baseWidth = 5
+
+-- And, since the SVG builder library takes 'Text' values for literally
+-- everything, we need a way to translate all our numbers to 'Text'
+showT :: (Show a) => a -> Text
+showT = pack . show
+
+-- A leaf is just a small green circle
+mkLeaf :: (Float, Float) -> SVG.Element
+mkLeaf origin =
+  SVG.circle_
+    [ SVG.Cx_ <<- showT (fst origin),
+      SVG.Cy_ <<- showT (snd origin),
+      SVG.R_ <<- showT (baseLength / 2),
+      SVG.Fill_ <<- "green"
+    ]
+
+instance Turtle (Alphabet BinaryTree) where
+  render Zero = do
+    -- Let's get the current cursor position and angle
+    TurtleState origin theta <- viewTurtle
+    -- The move forward a small amount
+    let next = vecMove origin baseLength theta
+    -- and save this new cursor state
+    turtleMod (const $ TurtleState next theta)
+    pure $
+      mkLeaf next -- draw a leaf at the new position
+        <> SVG.line_ -- and a line from the previous position to the new position
+          [ SVG.X1_ <<- showT (fst origin),
+            SVG.Y1_ <<- showT (snd origin),
+            SVG.X2_ <<- showT (fst next),
+            SVG.Y2_ <<- showT (snd next),
+            SVG.Stroke_ <<- "black",
+            SVG.Stroke_width_ <<- showT baseWidth
+          ]
+  render One = do
+    -- Very similar to how we render 'Zero', but we don't have a leaf
+    TurtleState origin theta <- viewTurtle
+    let next = vecMove origin baseLength theta
+    turtleMod (const $ TurtleState next theta)
+    pure $
+      SVG.line_
+        [ SVG.X1_ <<- showT (fst origin),
+          SVG.Y1_ <<- showT (snd origin),
+          SVG.X2_ <<- showT (fst next),
+          SVG.Y2_ <<- showT (snd next),
+          SVG.Stroke_ <<- "black",
+          SVG.Stroke_width_ <<- showT baseWidth
+        ]
+  render LBrace = do
+    -- copy the cursor state
+    viewTurtle >>= pushTurtle
+    -- and turn anti-clockwise by 45° (π / 4)
+    turtleMod $ \turtle -> turtle {angle = angle turtle - (pi / 4)}
+    -- but we don't actually render anything
+    pure mempty
+  render RBrace = do
+    -- go back to the previously-saved state
+    popTurtle 
+    -- and turn clockwise by 45° (π / 4)
+    turtleMod $ \turtle -> turtle {angle = angle turtle + (pi / 4)}
+    -- but we don't actually render anything
+    pure mempty
+```
+
+### Results!
+
+Running this we see some nice representations of our system's growth:
+
+::: gallery
+* ![BinaryTree frame 1](l-systems/assets/binary1.svg)
+* ![BinaryTree frame 2](l-systems/assets/binary2.svg)
+* ![BinaryTree frame 3](l-systems/assets/binary3.svg)
+* ![BinaryTree frame 4](l-systems/assets/binary4.svg)
+* ![BinaryTree frame 5](l-systems/assets/binary5.svg)
+* ![BinaryTree frame 6](l-systems/assets/binary6.svg)
+* ![BinaryTree frame 7](l-systems/assets/binary7.svg)
+:::
+
+We can do something similar for the Koch system
+
+```haskell
+instance Turtle (Alphabet Koch) where
+  render F = do
+    TurtleState origin theta <- viewTurtle
+    let next = vecMove origin (baseLength * 2) theta
+    turtleMod (const $ TurtleState next theta)
+    pure $ -- Draw a small line
+      SVG.line_
+        [ SVG.X1_ <<- showT (fst origin),
+          SVG.Y1_ <<- showT (snd origin),
+          SVG.X2_ <<- showT (fst next),
+          SVG.Y2_ <<- showT (snd next),
+          SVG.Stroke_ <<- "blue",
+          SVG.Stroke_width_ <<- showT baseWidth
+        ]
+  render Plus = do
+    -- Rotate 90° clockwise
+    turtleMod $ \turtle -> turtle {angle = angle turtle + (pi / 2)}
+    pure mempty
+  render Minus = do
+    -- Rotate 90° anticlockwise
+    turtleMod $ \turtle -> turtle {angle = angle turtle - (pi / 2)}
+    pure mempty
+```
+
+::: gallery
+* ![Koch frame 1](l-systems/assets/koch1.svg)
+* ![Koch frame 2](l-systems/assets/koch2.svg)
+* ![Koch frame 3](l-systems/assets/koch3.svg)
+* ![Koch frame 4](l-systems/assets/koch4.svg)
+* ![Koch frame 5](l-systems/assets/koch5.svg)
+:::
+
+## Wrapping up
+
+### Iterating over the world
+
+To generate these images, and to make experimentation a bit easier, I
+wrote a script to step through the iterations of growth for a given
+system and save the results as SVG images. While most of this final
+part is fairly mechanical, the nice part is that, due to the structures
+we have used like `NonEmpty` and `State`, we can very easily run the
+production rule over all the symbols iteratively, and then traverse over
+the drawing actions to generate a final result quite neatly. You can see
+how all this fits together in the downloadable version of this script
+(see the link at the top), but here's a snippet from how that works:
+
+```haskell
+runWorld ::
+  forall a.
+  ( (CFL a),
+    (Turtle (Alphabet a))
+  ) =>
+  CLI ->
+  Proxy a ->
+  IO ()
+runWorld options _ =
+  let start = RenderState (singleton $ TurtleState {position = (size / 2, 0), angle = 0})
+   in mapM_ (uncurry $ writeImage options)
+        . take (maxIterations options)
+        . zip [1 ..]
+        . map (mkImage . sconcat . fst . flip runState start . traverse render)
+        . iterate step
+        . singleton
+        $ axiom (Proxy @a)
+```
+
+### Further experimentation
+
+There are two directions that would be interesting to pursue: the first
+is context-aware L-systems -- those that take more than just a single
+symbol at a time, but look to what is around that symbol to decide what
+to produce next; the second is writing my own systems with their own
+strange production rules, to see what one might come up with (sort of in
+the vein of playing with [Game Of Life][gol] automata.
+
+[racket-lang]: https://racket-lang.org/
+[lsystem-wiki]: https://en.wikipedia.org/wiki/L-system
+[turtle-wiki]: https://en.wikipedia.org/wiki/Turtle_graphics
+[lib-gloss]: https://hackage.haskell.org/package/gloss
+[lib-svg]: https://hackage.haskell.org/package/svg-builder
+[gol]: https://conwaylife.com/
+[^nb-nonempty]: I'm using `Data.List.NonEmpty` to contain my lists of symbols, since I do not want to have to deal with the empty list cases over and over again.
