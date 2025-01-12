@@ -74,7 +74,7 @@ spec = describe "parseContentDoc" $ do
                   (fromOrdinalDate 2024 1)
                   (Just "This is just the best code")
                   (Just ["a cool tag"])
-                  (CodeProject [uri|https://github.com/gfarrell/gtf.io|] "haskell")
+                  (CodeProject (Repository [uri|https://github.com/gfarrell/gtf.io|]) "haskell")
 
   it "fails if the metadata section fails to parse"
     $ let doc =
