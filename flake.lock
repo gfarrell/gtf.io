@@ -18,7 +18,9 @@
     },
     "flake-parts": {
       "inputs": {
-        "nixpkgs-lib": "nixpkgs-lib"
+        "nixpkgs-lib": [
+          "nixpkgs"
+        ]
       },
       "locked": {
         "lastModified": 1717285511,
@@ -86,18 +88,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-lib": {
-      "locked": {
-        "lastModified": 1717284937,
-        "narHash": "sha256-lIbdfCsf8LMFloheeE6N31+BMIeixqyQWbSr2vk79EQ=",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/eb9ceca17df2ea50a250b6b27f7bf6ab0186f198.tar.gz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/eb9ceca17df2ea50a250b6b27f7bf6ab0186f198.tar.gz"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1710695816,
@@ -114,27 +104,13 @@
         "type": "github"
       }
     },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1710765496,
-        "narHash": "sha256-p7ryWEeQfMwTB6E0wIUd5V2cFTgq+DRRBz2hYGnJZyA=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "e367f7a1fb93137af22a3908f00b9a35e2d286a7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat",
         "gitignore": "gitignore",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {

@@ -3,9 +3,11 @@
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     haskell-flake.url = "github:srid/haskell-flake";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } {
