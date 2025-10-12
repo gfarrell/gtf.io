@@ -38,7 +38,7 @@ content currentPath =
 
       There are several websites which have inspired the structure, tooling, and content of this one, or I just think are really cool examples of websites I'd love this one to be as good as (it won't):
 
-      * [Colin Woodbury](https://www.fosskers.ca/about);
+      * [Colin Woodbury](https://www.fosskers.ca/en/about);
       * [Dorian Taylor](https://doriantaylor.com/colophon);
       * [Good Enough LLC](https://goodenough.us);
       * [Philippa Markovics](https://trimmings.wtf);
