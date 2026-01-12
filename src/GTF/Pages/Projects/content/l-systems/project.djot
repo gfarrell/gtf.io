@@ -369,7 +369,7 @@ is context-aware L-systems -- those that take more than just a single
 symbol at a time, but look to what is around that symbol to decide what
 to produce next; the second is writing my own systems with their own
 strange production rules, to see what one might come up with (sort of in
-the vein of playing with [Game Of Life][gol] automata.
+the vein of playing with [Game Of Life][gol] automata).
 
 [racket-lang]: https://racket-lang.org/
 [lsystem-wiki]: https://en.wikipedia.org/wiki/L-system
